@@ -1,0 +1,4 @@
+dataset (0) =
+dataset (0.1) =
+dataset (1) =
+dataset (1.1) = 255
