@@ -40,6 +40,7 @@ dependencies:
   path: ^1.8.3
   image_picker: ^1.0.1
   provider: ^6.0.5
+  mysql1: ^0.20.0
 
 dev_dependencies:
   flutter_test:
@@ -79,13 +80,21 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Inder
+     - family: inder
        fonts:
          - asset: fonts/Inder-Regular.ttf
 
      - family: Jomhuria
        fonts:
          - asset: fonts/Jomhuria-Regular.ttf
+
+     - family: lemonmilk
+       fonts:
+         - asset: fonts/LEMONMILK-Medium.otf
+
+     - family: inter
+       fonts:
+         - asset: fonts/Inter-Regular.ttf
 
 
   # For details regarding fonts from package dependencies,

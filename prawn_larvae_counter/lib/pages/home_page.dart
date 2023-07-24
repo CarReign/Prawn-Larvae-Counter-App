@@ -6,6 +6,8 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 
+import 'package:prawn_larvae_counter/logic/models/mysql.dart';
+
 
 class HomePage extends StatefulWidget {
 
@@ -14,6 +16,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var db = new Mysql();
+  var name = '';
+  void _getName() {
+    db.getConnection().then((conn) {
+      String sql = 'select name from users where user_id = 1;';
+      conn.query(sql).then((results) {
+        for(var row in results){
+          setState(() {
+            name = row[0];
+          });
+        }
+      }
+      );
+    });
+  }
+
 
   File? _image;
   Future getImage() async {
@@ -37,8 +55,38 @@ class _HomePageState extends State<HomePage> {
     return File(imagePath).copy(image.path);
   }
 
+  TextEditingController prawn_countController = TextEditingController();
+
+  String prawn_count = '0';
+
   @override
   Widget build(BuildContext context) {
+    void addCount() {
+      Navigator.of(context).pop(prawn_countController.text);
+    }
+    Future<String?> showForm() => showDialog<String>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Add Prawn Count"),
+            content: TextField(
+              controller: prawn_countController,
+              decoration: InputDecoration(
+                hintText: prawn_count
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    addCount();
+                  },
+                  child: Text("Add Count"))
+            ],
+          );
+        }
+        );
+
+
     return Scaffold(
 
       backgroundColor: Colors.teal[50],
@@ -51,14 +99,14 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(20.0),
                   color: Colors.teal[800],
                 ),
-                margin: const EdgeInsets.fromLTRB(40.0, 30.0, 40.0, 0),
+                margin: const EdgeInsets.fromLTRB(25.0, 30.0, 25.0, 0),
                 height: 100.0,
                 padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                 child: Column(
                   children: [
                     Center(
                       child: Text(
-                        "Welcome, Carren",
+                        "Welcome $name,",
                         style: TextStyle(
                           color: Colors.teal[50],
                           fontSize: 60.0,
@@ -81,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 15.0,),
+              const SizedBox(height: 15.0,),
               Text(
                 "Dashboard",
                 style: TextStyle(
@@ -95,17 +143,17 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(20.0),
                   color: Colors.teal[400],
                 ),
-                margin: const EdgeInsets.fromLTRB(40.0, 00.0, 40.0, 0),
+                margin: const EdgeInsets.fromLTRB(25.0, 00.0, 25.0, 0),
                 height: 80.0,
                 padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               ),
-              SizedBox(height: 20.0,),
+              const SizedBox(height: 20.0,),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   color: Colors.teal[800],
                 ),
-                margin: const EdgeInsets.fromLTRB(40.0, 00.0, 40.0, 0),
+                margin: const EdgeInsets.fromLTRB(25.0, 00.0, 25.0, 0),
                 height: 80.0,
                 padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               ),
@@ -115,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(20.0),
                   color: Colors.teal[100],
                 ),
-                margin: const EdgeInsets.fromLTRB(40.0, 00.0, 40.0, 0),
+                margin: const EdgeInsets.fromLTRB(25.0, 00.0, 25.0, 0),
                 height: 800.0,
                 padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                 child: Column(
@@ -138,8 +186,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 8.0),
-                            child: IconButton(onPressed: () {},
+                            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 8.0),
+                            child: IconButton(onPressed: _getName,
                                 icon: Icon(Icons.add_circle,
                                   color: Colors.teal[800],
                                   size: 40.0,
@@ -169,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                             margin: const EdgeInsets.fromLTRB(0.0, 00.0, 0.0, 0),
                             height: 80.0,
                             padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Padding(
@@ -194,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                                   children: <Widget>[
                                     Column(
                                       children: <Widget>[
-                                        Text("20",
+                                        Text('$prawn_count' + 'kg',
                                           style: TextStyle(
                                             fontSize: 50.0,
                                             fontFamily: 'Jomhuria',
@@ -237,7 +285,13 @@ class _HomePageState extends State<HomePage> {
                               Row(
                                 children: <Widget>[
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      final prawn_count = await showForm();
+                                      if (prawn_count == null || prawn_count.isEmpty) return;
+                                      setState(() {
+                                        this.prawn_count = prawn_count;
+                                      });
+                                      },
                                     child: Container(
                                       color: Colors.teal[800],
                                       margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -393,7 +447,7 @@ class _HomePageState extends State<HomePage> {
                     ? Image.file(_image!,
                     width: 250,
                     height: 250,
-                    fit: BoxFit.cover) : Text("E show sa nako diri ang image para makita jud na gi store sya sa _image variable, tho balak nako na himoon syang global na variable or what para ma access sya sa results page and didto sya e preview ang image"),
+                    fit: BoxFit.cover) : const Text("E show sa nako diri ang image para makita jud na gi store sya sa _image variable, tho balak nako na himoon syang global na variable or what para ma access sya sa results page and didto sya e preview ang image"),
                     const SizedBox(
                       height: 10.0,
                     ),
@@ -407,17 +461,17 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      floatingActionButton: Container(
+      floatingActionButton: SizedBox(
         height: 100.0,
         child: FittedBox(
           child: FloatingActionButton(
             elevation: 10.0,
             backgroundColor: Colors.teal[800],
             onPressed: getImage,
-            child: Container(
+            child: const SizedBox(
               height: 200.0,
               width: 200.0,
-              child: const Icon(Icons.camera_alt,
+              child: Icon(Icons.camera_alt,
                 size: 30.0,
               ),
             ),
@@ -432,7 +486,7 @@ class _HomePageState extends State<HomePage> {
 
           children: <Widget>[
             Container(
-              padding: EdgeInsets.fromLTRB(50.0, 0, 60.0, 30.0),
+              padding: const EdgeInsets.fromLTRB(50.0, 0, 60.0, 30.0),
               child: IconButton(
                 icon: Icon(Icons.home,
                     size: 50.0,
@@ -444,7 +498,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(140.0, 5.0, 50.0, 25.0),
+              padding: const EdgeInsets.fromLTRB(140.0, 5.0, 50.0, 25.0),
               child: IconButton(
                 icon: Icon(Icons.history,
                   size: 40.0,
@@ -459,5 +513,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+
+
   }
 }
