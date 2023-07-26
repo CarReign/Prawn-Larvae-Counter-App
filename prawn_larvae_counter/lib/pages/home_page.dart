@@ -242,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                                   children: <Widget>[
                                     Column(
                                       children: <Widget>[
-                                        Text('$prawn_count' + 'kg',
+                                        Text(prawn_count,
                                           style: TextStyle(
                                             fontSize: 50.0,
                                             fontFamily: 'Jomhuria',
@@ -297,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                                       margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                                       child: const Text(
-                                        'Add Count',
+                                        'Edit Count',
                                         style: TextStyle(color: Colors.white, fontSize: 13.0),
                                       ),
                                     ),

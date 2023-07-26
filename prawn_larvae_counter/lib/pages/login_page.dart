@@ -119,9 +119,9 @@ class _LogInPage extends State<LogInPage> {
             const SizedBox(height: 100.0),
             Container(
               margin: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 25.0),
-              child: Column(
+              child: const Column(
                 children: [
-                  const Text(
+                  Text(
                     "Copyright © 2024 Leonsarks",
                     style: TextStyle(
                       color: Color(0xFF00796B),
