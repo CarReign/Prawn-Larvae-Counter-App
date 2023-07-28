@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "440933892393",
+    "project_id": "ninja-brew-crew-30eff",
+    "storage_bucket": "ninja-brew-crew-30eff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440933892393:android:aa4e5d170753cc197ef738",
+        "android_client_info": {
+          "package_name": "com.example.prawn_larvae_counter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440933892393-r99mei91uj1ncgjr2g4b3qp1i2fkas85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOuwHKdNmfUkVMdVH3zw5StBO5BoOQggs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440933892393-r99mei91uj1ncgjr2g4b3qp1i2fkas85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440933892393:android:ffee4f05e3afcab07ef738",
+        "android_client_info": {
+          "package_name": "com.sample.brew_crew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440933892393-r99mei91uj1ncgjr2g4b3qp1i2fkas85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOuwHKdNmfUkVMdVH3zw5StBO5BoOQggs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440933892393-r99mei91uj1ncgjr2g4b3qp1i2fkas85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
