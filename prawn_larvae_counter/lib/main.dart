@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const PrawnLarvaeCounterApp());
+}
 
-void main() => runApp(MaterialApp(
-  initialRoute: '/',
-  routes: {
-    '/': (context) => const WelcomePage(),
-    '/signin': (context) => const SignInPage(),
-    '/login': (context) => const LogInPage(),
-    '/home': (context) => const HomePage(),
-    '/results': (context) => const ResultsPage(),
-    '/logs': (context) => const LogsPage(),
-  },
-));
+class PrawnLarvaeCounterApp extends StatefulWidget {
+  const PrawnLarvaeCounterApp({Key? key}) : super(key: key);
 
+  @override
+  State<PrawnLarvaeCounterApp> createState() => _PrawnLarvaeCounterAppState();
+}
 
+class _PrawnLarvaeCounterAppState extends State<PrawnLarvaeCounterApp> {
+  @override
+  Widget build(BuildContext context) {
+    String initialHeader = '/';
+    return MaterialApp(
+      title: 'Prawn Larvae Counter',
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+      ),
+      initialRoute: initialHeader,
+      routes: {
+        '/': (context) => const HomaPage(),
+        '/results': (context) => const ResultsPage(),
+        '/logs': (context) => const LogsPage(),
+      },
+    );
+  }
+}
 
-
+/*
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
@@ -68,8 +83,6 @@ class WelcomePage extends StatelessWidget {
   }
 }
 
-
-
 class Footer extends StatelessWidget {
   final String text;
 
@@ -87,8 +100,6 @@ class Footer extends StatelessWidget {
     );
   }
 }
-
-
 
 //ignore: must_be_immutable
 class BigButton extends StatelessWidget {
@@ -132,6 +143,27 @@ class BigButton extends StatelessWidget {
     );
   }
 }
+
+*/
+
+
+/*
+
+void main() => runApp(MaterialApp(
+  initialRoute: '/',
+  routes: {
+    '/': (context) => const WelcomePage(),
+    '/signin': (context) => const SignInPage(),
+    '/login': (context) => const LogInPage(),
+    '/home': (context) => const HomePage(),
+    '/results': (context) => const ResultsPage(),
+    '/logs': (context) => const LogsPage(),
+  },
+));
+
+*/
+
+/*
 
 
 class SignInPage extends StatefulWidget {
@@ -1086,4 +1118,4 @@ class Logs extends StatelessWidget {
   }
 }
 
-
+*/

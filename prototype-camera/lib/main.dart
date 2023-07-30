@@ -8,6 +8,10 @@ void main() {
   runApp(MyApp());
 }
 
+class
+
+/*
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -105,3 +109,5 @@ class ResultPage extends StatelessWidget {
     );
   }
 }
+
+*/

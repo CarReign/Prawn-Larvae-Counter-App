@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:440933892393:ios:4a779705be74d57f7ef738",
-  "FIREBASE_PROJECT_ID": "ninja-brew-crew-30eff",
-  "GCM_SENDER_ID": "440933892393"
+  "GOOGLE_APP_ID": "1:517163100767:ios:eb78dde73e0b8c3ca349ea",
+  "FIREBASE_PROJECT_ID": "prawn-larvae-counter",
+  "GCM_SENDER_ID": "517163100767"
 }
