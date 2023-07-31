@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "517163100767",
+    "project_id": "prawn-larvae-counter",
+    "storage_bucket": "prawn-larvae-counter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517163100767:android:a4bc7c18d31683b0a349ea",
+        "android_client_info": {
+          "package_name": "com.example.prawn_larvae_counter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517163100767-479fjbtqk044i89esqielrng38q4evud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuKMedP3jj5TAAcxXSwIV2zxC8FvVZ7Ok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517163100767-479fjbtqk044i89esqielrng38q4evud.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
