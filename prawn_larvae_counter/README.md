@@ -1,6 +1,6 @@
 # prawn_larvae_counter
 
-A capstone project
+Capstone project by Yongco, Esver, and Agad
 
 ## Getting Started
 

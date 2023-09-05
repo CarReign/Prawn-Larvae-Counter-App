@@ -1,169 +1,110 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const PrawnLarvaeCounterApp());
+  runApp(const MyApp());
 }
 
-class PrawnLarvaeCounterApp extends StatefulWidget {
-  const PrawnLarvaeCounterApp({Key? key}) : super(key: key);
-  @override
-  State<PrawnLarvaeCounterApp> createState() => _PrawnLarvaeCounterAppState();
-}
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-class _PrawnLarvaeCounterAppState extends State<PrawnLarvaeCounterApp> {
-
-  static const String defaultInitialIndexRoute = '/index';
-  static const String gettingStartedPageRoute = '/gettingStarted';
-  static const String homeLogPageRoute = '/home';
-  static const String resultPageRoute = '/result';
-
-  bool isInitialized(){
-    return false;
-  }
-
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    String initialHeader = defaultInitialIndexRoute;
-    bool isInitialized = this.isInitialized();
     return MaterialApp(
-      title: 'Prawn Larvae Counter',
-      debugShowCheckedModeBanner: false,
-      debugShowMaterialGrid: false,
+      title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.teal,
-        fontFamily: 'Roboto',
-        fontFamilyFallback: <String>['Roboto'],
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: initialHeader,
-      routes: {
-        defaultInitialIndexRoute: (context) => FrontPage(alreadyInitialized: isInitialized,),
-        gettingStartedPageRoute: (context) => const GettingStartedPage(),
-        homeLogPageRoute: (context) => const HomeLogPage(),
-        resultPageRoute: (context) => const ResultPage(),
-      },
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-  class FrontPage extends StatelessWidget {
-    const FrontPage({Key? key, required this.alreadyInitialized}) : super(key: key);
-    final bool alreadyInitialized;
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
 
-    @override
-    Widget build(BuildContext context) {
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
 
-      return Scaffold(
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Expanded(child:
-                  Center(child: Image.asset("assets/app logo.png")),
-              ),
-              Expanded(child:
-                  Center(child:
-                    alreadyInitialized ? FilledButton.tonal(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/home');
-                      },
-                      child: const Text('Continue'),
-                    ) : FilledButton.tonal(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/gettingStarted');
-                      },
-                      child: Text('Get Started'),
-                    )
-                  )
-              ),
-              Text('Copyright 2024 Leonsarks'),
-              Text('All Rights Reserved '),
-              SizedBox(height: 30.0)
-            ],
-          )
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          //
+          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          // action in the IDE, or press "p" in the console), to see the
+          // wireframe for each widget.
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
         ),
-      );
-    }
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
   }
-
-  class GettingStartedPage extends StatelessWidget {
-    const GettingStartedPage({Key? key}) : super(key: key);
-
-    @override
-    Widget build(BuildContext context) {
-      return const Scaffold();
-    }
-  }
-
-  class HomeLogPage extends StatefulWidget {
-    const HomeLogPage({Key? key}) : super(key: key);
-
-    @override
-    State<HomeLogPage> createState() => _HomeLogPageState();
-  }
-
-  class _HomeLogPageState extends State<HomeLogPage> {
-    @override
-    Widget build(BuildContext context) {
-      return const Scaffold();
-    }
-  }
-
-  class ResultPage extends StatefulWidget {
-    const ResultPage({Key? key}) : super(key: key);
-
-    @override
-    State<ResultPage> createState() => _ResultPageState();
-  }
-
-  class _ResultPageState extends State<ResultPage> {
-    @override
-    Widget build(BuildContext context) {
-      return const Scaffold();
-    }
-  }
-
-    class PrawnCount {
-      final int count;
-      final DateTime date;
-
-      PrawnCount({
-        required this.count,
-        required this.date,
-      });
-
-      // to map
-      Map<String, dynamic> toMap() {
-        return {
-          'count': count,
-          'date': date.toString(),
-        };
-      }
-
-      @override
-      String toString() {
-        return 'PrawnCount{count: $count, date: $date}';
-      }
-    }
-
-    class Farm {
-      final String farmerName;
-      final String farmName;
-
-      Farm({
-        required this.farmerName,
-        required this.farmName,
-      });
-
-      Map<String, dynamic> toMap(){
-        return {
-          'farmerName': farmerName,
-          'farmName': farmName,
-        };
-      }
-
-      @override
-      String toString(){
-        return 'Farm{farmerName: $farmerName, farmName: $farmName}';
-      }
-    }
+}

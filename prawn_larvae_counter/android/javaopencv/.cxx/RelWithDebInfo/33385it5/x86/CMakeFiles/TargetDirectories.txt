@@ -1,0 +1,3 @@
+D:/Capstone/prawn_larvae_counter/android/javaopencv/.cxx/RelWithDebInfo/33385it5/x86/CMakeFiles/opencv_jni_shared.dir
+D:/Capstone/prawn_larvae_counter/android/javaopencv/.cxx/RelWithDebInfo/33385it5/x86/CMakeFiles/edit_cache.dir
+D:/Capstone/prawn_larvae_counter/android/javaopencv/.cxx/RelWithDebInfo/33385it5/x86/CMakeFiles/rebuild_cache.dir
