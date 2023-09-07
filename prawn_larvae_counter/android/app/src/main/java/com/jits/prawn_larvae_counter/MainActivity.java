@@ -18,6 +18,8 @@ public class MainActivity extends FlutterActivity {
 
                         if(call.method.equals("blobDetection")){
                             int[] imageData = call.argument("imageData");
+                            int blobCount = blobDetection(imageData);
+                            result.success(blobCount);
                         }
                     });
     }
@@ -25,4 +27,9 @@ public class MainActivity extends FlutterActivity {
     private String debugOpenCV(){
         return "nah";
     }
+
+    private int blobDetection(int[] imageData){
+        return 0;
+    }
+
 }
