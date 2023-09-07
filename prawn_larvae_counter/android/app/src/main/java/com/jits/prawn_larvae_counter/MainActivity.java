@@ -14,6 +14,10 @@ public class MainActivity extends FlutterActivity {
                     (call, result) -> {
                         if(call.method.equals("debugOpenCV")){
                             result.success(debugOpenCV());
+                        };
+
+                        if(call.method.equals("blobDetection")){
+                            int[] imageData = call.argument("imageData");
                         }
                     });
     }
