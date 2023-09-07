@@ -14,7 +14,7 @@ public class MainActivity extends FlutterActivity {
                     (call, result) -> {
                         if(call.method.equals("debugOpenCV")){
                             result.success(debugOpenCV());
-                        };
+                        }
 
                         if(call.method.equals("blobDetection")){
                             int[] imageData = call.argument("imageData");
@@ -27,9 +27,8 @@ public class MainActivity extends FlutterActivity {
     private String debugOpenCV(){
         return "nah";
     }
-
     private int blobDetection(int[] imageData){
-        return 0;
+        return imageData.length;
     }
 
 }
