@@ -1,0 +1,6 @@
+package com.capstone.prawn_counter;
+
+import io.flutter.embedding.android.FlutterActivity;
+
+public class MainActivity extends FlutterActivity {
+}
