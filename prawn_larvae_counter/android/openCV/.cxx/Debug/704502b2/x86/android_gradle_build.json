@@ -1,0 +1,37 @@
+{
+  "buildFiles": [
+    "Z:\\Capstone\\prawn_larvae_counter\\android\\openCV\\libcxx_helper\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "F:\\programs\\androidsdk\\cmake\\3.18.1\\bin\\ninja.exe",
+      "-C",
+      "Z:\\Capstone\\prawn_larvae_counter\\android\\openCV\\.cxx\\Debug\\704502b2\\x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "F:\\programs\\androidsdk\\cmake\\3.18.1\\bin\\ninja.exe",
+    "-C",
+    "Z:\\Capstone\\prawn_larvae_counter\\android\\openCV\\.cxx\\Debug\\704502b2\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "opencv_jni_shared::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "opencv_jni_shared",
+      "output": "Z:\\Capstone\\prawn_larvae_counter\\android\\openCV\\.cxx\\Debug\\704502b2\\x86\\libopencv_jni_shared.a"
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "F:\\programs\\androidsdk\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+      "cppCompilerExecutable": "F:\\programs\\androidsdk\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}
