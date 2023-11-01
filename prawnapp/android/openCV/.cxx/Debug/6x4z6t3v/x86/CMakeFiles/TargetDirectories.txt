@@ -1,0 +1,3 @@
+D:/Capstone/prawnapp/android/openCV/.cxx/Debug/6x4z6t3v/x86/CMakeFiles/opencv_jni_shared.dir
+D:/Capstone/prawnapp/android/openCV/.cxx/Debug/6x4z6t3v/x86/CMakeFiles/edit_cache.dir
+D:/Capstone/prawnapp/android/openCV/.cxx/Debug/6x4z6t3v/x86/CMakeFiles/rebuild_cache.dir
