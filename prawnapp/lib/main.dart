@@ -53,7 +53,7 @@ class _DemoState extends State<Demo> {
     final String path = '${appDir.path}/tmp.png';
     await image!.saveTo(path);
     int? count = await countBlobs(path);
-    final File imageFile = await File(path);
+    final File imageFile = File(path);
     setState(() {
       _image = imageFile;
       _count = count;
@@ -70,7 +70,7 @@ class _DemoState extends State<Demo> {
     } on PlatformException catch (e) {
       print(e.message);
     }
-    // return int
+    return -1; // default
   }
 
   @override
