@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,23 +49,22 @@ class _DemoState extends State<Demo> {
   }
 
   Future<void> processImage(XFile? image) async{
-    File imageFile = File(image!.path);
-    Uint8List? imageData = await imageFile.readAsBytes();
-    var decodedImage = await decodeImageFromList(imageData);
-    int imageWidth = decodedImage.width;
-    int imageHeight = decodedImage.height;
-    int? count = await countBlobs(imageData, imageWidth, imageHeight);
+    final Directory appDir = await getApplicationDocumentsDirectory();
+    final String path = '${appDir.path}/tmp.png';
+    await image!.saveTo(path);
+    int? count = await countBlobs(path);
+    final File imageFile = await File(path);
     setState(() {
       _image = imageFile;
       _count = count;
     });
   }
 
-  Future<int?> countBlobs(imageData, imageWidth, imageHeight) async {
+  Future<int?> countBlobs(imagePath) async {
     // count blobs in image
     print('countBlob called');
     try {
-      final int count = await channel.invokeMethod('countBlobs', {'imageData': imageData, 'imageWidth': imageWidth, 'imageHeight': imageHeight});
+      final int count = await channel.invokeMethod('countBlobs', {'imagePath': imagePath});
       print('methodchannel returned $count');
       return count;
     } on PlatformException catch (e) {

@@ -5,17 +5,20 @@ import android.util.Log;
 import io.flutter.embedding.android.FlutterActivity;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
-import org.opencv.core.MatOfKeyPoint;
-import org.opencv.features2d.SimpleBlobDetector;
-import org.opencv.features2d.SimpleBlobDetector_Params;
 // import mat
 import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-// import  flutter engine configuration
 import io.flutter.embedding.engine.FlutterEngine;
 // IMPORT METHOD CHANNEL
 import io.flutter.plugin.common.MethodChannel;
-import kotlin.UByteArray;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends FlutterActivity {
     static {
@@ -35,12 +38,11 @@ public class MainActivity extends FlutterActivity {
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), "methodchannel.prawnapp").setMethodCallHandler(
             (call, result) -> {
                 if (call.method.equals("countBlobs")) {
-                    byte[] imageData = call.argument("imageData");
-                    int imageHeight = call.argument("imageHeight");
-                    int imageWidth = call.argument("imageWidth");
-                    Log.d("methodChannel", "imageData Length:" + imageData.length);
+                    final String imagePath = call.argument("imagePath");
+                    Log.d("methodChannel", "imagePath : " + imagePath);
+                    Log.d("methodChannel", "imageData Length :" + imagePath.length());
                     try {
-                        int count = countBlobs(imageData, imageHeight, imageWidth);
+                        int count = countBlobs(imagePath);
                         result.success(count);
 
                     } catch (Exception e) {
@@ -51,12 +53,59 @@ public class MainActivity extends FlutterActivity {
         );
     }
 
-    private int countBlobs(byte[] imageData,int imageHeight,int imageWidth) {
+    private int countBlobs(String imagePath) {
+        final long start = System.nanoTime();
         // convert to mat
-        Mat image = new Mat(imageHeight, imageWidth, CvType.CV_8UC1);
-        image.put(0, 0, imageData);
-        Log.d("openCV","OpenCV - Created Image Mat");
-        Log.d("openCV", "OpenCV - imageMat Channels: " + image.channels());
+        Log.d("openCV","OpenCV - Executed countBlobs @ Time : " + start);
+        Log.d("openCV","OpenCV - imread running @ time : " + System.nanoTime());
+        Mat image = Imgcodecs.imread(imagePath);
+        Log.d("openCV","OpenCV - Loaded Image @ time : " + System.nanoTime() + " : " + imagePath);
+        Log.d("openCV", "OpenCV - Image Channels : " + image.channels());
+
+        Log.d("openCV","OpenCV - image.clone running @ time : " + System.nanoTime());
+        Mat tmp = image.clone();
+        Log.d("openCV","OpenCV - image.clone complete @ time : " + System.nanoTime());
+        Log.d("openCV","OpenCV - Converting colors @ time : " + System.nanoTime());
+        Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2GRAY);
+        Log.d("openCV","OpenCV - Converted colors @ time : " + System.nanoTime());
+        Log.d("openCV","OpenCV - Gaussian Blur running @ time : " + System.nanoTime());
+        Imgproc.GaussianBlur(image, image, new Size(5,5), 0);
+        Log.d("openCV","OpenCV - Gaussian Blur complete @ time : " + System.nanoTime());
+        Log.d("openCV","OpenCV - Canny running @ time : " + System.nanoTime());
+        Imgproc.Canny(image, image, 20, 150);
+        Log.d("openCV","OpenCV - Canny complete @ time : " + System.nanoTime());
+
+        Log.d("openCV","OpenCV - Dilate running @ time : " + System.nanoTime());
+        int iterations = 2;
+        Mat kernel = new Mat(3, 3, CvType.CV_8U);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                kernel.put(i, j, 1);
+            }
+        }
+        Imgproc.dilate(image, image, kernel, new Point(-1, -1), iterations);
+        Log.d("openCV","OpenCV - Dilate complete @ time : " + System.nanoTime());
+        List<MatOfPoint> contours = new ArrayList<>();
+        Mat hierarchy = new Mat();
+        Log.d("openCV","OpenCV - findContours running @ time : " + System.nanoTime());
+        Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
+        Log.d("openCV","OpenCV - findContours complete @ time : " + System.nanoTime());
+        Log.d("openCV","OpenCV - drawContours running @ time : " + System.nanoTime());
+        Imgproc.drawContours(tmp, contours, -1, new Scalar(200, 155, 50), 2);
+        Log.d("openCV","OpenCV - drawContours complete @ time : " + System.nanoTime());
+
+        // overwrite image path with tmp
+        Log.d("openCV","OpenCV - Writing tmp image @ time : " + System.nanoTime());
+        Imgcodecs.imwrite(imagePath, tmp);
+        Log.d("openCV","OpenCV - Wrote tmp image @ time : " + System.nanoTime());
+
+        final int result = contours.toArray().length;
+        Log.d("openCV","OpenCV - Executed countBlobs @ Time : " + System.nanoTime() + ", Result :" + result);
+        return result;
+    }
+}
+
+/*
         // initialize blob detector
         SimpleBlobDetector_Params params = new SimpleBlobDetector_Params();
         params.set_maxThreshold(255);
@@ -66,10 +115,9 @@ public class MainActivity extends FlutterActivity {
         Log.d("openCV","OpenCV - Blob Detector Created");
         // detect blobs
         MatOfKeyPoint keypoints = new MatOfKeyPoint();
+
         detector.detect(image, keypoints);
         Log.d("openCV","OpenCV - Blobs Detected");
         Log.d("openCV","OpenCV - Number of Blobs: " + keypoints.toArray().length);
         // return number of blobs
-        return keypoints.toArray().length;
-    }
-}
+        */
