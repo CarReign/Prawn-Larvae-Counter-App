@@ -51,6 +51,11 @@ class _DemoState extends State<Demo> {
   Future<void> processImage(XFile? image) async{
     final Directory appDir = await getApplicationDocumentsDirectory();
     final String path = '${appDir.path}/tmp.png';
+    // check if the file in the temp exists
+    final File file = File(path);
+    if (file.existsSync()) {
+      file.deleteSync();
+    }
     await image!.saveTo(path);
     int? count = await countBlobs(path);
     final File imageFile = File(path);
