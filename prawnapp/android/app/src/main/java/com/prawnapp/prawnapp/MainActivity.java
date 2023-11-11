@@ -2,34 +2,36 @@ package com.prawnapp.prawnapp;
 
 import android.util.Log;
 
-import io.flutter.embedding.android.FlutterActivity;
+import androidx.annotation.NonNull;
+
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
-// import mat
 import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-import io.flutter.embedding.engine.FlutterEngine;
-// IMPORT METHOD CHANNEL
-import io.flutter.plugin.common.MethodChannel;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.plugin.common.MethodChannel;
 
 public class MainActivity extends FlutterActivity {
     static {
         if (!OpenCVLoader.initDebug()) {
         // Handle initialization error
+            Log.d("openCV","OpenCV - Failed to load OpenCV");
         }
     }
 
     // factory engine configuration flutter
     @Override
-    public void configureFlutterEngine(FlutterEngine flutterEngine) {
+    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
         // initialize the blob detector
 
@@ -40,7 +42,11 @@ public class MainActivity extends FlutterActivity {
                 if (call.method.equals("countBlobs")) {
                     final String imagePath = call.argument("imagePath");
                     Log.d("methodChannel", "imagePath : " + imagePath);
-                    Log.d("methodChannel", "imageData Length :" + imagePath.length());
+                    if (imagePath != null) {
+                        Log.d("methodChannel", "imageData Length :" + imagePath.length());
+                    } else {
+                        Log.d("methodChannel", "imageData : null");
+                    }
                     try {
                         int count = countBlobs(imagePath);
                         result.success(count);
