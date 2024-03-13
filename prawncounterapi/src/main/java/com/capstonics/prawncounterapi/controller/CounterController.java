@@ -16,6 +16,7 @@ import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.util.Assert;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.capstonics.prawncounterapi.service.CounterService;
 
 @RestController
 @RequestMapping("/api/counter")
@@ -42,11 +45,29 @@ public class CounterController {
     @Value("${windows.processed.image.path}")
     private String windowsProcessedImagePath;
 
+    @Autowired
+    private CounterService counterService;
+
     /// get endpoint that returns a json with message "Hello World from api"
     @GetMapping()
     public Message getCounter() {
         return new Message("Hello World from api");
     }
+
+    @GetMapping("/test")
+    public Message test(@RequestParam("image") MultipartFile file) {
+        if (file.isEmpty()) {
+            return new Message("File is empty");
+        }
+
+        try {
+            
+            return new Message("Test is finished");
+        } catch (Exception e) {
+            return new Message("Error: " + e.getMessage());
+        }
+    }
+    
 
     @PostMapping()
     public Message count(@RequestParam("image") MultipartFile file) {
@@ -120,18 +141,6 @@ public class CounterController {
         }
     }
 }
-
-class Count {
-    public String message;
-    public File processedImage;
-    public int count;
-
-    public Count(File processedImage, int count) {
-        this.processedImage = processedImage;
-        this.count = count;
-    }
-}
-
 class Message {
 
     public String message;
