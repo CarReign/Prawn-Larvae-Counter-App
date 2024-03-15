@@ -61,13 +61,12 @@ public class CounterController {
         }
 
         try {
-            
+
             return new Message("Test is finished");
         } catch (Exception e) {
             return new Message("Error: " + e.getMessage());
         }
     }
-    
 
     @PostMapping()
     public Message count(@RequestParam("image") MultipartFile file) {
@@ -100,9 +99,6 @@ public class CounterController {
             Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
             Mat dilated = new Mat();
             Imgproc.dilate(imageMat, dilated, kernel, new Point(-1, -1), iterations);
-
-            // imshow
-            HighGui.imshow("Dilated", dilated);
 
             List<MatOfPoint> contours = new ArrayList<>();
             Mat hierarchy = new Mat();
@@ -141,6 +137,7 @@ public class CounterController {
         }
     }
 }
+
 class Message {
 
     public String message;
