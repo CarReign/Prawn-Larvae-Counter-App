@@ -1,9 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import { supabase } from "../../libs/supabase";
 import { AuthError, Session } from "@supabase/supabase-js";
+import { Text } from "react-native";
 
 
-export const AuthContext = createContext<{ session?: Session | null }>({});
+export const AuthContext = createContext<{ session?: Session | null, loading?: boolean }>({});
 
 type SessionData = { 
     data: { session: Session | null; }; error: AuthError | null; 
@@ -11,11 +12,11 @@ type SessionData = {
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [session, setSession] = useState<Session | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const session = supabase.auth.getSession().then((sessionData: SessionData) => {
             if (sessionData.error) {
-                console.error(sessionData.error.message);
                 setSession(null);
                 return;
             };
@@ -26,11 +27,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             setSession(null);
         }).catch(() => {
             setSession(null);
+        }).finally(() => {
+            setLoading(false);
         });
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (event, updatedSession) => {
-                console.log(`Supabase auth event: ${event}`);
-                console.log(`Supabase auth updated session: ${updatedSession ? JSON.stringify(updatedSession) : updatedSession}`);
                 setSession(updatedSession);
             }
         );
@@ -40,7 +41,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }, []);
 
     return (
-        <AuthContext.Provider value={{ session }}>
+        <AuthContext.Provider value={{ session, loading }}>
             {children}
         </AuthContext.Provider>
     );
