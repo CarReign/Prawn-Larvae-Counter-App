@@ -1,10 +1,11 @@
-import { Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import { AuthContext } from "../../providers/authprovider";
 import { useContext, useEffect, useState } from "react";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import useAuth from "../../hooks/useauth";
 import { RootStackParamList } from "../../navigation/types";
+import { supabase } from "../../libs/supabase";
 
 interface IDashboardProps {
     route: RouteProp<RootStackParamList, "dashboard">;
@@ -28,9 +29,21 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
         }
     }, [session])
 
+    const handleSignOut = async () => {
+        setProceed(false);
+        await supabase.auth.signOut();
+    }
+
     return (
         <View>
-            <Text>Dashboard</Text>
+            {
+                proceed && <View><Text>Dashboard</Text>
+                <Button title="Sign Out" onPress={handleSignOut} />
+                </View>
+            }
+            {
+                !proceed && <Text>Logo + Loading...</Text>
+            }
         </View>
     );
 }

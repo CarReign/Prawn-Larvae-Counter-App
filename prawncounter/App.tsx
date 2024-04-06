@@ -5,8 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignInPage from './src/views/signinpage';
 import Dashboard from './src/views/dashboard';
+import { RootStackParamList } from './src/navigation/types';
+import { Header } from 'react-native/Libraries/NewAppScreen';
+import { Empty } from './src/components/empty';
 
-const RootStack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
 
@@ -15,7 +18,7 @@ export default function App() {
       <NavigationContainer>
         <RootStack.Navigator initialRouteName="dashboard">
           <RootStack.Screen name="dashboard" component={Dashboard} />
-          <RootStack.Screen  name="signin" component={SignInPage} />
+          <RootStack.Screen  name="signin" options={{ title: "test", header: () => null, }} component={SignInPage} />
         </RootStack.Navigator>
       </NavigationContainer>
     </AuthProvider>

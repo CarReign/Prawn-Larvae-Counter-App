@@ -30,6 +30,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (event, updatedSession) => {
                 console.log(`Supabase auth event: ${event}`);
+                console.log(`Supabase auth updated session: ${updatedSession ? JSON.stringify(updatedSession) : updatedSession}`);
                 setSession(updatedSession);
             }
         );
