@@ -10,6 +10,7 @@ type FarmType = {
 
 type FarmContextType = {
     farm?: FarmType | null;
+    username?: string;
     addFarm?: (farm: Omit<FarmType, "farm_id">) => void;
     editFarm?: (farm: FarmType) => void;
     loading?: boolean;
@@ -19,24 +20,30 @@ export const FarmContext = createContext<FarmContextType>({});
 
 export default function FarmProvider({ children }: { children: React.ReactNode }){
     const { session, loading: sessionLoading } = useAuth();
-    const [farm, setFarm] = useState({});
+    const [farm, setFarm] = useState<FarmType>({});
+    const [username, setUsername] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        console.log(`FarmProvider: ${loading ? "loading @" : "loaded @"} ${farm?.farm_name && farm?.farm_name}`)
+    }, [farm])
 
     useEffect(() => {
         if (sessionLoading || !session) return;
         supabase.from("farmers")
-                .select('user_id, farms!inner(farm_id, farm_name)')
+                .select('username, farms!inner(farm_id, farm_name)')
                 .eq('user_id', session?.user?.id)
                 .single()
-                .then((response) => {
+                .then((response: any) => {
                     if(response.error){
                         console.log(response.error.message);
                     }
                     if (!response.data?.farms) return;
                     setFarm(response.data?.farms);
+                    setUsername(response.data?.username);
                     setLoading(false);
                 });
-    }, [sessionLoading]);
+    }, [session, sessionLoading]);
 
     const handleAddFarm = (farm: Omit<FarmType, "farm_id">) => {
         supabase.from("farms")
@@ -64,7 +71,7 @@ export default function FarmProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <FarmContext.Provider value={{ farm, addFarm: handleAddFarm, editFarm: handleEditFarm, loading }}>
+        <FarmContext.Provider value={{ farm, username, addFarm: handleAddFarm, editFarm: handleEditFarm, loading }}>
             {children}
         </FarmContext.Provider>
     )

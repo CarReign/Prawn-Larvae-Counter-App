@@ -4,7 +4,10 @@ import { AuthError, Session } from "@supabase/supabase-js";
 import { Text } from "react-native";
 
 
-export const AuthContext = createContext<{ session?: Session | null, loading?: boolean }>({});
+export const AuthContext = createContext<{ 
+    session?: Session | null, 
+    loading?: boolean, 
+}>({});
 
 type SessionData = { 
     data: { session: Session | null; }; error: AuthError | null; 
@@ -32,6 +35,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         });
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (event, updatedSession) => {
+                console.log(`Supabase Auth: ${event}${updatedSession?.user ? `@ user ${updatedSession.user.email}` : " @ no auth" }`)
                 setSession(updatedSession);
             }
         );

@@ -26,20 +26,39 @@ export default function PondProvider({children}: {children: React.ReactNode}) {
     const { farm, loading: farmLoading } = useFarm();
 
     useEffect(() => {
+        console.log(`PondProvider: ${!loading ? "loaded @" : "loading @"} ${ponds.length}`)
+    }, [ponds]);
+
+    useEffect(() => {
         if (farmLoading || !farm) return;
+        supabase.from("ponds")
+                    .select("*")
+                    .eq("farm_id", farm.farm_id)
+                    .then((response: PostgrestMaybeSingleResponse<PondType[]>) => {
+                        if (response.error) {
+                            console.log(response.error.message);
+                        }
+                        setPonds(response.data || []);
+                        setLoading(false);
+                    });
         const farmFetchInterval = setInterval(() => {
-            supabase.from("ponds").select("*").eq("farm_id", farm.farm_id).then((response: PostgrestMaybeSingleResponse<PondType[]>) => {
-                if (response.error) {
-                    console.log(response.error.message);
-                }
-                setPonds(response.data || []);
-                setLoading(false);
-            });
-        }, 150000);
+            setLoading(true);
+            supabase.from("ponds")
+                    .select("*")
+                    .eq("farm_id", farm.farm_id)
+                    .then((response: PostgrestMaybeSingleResponse<PondType[]>) => {
+                        if (response.error) {
+                            console.log(response.error.message);
+                        }
+                        setPonds(response.data || []);
+                        setLoading(false);
+                        setLoading(false);
+                    });
+        }, 50000);
         return () => {
             clearInterval(farmFetchInterval);
         };
-    }, [farmLoading]);
+    }, [farmLoading, farm]);
 
     const handleAddPond = (pond: Omit<Omit<PondType, "pond_id">, "created_at">) => {
         supabase.from("ponds")
