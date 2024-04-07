@@ -16,6 +16,7 @@ type CountContextType = {
     addCount?: (pond_id: number, count: number) => void;
     updateCount?: (count: CountType) => void;
     deleteCount?: (count_id: number) => void;
+    refetch?: () => void;
 }
 
 export const CountContext = createContext<CountContextType>({})
@@ -95,7 +96,11 @@ export default function CountProvider({ children }: { children: React.ReactNode 
             });
     }
 
-    return <CountContext.Provider value={{counts, loading, addCount: handleAddCount, updateCount: handleUpdateCount, deleteCount: handleDeleteCount}}>
+    const handleRefetch = () => {
+        setLoading(true);
+    }
+
+    return <CountContext.Provider value={{counts, loading, addCount: handleAddCount, updateCount: handleUpdateCount, deleteCount: handleDeleteCount, refetch: handleRefetch}}>
         {children}
     </CountContext.Provider>
 }

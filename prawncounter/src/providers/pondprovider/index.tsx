@@ -16,6 +16,7 @@ type PondContextType = {
     addPond?: (pond: Omit<Omit<PondType, "pond_id">, "created_at">) => void;
     editPond?: (pond: PondType) => void;
     deletePond?: (pond_id: number) => void;
+    refetch?: () => void;
 }
 
 export const PondContext = createContext<PondContextType>({});
@@ -41,24 +42,10 @@ export default function PondProvider({children}: {children: React.ReactNode}) {
                         setPonds(response.data || []);
                         setLoading(false);
                     });
-        const farmFetchInterval = setInterval(() => {
-            setLoading(true);
-            supabase.from("ponds")
-                    .select("*")
-                    .eq("farm_id", farm.farm_id)
-                    .then((response: PostgrestMaybeSingleResponse<PondType[]>) => {
-                        if (response.error) {
-                            console.log(response.error.message);
-                        }
-                        setPonds(response.data || []);
-                        setLoading(false);
-                        setLoading(false);
-                    });
-        }, 50000);
         return () => {
-            clearInterval(farmFetchInterval);
+            setPonds([]);
         };
-    }, [farmLoading, farm]);
+    }, [farmLoading]);
 
     const handleAddPond = (pond: Omit<Omit<PondType, "pond_id">, "created_at">) => {
         supabase.from("ponds")
@@ -95,5 +82,11 @@ export default function PondProvider({children}: {children: React.ReactNode}) {
                 });
     }
 
-    return <PondContext.Provider value={{ ponds, loading, addPond: handleAddPond, editPond: handleEditPond, deletePond: handleDeletePond }}>{children}</PondContext.Provider>
+    const handleRefetch = () => {
+        setLoading(true);
+    }
+
+    return <PondContext.Provider value={{ ponds, loading, addPond: handleAddPond, editPond: handleEditPond, deletePond: handleDeletePond, refetch: handleRefetch }}>
+        {children}
+    </PondContext.Provider>
 }

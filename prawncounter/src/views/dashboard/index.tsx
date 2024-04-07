@@ -11,6 +11,7 @@ import usePond from "../../hooks/usePond";
 import useCount from "../../hooks/usecount";
 import FloatingCamera from "./floatingcamera";
 import DashboardTabs from "./tabs";
+import getFeedNeeded from "../../utils/getfeedneeded";
 
 interface IDashboardProps {
     route: RouteProp<RootStackParamList, "dashboard">;
@@ -63,7 +64,7 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                                 </View>
                                 <View className="flex flex-row justify-between">
                                     <Stat figure={counts ? String(counts.length && counts.reduce((acc, count) => acc + count.count, 0)) : "0"} stat="Prawns" />
-                                    <Stat figure="0 kg" stat="Feeds Needed" />
+                                    <Stat figure={String(getFeedNeeded(counts ? counts.length && counts.reduce((acc, count) => acc + count.count, 0) : 0)) + ' kg'} stat="Feeds Needed" />
                                     <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
                                 </View>
                                 <DashboardTabs />

@@ -43,6 +43,25 @@ export default function FarmProvider({ children }: { children: React.ReactNode }
                     setUsername(response.data?.username);
                     setLoading(false);
                 });
+        const farmRefetchInterval = setInterval(() => {
+            setLoading(true);
+            supabase.from("farmers")
+                .select('username, farms!inner(farm_id, farm_name)')
+                .eq('user_id', session?.user?.id)
+                .single()
+                .then((response: any) => {
+                    if(response.error){
+                        console.log(response.error.message);
+                    }
+                    if (!response.data?.farms) return;
+                    setFarm(response.data?.farms);
+                    setUsername(response.data?.username);
+                    setLoading(false);
+                });
+        }, 120000);
+        return () => {
+            clearInterval(farmRefetchInterval);
+        }
     }, [session, sessionLoading]);
 
     const handleAddFarm = (farm: Omit<FarmType, "farm_id">) => {

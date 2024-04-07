@@ -3,9 +3,11 @@ import { Image, Pressable } from "react-native";
 
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
+import useCount from "../../hooks/usecount";
 
 export default function FloatingCamera() {
     const [ currentImageUri, setCurrentImageUri ] = useState<string>("");
+    const { addCount } = useCount();
 
     const handleTakePicture = async () => {
         let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();

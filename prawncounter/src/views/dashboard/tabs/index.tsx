@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Ponds from "./ponds";
 import PondTab from "./ponds";
+import HistoryTab from "./history";
 
 export default function DashboardTabs() {
     const [selectedTab, setSelectedTab] = useState<"pond" | "history">("pond")
@@ -32,7 +33,7 @@ export default function DashboardTabs() {
                 selectedTab === "pond" && <PondTab />
             }
             {
-                selectedTab === "history" && <Text>History</Text>
+                selectedTab === "history" && <HistoryTab />
             }
         </View>
     </View>
