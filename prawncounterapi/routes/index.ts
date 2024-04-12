@@ -16,6 +16,7 @@ const upload: Multer = multer();
 router.post("/counter", upload.single("image-to-count"), async (req: Request, res: Response) => {
     try {
         console.log("req.file:", req.file);
+        const { kernelSize, } = req.body;
         const { file } = req;
         if (!file) throw new Error("No image file found");
         if (!file?.buffer) throw new Error("No image buffer found");
@@ -38,8 +39,17 @@ router.post("/counter", upload.single("image-to-count"), async (req: Request, re
         if (imageData.data.every((value: number) => value === 0)) throw new Error("Invalid image data");
         console.log("get image data:", imageData);
         const imageMat = cv.matFromImageData(imageData);
-        const count = getAverageCount(imageMat);
-        res.status(200).json({ success: true, data: { count }, message: "image processed successfully" });
+
+        let data: { count: number } | CountType;
+        if (kernelSize) {
+            const count = getCountWithSpecificKernelSize(imageMat, kernelSize);
+            data = { count };
+        } else {
+            const count = getAverageCount(imageMat);
+            data = { ...count };
+        }
+
+        res.status(200).json({ success: true, data, message: "image processed successfully" });
     } catch (error: any) {
         res.status(500).json({ message: error.message || "unknown server error" });
     }
