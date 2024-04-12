@@ -122,6 +122,17 @@ type CountType = {
     counts: number[]
 };
 
+function getCountWithSpecificKernelSize(imageMat: cv.Mat, kernelSize: number): CountType {
+    const processedMat: cv.Mat = new Mat();
+    cvtColor(imageMat, processedMat, COLOR_RGBA2GRAY);
+    GaussianBlur(processedMat, processedMat, new Size(3, 3), 0,);
+    adaptiveThreshold(processedMat, processedMat, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 12);
+    dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
+    const contours: cv.MatVector = new MatVector();
+    findContours(processedMat, contours, new Mat(), RETR_TREE, CHAIN_APPROX_SIMPLE);
+    return { count: contours.size(), total: contours.size(), mean: contours.size(), counts: [contours.size()] };
+}
+
 function getAverageCount(imageMat: cv.Mat): CountType {
     const counts = [];
     for (let i = 2; i <= 6; i++) {
