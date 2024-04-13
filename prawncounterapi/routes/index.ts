@@ -1,13 +1,13 @@
 import { Request, Response, Router, response } from "express";
-import { request } from "http";
 import multer, { Multer } from "multer";
-import * as cv from "@techstark/opencv-js";
-import { dilate, findContours, RETR_TREE, CHAIN_APPROX_SIMPLE, MatVector, getStructuringElement, MORPH_ELLIPSE, adaptiveThreshold, Mat, COLOR_RGBA2GRAY, cvtColor, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, BORDER_DEFAULT, Point, Size, GaussianBlur } from "@techstark/opencv-js";
-import { Image, createCanvas } from "canvas";
-// PLEASE FUCKING REMOVE LATER
-import fs from "fs";
-import path from "path";
+import { ImageData } from "canvas";
+
 import { CountType } from "./types";
+
+import { supabase } from "../lib/supabase";
+import { getImageDataFromBuffer } from "../lib/canvas";
+import { getAverageCount, getCountWithSpecificKernelSize } from "../lib/opencv";
+import { matFromImageData } from "@techstark/opencv-js";
 
 const router: Router = Router();
 
@@ -22,23 +22,12 @@ router.post("/counter", upload.single("image-to-count"), async (req: Request, re
         if (!file?.buffer) throw new Error("No image buffer found");
         if (!file?.mimetype) throw new Error("No image mimetype found");
         if (!file?.mimetype.startsWith("image/") || file?.mimetype.endsWith('png')) throw new Error("Invalid image");
-        const image: Image = new Image();
-        console.log("image initialized successfully");
-        image.src = Buffer.from(file?.buffer);
-        // image.src = `data:${file.mimetype};base64,${Buffer.from(file.buffer).toString('base64')}`
-        console.log("image buffer loaded successfully");
-        const canvas = createCanvas(1, 1); // Create a small canvas (1x1) for drawing the image
-        const ctx = canvas.getContext('2d');
-        console.log("initialized canvas and context");
-        canvas.width = image.width;
-        canvas.height = image.height;
-        ctx.drawImage(image, 0, 0);
-        console.log("image drawn to canvas");
-        console.log("image dimensions:", image.width, image.height);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        const imageData: ImageData = getImageDataFromBuffer(file.buffer);
+
         if (imageData.data.every((value: number) => value === 0)) throw new Error("Invalid image data");
         console.log("get image data:", imageData);
-        const imageMat = cv.matFromImageData(imageData);
+        const imageMat = matFromImageData(imageData);
 
         let data: { count: number } | CountType;
         if (kernelSize) {
@@ -48,38 +37,34 @@ router.post("/counter", upload.single("image-to-count"), async (req: Request, re
             const count = getAverageCount(imageMat);
             data = { ...count };
         }
-
         res.status(200).json({ success: true, data, message: "image processed successfully" });
     } catch (error: any) {
         res.status(500).json({ message: error.message || "unknown server error" });
     }
 });
 
-function getCountWithSpecificKernelSize(imageMat: cv.Mat, kernelSize: number): number {
-    console.log("counting with kernel size:", kernelSize, "x", kernelSize,);
-    const processedMat: cv.Mat = new Mat();
-    cvtColor(imageMat, processedMat, COLOR_RGBA2GRAY);
-    GaussianBlur(processedMat, processedMat, new Size(3, 3), 0,);
-    adaptiveThreshold(processedMat, processedMat, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 12);
-    dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
-    const contours: cv.MatVector = new MatVector();
-    findContours(processedMat, contours, new Mat(), RETR_TREE, CHAIN_APPROX_SIMPLE);
-    return contours.size();
-}
+router.post("/counter/save", upload.single("image-to-count"), async (req: Request, res: Response) => {
+    try {
+        const { kernelSize, } = req.body;
+        const { file } = req;
 
-function getAverageCount(imageMat: cv.Mat): CountType {
-    const counts = [];
-    for (let i = 2; i <= 6; i++) {
-        const count = getCountWithSpecificKernelSize(imageMat, i);
-        counts.push(count);
+        if (!file) throw new Error("No image file found");
+        if (!file?.buffer) throw new Error("No image buffer found");
+        if (!file?.mimetype) throw new Error("No image mimetype found");
+        if (!file?.mimetype.startsWith("image/") || file?.mimetype.endsWith('png')) throw new Error("Invalid image");
+
+        const imageData: ImageData = getImageDataFromBuffer(file.buffer);
+
+        if (imageData.data.every((value: number) => value === 0)) throw new Error("Invalid image data");
+        console.log("get image data:", imageData);
+        const imageMat = matFromImageData(imageData);
+
+
+
+    } catch (error: any) {
+        return res.status(500).json({ message: error.message || "unknown server error" });
     };
-    // average using reduce
-    const total = counts.reduce((acc, curr) => acc + curr);
-    const mean = total / counts.length;
-    // get the counts that is closest to mean
-    const closest = counts.reduce((prev, curr) => Math.abs(curr - mean) < Math.abs(prev - mean) ? curr : prev);
-    return { count: closest, mean, total, counts };
-}
+});
 
 export default router;
 
