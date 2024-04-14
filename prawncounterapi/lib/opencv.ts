@@ -20,14 +20,16 @@ export function getCountWithSpecificKernelSize(imageMat: Mat, kernelSize: number
 
 export function getAverageCount(imageMat: Mat): CountType {
     const counts = [];
+    const arrContours: MatVector[] = [];
     for (let i = 2; i <= 6; i++) {
-        const count = getCountWithSpecificKernelSize(imageMat, i);
-        counts.push(count);
+        const { contours } = processCount(imageMat, i);
+        counts.push(contours?.size() || 0);
+        arrContours.push(contours || new MatVector());
     };
     // average using reduce
     const total = counts.reduce((acc, curr) => acc + curr);
     const mean = total / counts.length;
     // get the counts that is closest to mean
     const closest = counts.reduce((prev, curr) => Math.abs(curr - mean) < Math.abs(prev - mean) ? curr : prev);
-    return { count: closest, kernelSize: (counts.indexOf(closest) + 2) };
+    return { count: closest, contours: arrContours[counts.indexOf(closest)], kernelSize: (counts.indexOf(closest) + 2) };
 }

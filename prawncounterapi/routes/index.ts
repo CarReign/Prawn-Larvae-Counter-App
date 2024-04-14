@@ -10,6 +10,8 @@ import { getAverageCount, getCountWithSpecificKernelSize, processCount } from ".
 import { matFromImageData, drawContours, MatVector } from "@techstark/opencv-js";
 import * as cv from "@techstark/opencv-js";
 import { hashFromString } from "../helper/hash";
+import saveImageMatToBucket from "../utility/saveToBucket";
+import streamToBuffer from "../helper/streamToBuffer";
 
 const router: Router = Router();
 
@@ -33,7 +35,7 @@ router.post("/counter", upload.single("image-to-count"), async (req: Request, re
 
         let data: { count: number } | CountType;
         if (kernelSize) {
-            const count = getCountWithSpecificKernelSize(imageMat, kernelSize);
+            const count = getCountWithSpecificKernelSize(imageMat, Number(kernelSize));
             data = { count };
         } else {
             const count = getAverageCount(imageMat);
@@ -45,7 +47,23 @@ router.post("/counter", upload.single("image-to-count"), async (req: Request, re
     }
 });
 
-router.post("/counter/save", upload.single("image-to-count"), async (req: Request, res: Response) => {
+router.get("/counter/image/:filepath", async (req: Request, res: Response) => {
+    try {
+        const { filepath } = req.params;
+        const result = await supabase.storage.from("countimg").download(`public/${filepath}.jpg`);
+        if (result?.error) throw new Error(result.error.message || "supabase unknown error");
+        const buffer = Buffer.from( await result.data.arrayBuffer() );
+        res.writeHead(200, {
+            'Content-Type': 'image/jpeg',
+            'Content-Length': buffer.length
+        });
+        res.end(buffer);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || "unknown server error" });
+    }
+});
+
+router.post("/counter/image", upload.single("image-to-count"), async (req: Request, res: Response) => {
     try {
         const { kernelSize, } = req.body;
         const { file } = req;
@@ -61,18 +79,27 @@ router.post("/counter/save", upload.single("image-to-count"), async (req: Reques
         console.log("get image data:", imageData);
         const imageMat = matFromImageData(imageData);
 
-        const { contours, processedMat }: ProcessedMatType = processCount(imageMat, kernelSize);
+        let resultingContours: MatVector | undefined;
+        
+        if (kernelSize) {
+            const { contours, processedMat }: ProcessedMatType = processCount(imageMat, Number(kernelSize));
+            resultingContours = contours;
+        } else {
+            const { count, contours, kernelSize: resultingKernelSize }: CountType = getAverageCount(imageMat);
+            resultingContours = contours;
+        }
 
-        if (!contours) throw new Error("Contours value is undefined");
+        if (!resultingContours) throw new Error("Contours value is undefined");
+    
+        drawContours(imageMat, resultingContours, -1, [0, 255, 0, 255], 2);
 
-        /*
-        Scalar color = new Scalar(0, 255, 0);
-        image.copyTo(imageResult);
-        Imgproc.drawContours(imageResult, closestContours, -1, color, 2);
-        */
-        drawContours(imageMat, contours, -1, [0, 255, 0, 255], 0);
+        const result = await saveImageMatToBucket(imageMat, file.originalname);
 
+        console.log("supabase result:", result);
 
+        if(result.error) throw new Error(result?.error?.message || "supabase unknown error");
+
+        return res.status(200).json({ success: true, path: result.data.path, count: resultingContours.size(), message: "image processed and saved successfully" });
     } catch (error: any) {
         return res.status(500).json({ message: error.message || "unknown server error" });
     };
@@ -97,14 +124,13 @@ router.post("/counter/test/save", upload.single("image-to-count"), async (req: R
         console.log("get image data:", imageData);
         const imageMat = matFromImageData(imageData);
 
-        const canvasToSave = createCanvas(imageMat.cols, imageMat.rows);
-        const ctxToSave = canvasToSave.getContext('2d');
+        const result = await saveImageMatToBucket(imageMat, file.originalname);
 
-        const imageDataToSave = ctxToSave.createImageData(imageMat.cols, imageMat.rows);
-        imageDataToSave.data.set(imageMat.data);
+        console.log("supabase result:", result);
 
-        supabase.storage.from("images").upload(`${String(hashFromString(file.originalname))}.jpg`, canvasToSave.toBuffer('image/png'));
+        if(result.error) throw new Error(result?.error?.message || "supabase unknown error");
 
+        return res.status(200).json({ success: true, message: "image processed successfully" });
     } catch (error: any) {
         return res.status(500).json({ message: error.message || "unknown server error" });
     }
