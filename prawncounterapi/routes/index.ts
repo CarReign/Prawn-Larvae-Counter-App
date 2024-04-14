@@ -59,11 +59,39 @@ router.post("/counter/save", upload.single("image-to-count"), async (req: Reques
         console.log("get image data:", imageData);
         const imageMat = matFromImageData(imageData);
 
+        
+
 
 
     } catch (error: any) {
         return res.status(500).json({ message: error.message || "unknown server error" });
     };
+});
+
+router.post("/counter/test", upload.single("image-to-count"), async (req: Request, res: Response) => {
+
+});
+
+router.post("/counter/test/save", upload.single("image-to-count"), async (req: Request, res: Response) => {
+    try {
+        const { file } = req;
+
+        if (!file) throw new Error("No image file found");
+        if (!file?.buffer) throw new Error("No image buffer found");
+        if (!file?.mimetype) throw new Error("No image mimetype found");
+        if (!file?.mimetype.startsWith("image/") || file?.mimetype.endsWith('png')) throw new Error("Invalid image");
+    
+        const imageData: ImageData = getImageDataFromBuffer(file.buffer);
+    
+        if (imageData.data.every((value: number) => value === 0)) throw new Error("Invalid image data");
+        console.log("get image data:", imageData);
+        const imageMat = matFromImageData(imageData);
+
+
+
+    } catch (error: any) {
+        return res.status(500).json({ message: error.message || "unknown server error" });
+    }
 });
 
 export default router;
