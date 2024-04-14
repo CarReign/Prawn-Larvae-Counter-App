@@ -12,7 +12,7 @@ app.get("/test", (req: Request, res: Response) => {
 });
 
 app.use("/api", async (req: Request, res: Response, next: NextFunction) => {
-    if (req.headers['x-prawncounter-api-key'] === (process.env.NEXT_PUBLIC_SUPABASE_URL || "carreigniab123456")) {
+    if (req.headers['x-prawncounter-api-key'] === (process.env.API_KEY || "carreigniab123456")) {
         next();
     } else {
         res.status(404).send(`Cannot ${req.method} ${req.originalUrl}`);
