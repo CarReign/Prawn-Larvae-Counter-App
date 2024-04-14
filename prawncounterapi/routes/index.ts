@@ -1,13 +1,15 @@
 import { Request, Response, Router, response } from "express";
 import multer, { Multer } from "multer";
-import { ImageData } from "canvas";
+import { ImageData, createCanvas } from "canvas";
 
-import { CountType } from "./types";
+import { CountType, ProcessedMatType } from "./types";
 
 import { supabase } from "../lib/supabase";
 import { getImageDataFromBuffer } from "../lib/canvas";
-import { getAverageCount, getCountWithSpecificKernelSize } from "../lib/opencv";
-import { matFromImageData } from "@techstark/opencv-js";
+import { getAverageCount, getCountWithSpecificKernelSize, processCount } from "../lib/opencv";
+import { matFromImageData, drawContours, MatVector } from "@techstark/opencv-js";
+import * as cv from "@techstark/opencv-js";
+import { hashFromString } from "../helper/hash";
 
 const router: Router = Router();
 
@@ -59,8 +61,16 @@ router.post("/counter/save", upload.single("image-to-count"), async (req: Reques
         console.log("get image data:", imageData);
         const imageMat = matFromImageData(imageData);
 
-        
+        const { contours, processedMat }: ProcessedMatType = processCount(imageMat, kernelSize);
 
+        if (!contours) throw new Error("Contours value is undefined");
+
+        /*
+        Scalar color = new Scalar(0, 255, 0);
+        image.copyTo(imageResult);
+        Imgproc.drawContours(imageResult, closestContours, -1, color, 2);
+        */
+        drawContours(imageMat, contours, -1, [0, 255, 0, 255], 0);
 
 
     } catch (error: any) {
@@ -87,7 +97,13 @@ router.post("/counter/test/save", upload.single("image-to-count"), async (req: R
         console.log("get image data:", imageData);
         const imageMat = matFromImageData(imageData);
 
+        const canvasToSave = createCanvas(imageMat.cols, imageMat.rows);
+        const ctxToSave = canvasToSave.getContext('2d');
 
+        const imageDataToSave = ctxToSave.createImageData(imageMat.cols, imageMat.rows);
+        imageDataToSave.data.set(imageMat.data);
+
+        supabase.storage.from("images").upload(`${String(hashFromString(file.originalname))}.jpg`, canvasToSave.toBuffer('image/png'));
 
     } catch (error: any) {
         return res.status(500).json({ message: error.message || "unknown server error" });
