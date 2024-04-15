@@ -13,19 +13,19 @@ export default function DashboardTabs() {
         }
     };
 
-    return <View className="border h-full">
-        <View className="min-h-[40px] flex flex-row justify-between border">
+    return <View className="h-full bg-[#B2D1ED]">
+        <View className="min-h-[40px] flex flex-row justify-between ">
             <Pressable 
-                className={`items-center flex-grow justify-center ${selectedTab === "pond" ? "bg-white" : "bg-[#E2EFFA]"}`}
+                className={`rounded-t-lg items-center flex-grow justify-center ${selectedTab === "pond" ? "bg-[#eff6fc]" : "bg-[#E2EFFA]"}`}
                 onPress={handleChangeTab("pond")}
             >
-                <Text>Pond</Text>
+                <Text className="text-[16px]">Pond</Text>
             </Pressable>
             <Pressable 
-                className={`flex-grow items-center justify-center ${selectedTab === "history" ? "bg-white" : "bg-[#E2EFFA]"}`}
+                className={`rounded-t-lg flex-grow items-center justify-center ${selectedTab === "history" ? "bg-[#eff6fc]" : "bg-[#E2EFFA]"}`}
                 onPress={handleChangeTab("history")}
                 >
-                <Text>History</Text>
+                <Text className="text-[16px]">History</Text>
             </Pressable>
         </View>
         <View>

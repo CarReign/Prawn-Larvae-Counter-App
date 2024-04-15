@@ -52,17 +52,17 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                             !!farmLoading && <ActivityIndicator color="#2E78B8" />
                         }
                         {
-                            !farmLoading && <View className="flex flex-col px-[20px] space-y-2">
-                                <View className="flex flex-row w-full justify-between">
+                            !farmLoading && <View className="flex flex-col space-y-2">
+                                <View className="flex flex-row w-full justify-between mt-4 px-[20px]">
                                     <View className="">
-                                        <Text className="text-[#24527A] text-[16px] font-bold">Welcome, {username}</Text>
-                                        <Text className="text-[#24527A]">{farm?.farm_name}</Text>
+                                        <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username}</Text>
+                                        <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
                                     </View>
                                     <View>
-                                        <Text>Settings</Text>
+                                        <Image className="" source={require('../../../assets/settings.png')}></Image>
                                     </View>
                                 </View>
-                                <View className="flex flex-row justify-between">
+                                <View className="flex flex-row justify-between pt-2 pb-4 px-[20px]">
                                     <Stat figure={counts ? String(counts.length && counts.reduce((acc, count) => acc + count.count, 0)) : "0"} stat="Prawns" />
                                     <Stat figure={String(getFeedNeeded(counts ? counts.length && counts.reduce((acc, count) => acc + count.count, 0) : 0)) + ' kg'} stat="Feeds Needed" />
                                     <Stat figure={String(ponds?.length || 0)} stat="Ponds" />

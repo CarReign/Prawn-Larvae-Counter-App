@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import uuid from 'react-native-uuid';
 import { ActivityIndicator, Image, Pressable } from "react-native";
-import base64ToBlob from "../../utils/base64ToBlob";
+import {Buffer} from 'buffer';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import useCount from "../../hooks/usecount";
 import axios from "axios";
 import * as FileSystem from 'expo-file-system';
+import FormData from 'form-data';
 
 export default function FloatingCamera() {
     const [currentImageUri, setCurrentImageUri] = useState<string>("");
@@ -18,10 +19,17 @@ export default function FloatingCamera() {
         if (currentImageUri) {
             setLoading(true);
             console.log("currentImageUri is:", currentImageUri);
-            FileSystem.readAsStringAsync(currentImageUri).then((response: string) => {
+            FileSystem.readAsStringAsync(currentImageUri).then( async (response: string) => {
                 const formData = new FormData();
-                formData.append('image-to-count', base64ToBlob(response), `${uuid.v4()}.jpg`);
-                axios.post('http://prawn-larvae-counter-app.vercel.app/api/counter/image',
+                // // const newBlob: any =  await axios.get(`data:image/jpeg;base64,${Buffer.from(response, 'binary').toString('base64')}`);
+                // console.log("Blob Value:", `data:image/jpeg;base64,${Buffer.from(response, 'binary').toString('base64')}`)
+                formData.append('image-to-count', {
+                    uri: currentImageUri,
+                    name: `${uuid.v4()}.jpg`,
+                    type: 'image/jpeg'
+                });
+                console.log("formdata:", formData)
+                axios.post('https://prawn-larvae-counter-app.vercel.app/api/counter/image',
                     formData,
                     { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "carreigniab123456" } }
                 ).then((response: any) => {

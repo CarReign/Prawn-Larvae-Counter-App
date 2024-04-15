@@ -14,17 +14,26 @@ export default function PondTab(){
             </View>
         }
         {
-            !loading && <View className="">
+            !loading && <View className="bg-[#eff6fc]">
+                <View className="flex flex-row justify-evenly p-4">
+                    <Text>Pond no</Text>
+                    <Text>Total prawn</Text>
+                    <Text>Feeds Needed (in kg)</Text>
+                    <Text>Action</Text>
+                </View>
                 {
                     ponds ?
                     ponds.map((pond, index) => {
-                        return <View key={pond.pond_id} className="flex flex-col justify-evenly p-4 border-b">
-                            <Text>pond no. {index}</Text>
-                            <Text> Counts: </Text>
-                            <Text>{counts && counts.length && counts.filter(count => count.pond_id === pond.pond_id).reduce((acc, count) => acc + count.count, 0).toString()}</Text>
-                            <Text>Feeds Needed</Text>
-                            <Text>0 kg</Text>
-                        </View>
+                        return (
+                            <View key={pond.pond_id} className="flex flex-col justify-evenly p-4 border-b">
+                                <Text>pond no. {index}</Text>
+                                <Text> Counts: </Text>
+                                <Text>{counts && counts.length && counts.filter(count => count.pond_id === pond.pond_id).reduce((acc, count) => acc + count.count, 0).toString()}</Text>
+                                <Text>Feeds Needed</Text>
+                                <Text>0 kg</Text>
+                            </View>
+
+                        )
                     })
                     :
                     <View className="flex-1 justify-center items-center">
