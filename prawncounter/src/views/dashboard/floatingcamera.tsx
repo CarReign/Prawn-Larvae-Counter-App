@@ -1,13 +1,39 @@
-import { useState } from "react";
-import { Image, Pressable } from "react-native";
+import { useEffect, useState } from "react";
+import uuid from 'react-native-uuid';
+import { ActivityIndicator, Image, Pressable } from "react-native";
+import base64ToBlob from "../../utils/base64ToBlob";
 
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import useCount from "../../hooks/usecount";
+import axios from "axios";
+import * as FileSystem from 'expo-file-system';
 
 export default function FloatingCamera() {
-    const [ currentImageUri, setCurrentImageUri ] = useState<string>("");
+    const [currentImageUri, setCurrentImageUri] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
     const { addCount } = useCount();
+
+    useEffect(() => {
+        if (currentImageUri) {
+            setLoading(true);
+            console.log("currentImageUri is:", currentImageUri);
+            FileSystem.readAsStringAsync(currentImageUri).then((response: string) => {
+                const formData = new FormData();
+                formData.append('image-to-count', base64ToBlob(response), `${uuid.v4()}.jpg`);
+                axios.post('http://prawn-larvae-counter-app.vercel.app/api/counter/image',
+                    formData,
+                    { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "carreigniab123456" } }
+                ).then((response: any) => {
+                    console.log("count is:", response);
+                }).catch((error) => console.log("error is:", error))
+            }).catch((error) => console.log("error is:", error))
+                .finally(() => {
+                    setCurrentImageUri("");
+                    setLoading(false);
+                });
+        };
+    }, [currentImageUri])
 
     const handleTakePicture = async () => {
         let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -19,8 +45,8 @@ export default function FloatingCamera() {
                 quality: 1,
             });
             if (!result.canceled) {
-                const image = await ImageManipulator.manipulateAsync(result.assets[0].uri, 
-                    [{ resize: { width: 500 } }], 
+                const image = await ImageManipulator.manipulateAsync(result.assets[0].uri,
+                    [{ resize: { width: 500 } }],
                     { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
                 );
                 setCurrentImageUri(image.uri);
@@ -28,10 +54,11 @@ export default function FloatingCamera() {
         }
     }
 
-    return <Pressable 
+    return <Pressable
         className=" flex items-center justify-center min-h-[55px] min-w-[55px] rounded-full bg-[#2E78B8] absolute bottom-[30px] right-[30px]"
         onPress={handleTakePicture}
-        >
-        <Image className=" aspect-auto h-[23.25px]" source={require('../../../assets/camera.png')} />
+    >
+        {loading && <ActivityIndicator color="white" />}
+        {!loading && <Image className=" aspect-auto h-[23.25px]" source={require('../../../assets/camera.png')} />}
     </Pressable>
 }

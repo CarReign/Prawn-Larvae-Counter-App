@@ -1,18 +1,24 @@
-import express, { Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
+import router from "./routes";
 
-// configures dotenv to work in your application
 dotenv.config();
-const app = express();
 
-const PORT = process.env.PORT;
+const app: Express = express();
+const port = process.env.PORT || 3000;
 
-app.get("/", (request: Request, response: Response) => { 
-  response.status(200).send("Prawn Counter API is running!");
-}); 
+app.get("/test", (req: Request, res: Response) => {
+    res.status(200).json({ message: "test run OK" });
+});
 
-app.listen(PORT, () => { 
-  console.log("Server running at PORT: ", PORT); 
-}).on("error", (error) => {
-  throw new Error(error.message);
+app.use("/api", async (req: Request, res: Response, next: NextFunction) => {
+    if (req.headers['x-prawncounter-api-key'] === (process.env.API_KEY || "carreigniab123456")) {
+        next();
+    } else {
+        res.status(404).send(`Cannot ${req.method} ${req.originalUrl}`);
+    };
+}, router);
+
+app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`);
 });
