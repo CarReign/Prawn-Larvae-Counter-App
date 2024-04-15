@@ -3,15 +3,17 @@ import { Image, View, ActivityIndicator } from 'react-native';
 import FileSystem from 'expo-file-system';
 import { supabase } from '../../../libs/supabase';
 import uuid from 'react-native-uuid';
+import blobToBase64 from '../../../utils/blobToBase64';
 
-export default function ImageComponent({path}: {path: string}) {
-//   const [imageURL, setImageURL] = useState("");
-    const [ imageData, setImageData] = useState<Blob>()
-    const [loading, setLoading] = useState(true);
+export default function ImageComponent({ path }: { path: string }) {
+  //   const [imageURL, setImageURL] = useState("");
+  const [imageData, setImageData] = useState<String>()
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchImage() {
       try {
+        if (!path) return;
         console.log(`path is: "${path}"`)
         // Replace 'image_filename' with your actual filename in the Supabase Bucket
         const { data, error } = await supabase.storage
@@ -19,24 +21,27 @@ export default function ImageComponent({path}: {path: string}) {
           .download(path);
 
         if (error) {
-            console.log(error)
+          console.log(error)
           throw error;
         }
-        
-    
-        const reader: FileReader = new FileReader();
-        reader.onload = async () => {
-            const documentStore = FileSystem.documentDirectory;
-            const fileUri = `${documentStore}/${uuid.v4()}.jpg`;
-            await FileSystem.writeAsStringAsync(fileUri, reader?.result?.split(',')[1], { encoding: FileSystem.EncodingType.Base64 });
-        };
-        reader.readAsDataURL(data);
+
+        console.log("data:", data);
+
+        const base64String: String = await blobToBase64(data);
+
+        console.log("assert base64:", base64String);
+        // const reader: FileReader = new FileReader();
+        // reader.onload = async () => {
+        //     const documentStore = FileSystem.documentDirectory;
+        //     const fileUri = `${documentStore}/${uuid.v4()}.jpg`;
+        //     await FileSystem.writeAsStringAsync(fileUri, reader?.result?.split(',')[1], { encoding: FileSystem.EncodingType.Base64 });
+        // };
+        // reader.readAsDataURL(data);
         // Get the URL of the downloaded image
         // const url = URL.createObjectURL();
         // console.log(url);
         // setImageURL(url);
-        console.log(data)
-        setImageData(data)
+        setImageData(base64String)
       } catch (error: any) {
         console.error('Error fetching image:', error.message);
       } finally {
@@ -48,13 +53,13 @@ export default function ImageComponent({path}: {path: string}) {
   }, [path]);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {loading ?(
+    <View className='bg-cover flex-row flex'>
+      {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : <>
         {path && imageData && <Image
           source={{ uri: `data:image/jpeg;base64,${imageData}` }}
-          style={{ width: 200, height: 200 }}
+          className=' aspect-auto min-h-[300px] w-full'
         />}
       </>}
     </View>

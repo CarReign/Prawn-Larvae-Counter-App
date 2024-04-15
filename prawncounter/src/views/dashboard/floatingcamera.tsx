@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import uuid from 'react-native-uuid';
 import { ActivityIndicator, Image, Pressable } from "react-native";
-import {Buffer} from 'buffer';
+import { Buffer } from 'buffer';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -21,7 +21,7 @@ export default function FloatingCamera() {
         if (currentImageUri) {
             setLoading(true);
             console.log("currentImageUri is:", currentImageUri);
-            FileSystem.readAsStringAsync(currentImageUri).then( async (response: string) => {
+            FileSystem.readAsStringAsync(currentImageUri).then(async (response: string) => {
                 const formData = new FormData();
                 // // const newBlob: any =  await axios.get(`data:image/jpeg;base64,${Buffer.from(response, 'binary').toString('base64')}`);
                 // console.log("Blob Value:", `data:image/jpeg;base64,${Buffer.from(response, 'binary').toString('base64')}`)
@@ -37,7 +37,7 @@ export default function FloatingCamera() {
                 ).then((response: any) => {
                     setResult({ count: response.data.count, path: response.data.path });
                 }).catch((error) => console.log("error is:", error))
-                
+
             }).catch((error) => console.log("error is:", error))
                 .finally(() => {
                     setCurrentImageUri("");
@@ -47,6 +47,7 @@ export default function FloatingCamera() {
     }, [currentImageUri])
 
     const handleTakePicture = async () => {
+        // setResult({ count: 666, path: "public/test.jpg" });
         let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (permission.granted) {
             let result = await ImagePicker.launchCameraAsync({

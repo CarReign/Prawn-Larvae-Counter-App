@@ -13,20 +13,20 @@ export default function HistoryTab() {
             </View>
         }
         {
-            !loading && <View className="">
+            !loading && <View className="bg-white min-h-full bg-[#eff6fc]">
                 {
                     counts ?
-                    counts.map((count, index) => {
-                        return <View key={count.count_id} className="flex flex-col justify-evenly p-4 border-b">
-                            <Text>pond no. {index}</Text>
-                            <Text> Count: </Text>
-                            <Text>{count.count}</Text>
+                        counts.map((count, index) => {
+                            return <View key={count.count_id} className="flex flex-col justify-evenly p-4 border-b">
+                                <Text>pond no. {index}</Text>
+                                <Text> Count:</Text>
+                                <Text>{count.count}</Text>
+                            </View>
+                        })
+                        :
+                        <View className="flex-1 justify-center items-center">
+                            <Text>No History</Text>
                         </View>
-                    })
-                    :
-                    <View className="flex-1 justify-center items-center">
-                        <Text>No History</Text>
-                    </View>
                 }
             </View>
         }
