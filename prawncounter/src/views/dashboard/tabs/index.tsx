@@ -19,13 +19,13 @@ export default function DashboardTabs() {
                 className={`rounded-t-lg items-center flex-grow justify-center ${selectedTab === "pond" ? "bg-[#eff6fc]" : "bg-[#E2EFFA]"}`}
                 onPress={handleChangeTab("pond")}
             >
-                <Text className="text-[16px]">Pond</Text>
+                <Text className="text-[16px] text-[#24527A]">Pond</Text>
             </Pressable>
             <Pressable 
                 className={`rounded-t-lg flex-grow items-center justify-center ${selectedTab === "history" ? "bg-[#eff6fc]" : "bg-[#E2EFFA]"}`}
                 onPress={handleChangeTab("history")}
                 >
-                <Text className="text-[16px]">History</Text>
+                <Text className="text-[16px] text-[#24527A]">History</Text>
             </Pressable>
         </View>
         <View>

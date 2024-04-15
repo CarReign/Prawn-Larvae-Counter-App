@@ -9,9 +9,11 @@ import useCount from "../../hooks/usecount";
 import axios from "axios";
 import * as FileSystem from 'expo-file-system';
 import FormData from 'form-data';
+import { useResult } from "./modals/resultmodal";
 
 export default function FloatingCamera() {
     const [currentImageUri, setCurrentImageUri] = useState<string>("");
+    const { result, setResult } = useResult();
     const [loading, setLoading] = useState<boolean>(false);
     const { addCount } = useCount();
 
@@ -33,8 +35,9 @@ export default function FloatingCamera() {
                     formData,
                     { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "carreigniab123456" } }
                 ).then((response: any) => {
-                    console.log("count is:", response);
+                    setResult({ count: response.data.count, path: response.data.path });
                 }).catch((error) => console.log("error is:", error))
+                
             }).catch((error) => console.log("error is:", error))
                 .finally(() => {
                     setCurrentImageUri("");

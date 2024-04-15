@@ -1,4 +1,4 @@
-import { ActivityIndicator, Button, Image, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Button, Image, Modal, Pressable, Text, View } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -12,6 +12,7 @@ import useCount from "../../hooks/usecount";
 import FloatingCamera from "./floatingcamera";
 import DashboardTabs from "./tabs";
 import getFeedNeeded from "../../utils/getfeedneeded";
+import ResultModal from "./modals/resultmodal";
 
 interface IDashboardProps {
     route: RouteProp<RootStackParamList, "dashboard">;
@@ -24,6 +25,8 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
     const { ponds } = usePond();
     const { counts } = useCount();
     
+    const [ modalVisible, setModalVisible ] = useState<boolean>(false);
+
     const { session, loading } = useAuth();
 
     useEffect(() => {
@@ -44,6 +47,8 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
     
 
     return (
+        <>
+        <ResultModal>
         <View className=" flex-1 bg-[#BAD8F2] py-8">
             {
                 proceed && <>
@@ -80,5 +85,7 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                 </View>
             }
         </View>
+        </ResultModal>
+        </>
     );
 }
