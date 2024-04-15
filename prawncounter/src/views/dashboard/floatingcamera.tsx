@@ -67,10 +67,10 @@ export default function FloatingCamera() {
     }
 
     return <Pressable
-        className=" flex items-center justify-center min-h-[55px] min-w-[55px] rounded-full bg-[#2E78B8] absolute bottom-[30px] right-[30px]"
+        className=" flex items-center justify-center min-h-[55px] min-w-[55px] rounded-full bg-[#2E78B8] absolute bottom-[30px] right-[30px] pb-[2px] pr-[2px]"
         onPress={handleTakePicture}
     >
         {loading && <ActivityIndicator color="white" />}
-        {!loading && <Image className=" aspect-auto h-[23.25px]" source={require('../../../assets/camera.png')} />}
+        {!loading && <Image className="" source={require('../../../assets/camera.png')} style={{ width: 32, height: 32}}/>}
     </Pressable>
 }
