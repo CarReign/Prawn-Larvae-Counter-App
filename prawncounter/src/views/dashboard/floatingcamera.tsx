@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, Pressable } from "react-native";
+import { ActivityIndicator, Image, Pressable } from "react-native";
 
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -9,6 +9,7 @@ import * as FileSystem from 'expo-file-system';
 
 export default function FloatingCamera() {
     const [currentImageUri, setCurrentImageUri] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
     const { addCount } = useCount();
 
     useEffect(() => {
@@ -16,16 +17,18 @@ export default function FloatingCamera() {
 
             axios.get(currentImageUri).then((response: any) => {
 
-                const formData = new FormData();
+                console.log("response is:", response.data);
 
-                formData.append('image-to-count', response.data.blob());
+                // const formData = new FormData();
 
-                axios.post('http://prawn-counter.vercel.com/api/counter',
-                    formData,
-                    { headers: { 'Content-Type': 'multipart/form-data' } }
-                ).then((response: any) => {
-                    console.log("count is:", response.data.count);
-                });
+                // formData.append('image-to-count', response.data.blob());
+
+                // axios.post('http://prawn-counter.vercel.com/api/counter',
+                //     formData,
+                //     { headers: { 'Content-Type': 'multipart/form-data' } }
+                // ).then((response: any) => {
+                //     console.log("count is:", response.data.count);
+                // });
             });
 
 
@@ -55,6 +58,7 @@ export default function FloatingCamera() {
         className=" flex items-center justify-center min-h-[55px] min-w-[55px] rounded-full bg-[#2E78B8] absolute bottom-[30px] right-[30px]"
         onPress={handleTakePicture}
     >
-        <Image className=" aspect-auto h-[23.25px]" source={require('../../../assets/camera.png')} />
+        {loading && <ActivityIndicator color="white" />}
+        {!!loading && <Image className=" aspect-auto h-[23.25px]" source={require('../../../assets/camera.png')} />}
     </Pressable>
 }
