@@ -6,6 +6,7 @@ import { add } from "@techstark/opencv-js";
 type CountType = {
     count_id: number;
     pond_id: number;
+    path: string;
     count: number;
     created_at: string;
 }
@@ -13,7 +14,7 @@ type CountType = {
 type CountContextType = {
     counts?: CountType[];
     loading?: boolean;
-    addCount?: (pond_id: number, count: number) => void;
+    addCount?: (pond_id: number, path: string, count: number) => void;
     updateCount?: (count: CountType) => void;
     deleteCount?: (count_id: number) => void;
     refetch?: () => void;
@@ -61,9 +62,9 @@ export default function CountProvider({ children }: { children: React.ReactNode 
         }
     }, [pondLoading]);
 
-    const handleAddCount = (pond_id: number, count: number) => {
+    const handleAddCount = (pond_id: number, path: string, count: number) => {
         supabase.from("counts")
-            .insert([{pond_id, count}])
+            .insert([{pond_id, path, count}])
             .then((response) => {
                 if (response.error) {
                     console.log(response.error.message);
