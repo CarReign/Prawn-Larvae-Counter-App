@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import uuid from 'react-native-uuid';
 import { ActivityIndicator, Image, Pressable } from "react-native";
+import base64ToBlob from "../../utils/base64ToBlob";
 
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -14,24 +16,22 @@ export default function FloatingCamera() {
 
     useEffect(() => {
         if (currentImageUri) {
-
-            axios.get(currentImageUri).then((response: any) => {
-
-                console.log("response is:", response.data);
-
-                // const formData = new FormData();
-
-                // formData.append('image-to-count', response.data.blob());
-
-                // axios.post('http://prawn-counter.vercel.com/api/counter',
-                //     formData,
-                //     { headers: { 'Content-Type': 'multipart/form-data' } }
-                // ).then((response: any) => {
-                //     console.log("count is:", response.data.count);
-                // });
-            });
-
-
+            setLoading(true);
+            console.log("currentImageUri is:", currentImageUri);
+            FileSystem.readAsStringAsync(currentImageUri).then((response: string) => {
+                const formData = new FormData();
+                formData.append('image-to-count', base64ToBlob(response), `${uuid.v4()}.jpg`);
+                axios.post('http://prawn-larvae-counter-app.vercel.app/api/counter/image',
+                    formData,
+                    { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "carreigniab123456" } }
+                ).then((response: any) => {
+                    console.log("count is:", response);
+                }).catch((error) => console.log("error is:", error))
+            }).catch((error) => console.log("error is:", error))
+                .finally(() => {
+                    setCurrentImageUri("");
+                    setLoading(false);
+                });
         };
     }, [currentImageUri])
 
@@ -59,6 +59,6 @@ export default function FloatingCamera() {
         onPress={handleTakePicture}
     >
         {loading && <ActivityIndicator color="white" />}
-        {!!loading && <Image className=" aspect-auto h-[23.25px]" source={require('../../../assets/camera.png')} />}
+        {!loading && <Image className=" aspect-auto h-[23.25px]" source={require('../../../assets/camera.png')} />}
     </Pressable>
 }
