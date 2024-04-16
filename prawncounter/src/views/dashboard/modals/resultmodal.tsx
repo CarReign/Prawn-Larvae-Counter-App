@@ -48,12 +48,12 @@ export default function ResultModal({ children }: { children: React.ReactNode })
                             <Text className="text-center text-[16px] text-[#24527A]">prawns</Text>
                         </View>
                         <Pressable
-                            className="bg-[#24527A] rounded-md py-3 px-3 mb-2 justify-center flex flex-row "
-                            onPress={handleTakePicture}
+                            className="bg-[#24527A] rounded-md py-3 px-3 mb-2 justify-center flex flex-row items-center"
+                            onPress={() => handleTakePicture()}
                             
                         >
-                            <Image source={require('../../../../assets/count-again.png')} />
-                            <Text className="text-[#F9FCFF] pl-2">Count again</Text>
+                            <Image source={require('../../../../assets/count-again.png')} style={{ width: 12, height: 12}} />
+                            <Text className="text-[#F9FCFF] pl-1">Count again</Text>
                         </Pressable>
                         <Pressable
                             className="bg-[#F9FCFF] py-3 px-3 border-[#315f88] rounded-md border"

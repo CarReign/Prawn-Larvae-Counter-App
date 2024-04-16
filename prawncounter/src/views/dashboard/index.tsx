@@ -24,8 +24,6 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
     const { farm, loading: farmLoading, username } = useFarm();
     const { ponds } = usePond();
     const { counts } = useCount();
-    
-    const [ modalVisible, setModalVisible ] = useState<boolean>(false);
 
     const { session, loading } = useAuth();
 
@@ -63,9 +61,9 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                                         <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username}</Text>
                                         <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
                                     </View>
-                                    <View>
+                                    <Pressable onPress={() => navigation.navigate('settings')}>
                                         <Image className="" source={require('../../../assets/settings.png')}></Image>
-                                    </View>
+                                    </Pressable>
                                 </View>
                                 <View className="flex flex-row justify-between pt-2 pb-4 px-[20px] mt-5 mb-1">
                                     <Stat figure={counts ? String(counts.length && counts.reduce((acc, count) => acc + count.count, 0)) : "0"} stat="Prawns" />
