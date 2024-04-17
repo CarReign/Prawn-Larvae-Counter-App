@@ -35,7 +35,7 @@ export default function Settings({ route, navigation }: IDashboardProps) {
             <View className="">
                 <View className="mb-6">
                     <View className="flex flex-row justify-between items-center mb-2">
-                        <Text className="text-[#24527A] text-[18px] font-semibold">Account</Text>
+                        <Text className="text-[#24527A] text-[16px] font-semibold">Account</Text>
                         <Pressable className="flex flex-row border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
                             onPress={() => navigation.navigate('editAccount')}>
                             <Image className="" source={require('../../../assets/edit.png')} style={{ width: 16, height: 16}} />
@@ -44,33 +44,33 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <View className="flex flex-row justify-between mb-3">
-                            <Text className="text-[18px] text-[#24527A]">Name:</Text>
-                            <Text className="text-[18px] text-[#24527A]">Carren Mae Yongco</Text>
+                            <Text className="text-[16px] text-[#24527A]">Name:</Text>
+                            <Text className="text-[16px] text-[#24527A]">Carren Mae Yongco</Text>
                         </View>
                         <View className="flex flex-row justify-between mb-3">
-                            <Text className="text-[18px] text-[#24527A]">Username:</Text>
-                            <Text className="text-[18px] text-[#24527A]">Carreign</Text>
+                            <Text className="text-[16px] text-[#24527A]">Username:</Text>
+                            <Text className="text-[16px] text-[#24527A]">Carreign</Text>
                         </View>
                         <View className="flex flex-row justify-between">
-                            <Text className="text-[18px] text-[#24527A]">Farm name:</Text>
-                            <Text className="text-[18px] text-[#24527A]">RDEX Prawn Farm</Text>
+                            <Text className="text-[16px] text-[#24527A]">Farm name:</Text>
+                            <Text className="text-[16px] text-[#24527A]">RDEX Prawn Farm</Text>
                         </View>
                     </View>
                 </View>
                 <View className="mb-6">
                     <View className="flex flex-row justify-between items-center mb-2">
-                        <Text className="text-[#24527A] text-[18px] font-semibold">Privacy & Security</Text>
+                        <Text className="text-[#24527A] text-[16px] font-semibold">Privacy & Security</Text>
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <Pressable  className="flex flex-row justify-between" onPress={() => navigation.navigate('changePassword')}>
-                            <Text className="text-[18px] text-[#24527A]">Change Password</Text>
+                            <Text className="text-[16px] text-[#24527A]">Change Password</Text>
                             <Image source={require('../../../assets/arrow-right.png')} style={{ width: 16, height: 16}}/>
                         </Pressable>
                     </View>
                 </View>
                 <View className="mb-6">
                     <View className="flex flex-row justify-between items-center mb-2">
-                        <Text className="text-[#24527A] text-[18px] font-semibold">Counting algorithms</Text>
+                        <Text className="text-[#24527A] text-[16px] font-semibold">Counting algorithms</Text>
                         <Pressable className="flex flex-row border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
                             onPress={() => navigation.navigate('changeAlgorithm')}>
                             <Image className="" source={require('../../../assets/edit.png')} style={{ width: 16, height: 16}} />
@@ -79,13 +79,13 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <View className="flex flex-row justify-between mb-3">
-                            <Text className="text-[18px] text-[#24527A]">Contour-based</Text>
+                            <Text className="text-[16px] text-[#24527A]">Contour-based</Text>
                         </View>
                         <View className="flex flex-row  mb-3 ">
-                            <Text className="text-[18px] text-[#24527A]">Canny-edge detection</Text>
+                            <Text className="text-[16px] text-[#24527A]">Canny-edge detection</Text>
                         </View>
                         <View className="flex flex-row d mb-3 ">
-                            <Text className="text-[18px] text-[#24527A]">Blob-detection</Text>
+                            <Text className="text-[16px] text-[#24527A]">Blob-detection</Text>
                         </View>
                     </View>
                 </View>
@@ -93,7 +93,7 @@ export default function Settings({ route, navigation }: IDashboardProps) {
             <View className="flex flex-row w-full justify-center pb-5">
                 <Pressable onPress={toggleLogoutModal} className="flex flex-row bg-[#B41919] rounded-md pr-2 h-[36px] pl-2 pb-[6px] pt-[5px] w-[96px] justify-center items-center">
                     <Image source={require('../../../assets/logout.png')} style={{ width: 16, height: 16}}></Image>
-                    <Text className="text-[#ECF4FB] pl-1 text-[18px]">Logout</Text>
+                    <Text className="text-[#ECF4FB] pl-1 text-[16px]">Logout</Text>
                 </Pressable>
             </View>
             {logoutModalVisibility && (

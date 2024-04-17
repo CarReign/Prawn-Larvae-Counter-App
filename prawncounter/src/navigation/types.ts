@@ -9,4 +9,5 @@ export type RootStackParamList = {
     editAccount: undefined;
     changePassword: undefined;
     changeAlgorithm: undefined;
+    selectPond: undefined;
 };

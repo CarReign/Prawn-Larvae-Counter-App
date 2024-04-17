@@ -12,6 +12,8 @@ import Settings from "./src/views/settings";
 import EditAccount from "./src/views/editAccount";
 import ChangePassword from "./src/views/changepassword";
 import ChangeAlgorithm from "./src/views/changealgorithm";
+import SelectPond from "./src/views/selectpond/selectpond";
+
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,7 +25,7 @@ export default function App() {
         <PondProvider>
           <CountProvider>
             <NavigationContainer>
-              <RootStack.Navigator initialRouteName="dashboard" screenOptions={{
+              <RootStack.Navigator initialRouteName="selectPond" screenOptions={{
                   headerTintColor: '#24527A',
                   headerStyle: { backgroundColor: '#ECF4FB' },
                 }}>
@@ -33,6 +35,7 @@ export default function App() {
                 <RootStack.Screen name="editAccount" options={{title: "Edit account"}} component={EditAccount}/>
                 <RootStack.Screen name="changePassword" options={{title: "Change password"}} component={ChangePassword}/>
                 <RootStack.Screen name="changeAlgorithm" options={{title: "Change algorithm"}} component={ChangeAlgorithm}/>
+                <RootStack.Screen name="selectPond" options={{title: "Select a pond"}} component={SelectPond}/>
               </RootStack.Navigator>
             </NavigationContainer>
           </CountProvider>
