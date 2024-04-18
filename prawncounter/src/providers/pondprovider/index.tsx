@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useEffect, useState } from "react";
 import useAuth from "../../hooks/useauth";
 import useFarm from "../../hooks/useFarm";
 import { supabase } from "../../libs/supabase";
@@ -17,6 +17,7 @@ export type PondTypeWithOrWithoutPondNumber = PondType & { pondNumber?: number }
 type PondContextType = {
     ponds?: PondTypeWithOrWithoutPondNumber[];
     loading?: boolean;
+    setPonds?: Dispatch<SetStateAction<PondTypeWithOrWithoutPondNumber[]>>;
     addPond?: (pond: Omit<Omit<PondType, "pond_id">, "created_at">) => void;
     editPond?: (pond: PondType) => void;
     deletePond?: (pond_id: number) => void;
@@ -100,9 +101,21 @@ export default function PondProvider({ children }: { children: React.ReactNode }
 
     const handleRefetch = () => {
         setLoading(true);
+        if (!farm) return;
+        supabase.from("ponds")
+            .select("*")
+            .eq("farm_id", farm.farm_id)
+            .then((response: PostgrestMaybeSingleResponse<PondType[]>) => {
+                if (response.error) {
+                    console.log(response.error.message);
+
+                }
+                setPonds(response?.data?.sort((a, b) => b.pond_id - a.pond_id).map((pond: PondType, index: number) => ({ ...pond, pondNumber: index + 1 })) || []);
+                setLoading(false);
+            });
     }
 
-    return <PondContext.Provider value={{ ponds, loading, addPond: handleAddPond, editPond: handleEditPond, deletePond: handleDeletePond, refetch: handleRefetch }}>
+    return <PondContext.Provider value={{ ponds, loading, setPonds, addPond: handleAddPond, editPond: handleEditPond, deletePond: handleDeletePond, refetch: handleRefetch }}>
         {children}
     </PondContext.Provider>
 }

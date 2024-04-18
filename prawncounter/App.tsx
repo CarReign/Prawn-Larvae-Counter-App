@@ -15,19 +15,22 @@ import ChangeAlgorithm from "./src/views/changealgorithm";
 import SelectPond from "./src/views/selectpond/selectpond";
 import SignUpPage from "./src/views/signuppage";
 import ResultModal from "./src/views/dashboard/modals/resultmodal";
+import { useRef } from "react";
 
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
 
+  const navigatorRef = useRef<any>();
+
   return (
     <AuthProvider>
       <FarmProvider>
         <PondProvider>
           <CountProvider>
-            <ResultModal>
-              <NavigationContainer>
+            <ResultModal navigation={navigatorRef}>
+              <NavigationContainer ref={navigatorRef}>
                 <RootStack.Navigator initialRouteName="signin" screenOptions={{
                   headerTintColor: '#24527A',
                   headerStyle: { backgroundColor: '#ECF4FB' },

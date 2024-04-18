@@ -13,7 +13,7 @@ import { useResult } from "./modals/resultmodal";
 
 export default function FloatingCamera() {
     const [currentImageUri, setCurrentImageUri] = useState<string>("");
-    const { result, setResult } = useResult();
+    const { result, setResult, setNavigateCallback } = useResult();
     const [loading, setLoading] = useState<boolean>(false);
     const { addCount } = useCount();
 
@@ -36,18 +36,18 @@ export default function FloatingCamera() {
                     { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "carreigniab123456" } }
                 ).then((response: any) => {
                     setResult({ count: response.data.count, path: response.data.path });
-                }).catch((error) => console.log("error is:", error))
+                }).catch((error) => console.log("error is:", error)).finally(() => setLoading(false))
 
             }).catch((error) => console.log("error is:", error))
                 .finally(() => {
                     setCurrentImageUri("");
-                    setLoading(false);
                 });
         };
     }, [currentImageUri])
 
     const handleTakePicture = async () => {
         // setResult({ count: 666, path: "public/test.jpg" });
+        if (loading) return;
         let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (permission.granted) {
             let result = await ImagePicker.launchCameraAsync({
@@ -71,6 +71,6 @@ export default function FloatingCamera() {
         onPress={handleTakePicture}
     >
         {loading && <ActivityIndicator color="white" />}
-        {!loading && <Image className="" source={require('../../../assets/camera.png')} style={{ width: 32, height: 32}}/>}
+        {!loading && <Image className="" source={require('../../../assets/camera.png')} style={{ width: 32, height: 32 }} />}
     </Pressable>
 }

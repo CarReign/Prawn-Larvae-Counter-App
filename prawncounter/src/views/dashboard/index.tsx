@@ -12,7 +12,7 @@ import useCount from "../../hooks/usecount";
 import FloatingCamera from "./floatingcamera";
 import DashboardTabs from "./tabs";
 import getFeedNeeded from "../../utils/getfeedneeded";
-import ResultModal from "./modals/resultmodal";
+import ResultModal, { useResult } from "./modals/resultmodal";
 
 interface IDashboardProps {
     route: RouteProp<RootStackParamList, "dashboard">;
@@ -23,6 +23,12 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
     const { farm, loading: farmLoading, username, refresh } = useFarm();
     const { ponds } = usePond();
     const { counts } = useCount();
+    const { setNavigateCallback } = useResult();
+
+    useEffect(() => {
+        setNavigateCallback(() => () => { navigation.navigate("selectPond") })
+    }, [])
+
     return (
         <>
             <View className=" flex-1 bg-[#BAD8F2] py-8">

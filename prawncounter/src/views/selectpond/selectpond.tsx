@@ -7,6 +7,7 @@ import { PondTypeWithOrWithoutPondNumber } from "../../providers/pondprovider";
 import { useResult } from "../dashboard/modals/resultmodal";
 import { RootStackParamList } from "../../navigation/types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import getFeedNeeded from "../../utils/getfeedneeded";
 
 interface IDashboardProps {
     navigation: NativeStackNavigationProp<RootStackParamList, "selectPond">;
@@ -69,12 +70,12 @@ export default function SelectPond({ navigation }: IDashboardProps) {
                                 source={require("../../../assets/line.png")}
                                 style={{ width: 0.5, height: 15, tintColor: "#9fb7cc", marginTop: 3 }}
                             />
-                            <Text className="font-semibold text-lg text-[#24527A]">{counts && counts.length && counts.filter(count => count.pond_id === pond.pond_id).reduce((acc, count) => acc + count.count, 0).toString()}</Text>
+                            <Text className="font-semibold text-lg text-[#24527A]">{pond.total_count || "Not Known"}</Text>
                             <Image
                                 source={require("../../../assets/line.png")}
                                 style={{ width: 0.5, height: 15, tintColor: "#9fb7cc", marginTop: 3 }}
                             />
-                            <Text className="font-semibold text-lg text-[#24527A]">0kg</Text>
+                            <Text className="font-semibold text-lg text-[#24527A]">{getFeedNeeded(pond.total_count || 0)} kg</Text>
                         </Pressable>
                     )) :
                         <View className="flex-1 justify-center items-center">
@@ -85,7 +86,7 @@ export default function SelectPond({ navigation }: IDashboardProps) {
             <View className="flex-row justify-between bg-[#ECF4FB]] border-t-[.3px] border-[#24527A] h-16 p-4 items-center">
                 <View>
                     <Text className="text-lg font-bold text-[#24527A]">Selected pond:</Text>
-                    <Text className="italic text-lg text-[#24527A]">{selectedPond ? `Pond ${selectedPond}` : 'No selected pond yet'}</Text>
+                    <Text className="italic text-lg text-[#24527A]">{selectedPond ? `Pond ${selectedPond.pondNumber}` : 'No selected pond yet'}</Text>
                 </View>
                 <Pressable
                     onPress={toggleSelectPond}

@@ -3,6 +3,8 @@ import usePond from "../../hooks/usePond";
 import { supabase } from "../../libs/supabase";
 import { add } from "@techstark/opencv-js";
 import { ToastAndroid } from "react-native";
+import moment from "moment-timezone";
+import useFarm from "../../hooks/useFarm";
 
 type CountType = {
     count_id: number;
@@ -26,7 +28,8 @@ export const CountContext = createContext<CountContextType>({})
 export default function CountProvider({ children }: { children: React.ReactNode }) {
     const [counts, setCounts] = useState<CountType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const { ponds, loading: pondLoading } = usePond();
+    const { ponds, loading: pondLoading, refetch } = usePond();
+    const { refresh } = useFarm();
 
     useEffect(() => {
         const sum = counts.length && counts.reduce((acc, count) => acc + count.count, 0);
@@ -66,12 +69,21 @@ export default function CountProvider({ children }: { children: React.ReactNode 
     const handleAddCount = async (pond_id: number, path: string, count: number) => {
         await supabase.from("counts")
             .insert([{ pond_id, path, count }])
+            .select("*")
             .then((response) => {
                 if (response.error) {
                     console.log("Handle Add Count:", response.error.message);
-                    ToastAndroid.showWithGravity("Something Went Wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM)
+                    ToastAndroid.showWithGravity("Something Went Wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM);
                 }
-                if (response.data) setCounts([...counts, response.data]);
+                if (response.data) setCounts([...counts, ...response.data]);
+                supabase.from("ponds").select("*").eq("pond_id", pond_id).then((response: any) => {
+                    const total_count = response.data[0].total_count;
+                    supabase.from("ponds").update({ ...response.data[0], total_count: total_count + count }).eq("pond_id", pond_id).then(() => {
+                        refetch && refetch();
+                        refresh && refresh();
+                        ToastAndroid.showWithGravity("Successfully Added Count", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+                    });
+                });
             });
     }
 

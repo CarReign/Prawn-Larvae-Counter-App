@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, Image } from 'react-native';
 import ImageComponent from "./resultPicture";
 import handleTakePicture from "../floatingcamera";
@@ -17,29 +17,30 @@ type ResultContextProps = {
     result: ResultType;
     setResult: React.Dispatch<React.SetStateAction<ResultType>>;
     setIsPaused: React.Dispatch<React.SetStateAction<boolean>>;
+    setNavigateCallback: Dispatch<SetStateAction<(() => void) | undefined>>;
 }
 
-interface IDashboardProps {
-    route: RouteProp<RootStackParamList, "dashboard">;
-    navigation: NativeStackNavigationProp<RootStackParamList, "dashboard">;
-}
-
-export const ResultContext = React.createContext<ResultContextProps>({ result: { count: 0, path: "" }, setResult: () => { }, setIsPaused: () => { } });
+export const ResultContext = React.createContext<ResultContextProps>({ result: { count: 0, path: "" }, setResult: () => { }, setIsPaused: () => { }, setNavigateCallback: () => { } });
 
 export function useResult() {
     return React.useContext(ResultContext);
 }
 
-export default function ResultModal({ children }: { children: React.ReactNode }, { route, navigation }: IDashboardProps) {
+export default function ResultModal({ children, navigation }: { children: React.ReactNode, navigation: any }) {
     const [isPaused, setIsPaused] = useState(false);
     const [result, setResult] = useState<ResultType>(null);
+    const [navigateCallback, setNavigateCallback] = useState<() => void>();
+
+    useEffect(() => {
+        console.log("NAVIGATE CALLBACK -", navigateCallback);
+    }, [navigateCallback])
 
     useEffect(() => {
         console.log("result is:", result);
     }, [result]);
 
     return (
-        <ResultContext.Provider value={{ result, setResult, setIsPaused }}>
+        <ResultContext.Provider value={{ result, setResult, setIsPaused, setNavigateCallback }}>
             <Modal className="flex flex-1 max-w-2xl max-h-full z-10 "
                 animationType="slide"
                 transparent={true}
@@ -72,7 +73,7 @@ export default function ResultModal({ children }: { children: React.ReactNode },
                         </Pressable>
                         <Pressable
                             className="bg-[#F9FCFF] py-3 px-3 flex flex-row justify-center items-center border-[#315f88] rounded-md border"
-                            onPress={() => navigation.navigate('selectPond')}
+                            onPress={() => { setIsPaused(true); navigateCallback && navigateCallback() }}
                         >
                             <Image source={require('../../../../assets/add.png')} style={{ width: 12, height: 12 }} />
                             <Text className="text-[#24527A] pl-1 text-center">Add to pond</Text>
