@@ -38,8 +38,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                 navigation.pop();
             }, 2000)
             setAuthMessage({ message: 'Signed in successfully', status: 'success' });
-        }
-        ).catch((error) => {
+        }).catch((error) => {
             setAuthMessage(error.message);
         }).finally(() => {
             setAuthForm({ ...authForm, loading: false });

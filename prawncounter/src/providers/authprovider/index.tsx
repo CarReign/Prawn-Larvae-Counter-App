@@ -6,7 +6,8 @@ import { Text } from "react-native";
 
 export const AuthContext = createContext<{ 
     session?: Session | null, 
-    loading?: boolean, 
+    loading?: boolean,
+    reset?: () => void 
 }>({});
 
 type SessionData = { 
@@ -35,8 +36,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         });
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (event, updatedSession) => {
-                console.log(`Supabase Auth: ${event}${updatedSession?.user ? `@ user ${updatedSession.user.email}` : " @ no auth" }`)
-                setSession(updatedSession);
+                console.log(`Supabase Auth: ${event}${updatedSession?.user ? `@ user ${updatedSession.user.email}` : " @ no auth" }`);
+                if(!(session === null && updatedSession === null)) setSession(updatedSession);
             }
         );
         return () => {
@@ -44,8 +45,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         }
     }, []);
 
+    const reset = () => {
+    }
+
     return (
-        <AuthContext.Provider value={{ session, loading }}>
+        <AuthContext.Provider value={{ session, loading, reset }}>
             {children}
         </AuthContext.Provider>
     );

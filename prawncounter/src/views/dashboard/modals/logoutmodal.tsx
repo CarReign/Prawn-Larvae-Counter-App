@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Modal, StyleSheet, Text, Pressable, View, Image, TextInput } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Image, TextInput, ActivityIndicator } from 'react-native';
 import Overlay from "../overlay";
 import { supabase } from "../../../libs/supabase";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import useAuth from "../../../hooks/useauth";
 
 type PondType = {
     pondNo: number;
@@ -16,12 +17,12 @@ type LogoutModalProps = {
 }
 
 export default function LogoutModal({ onClose, onLogout}: LogoutModalProps) {
+    const { loading } = useAuth();
     const [pondNumber, setPondNumber] = useState<number>(0);
     const [pondCount, setPondCount] = useState<number>(0);
 
     const handleLogoutModal = () => {
 
-        onLogout();
 
         onClose();
     };
@@ -48,10 +49,12 @@ export default function LogoutModal({ onClose, onLogout}: LogoutModalProps) {
                                 <Text className="text-[#24527A] text-[18px]">No</Text>
                             </Pressable>
                             <Pressable
+                                disabled={loading}
                                 className="mr-2 rounded h-[36px] px-5 text-center bg-[#24527A] justify-center items-center"
-                                onPress={handleLogoutModal}
+                                onPress={onLogout}
                             >
-                                <Text className="text-[#ECF4FB] text-[18px]">Yes</Text>
+                                { !loading && <Text className="text-[#ECF4FB] text-[18px]">Yes</Text>}
+                                { !!loading && <><ActivityIndicator color={"#ffffff"}/><Text>Signing Out...</Text></>}
                             </Pressable>
                         </View>
                     </View>

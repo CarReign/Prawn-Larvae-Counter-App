@@ -5,6 +5,7 @@ import { RootStackParamList } from "../../navigation/types";
 import { supabase } from "../../libs/supabase";
 import { useState } from "react";
 import LogoutModal from "../dashboard/modals/logoutmodal";
+import useAuth from "../../hooks/useauth";
 
 interface IDashboardProps {
     route: RouteProp<RootStackParamList, "settings">;
@@ -12,6 +13,8 @@ interface IDashboardProps {
 }
 
 export default function Settings({ route, navigation }: IDashboardProps) {
+    const { loading, reset } = useAuth();
+
     const toggleLogoutModal = () => {
         console.log("logout")
         setLogoutModalVisibility(!logoutModalVisibility);
@@ -19,16 +22,12 @@ export default function Settings({ route, navigation }: IDashboardProps) {
 
     const [ logoutModalVisibility, setLogoutModalVisibility ] = useState(false)
 
-    const handleLogoutModal = (pond: any) => {
+    const handleLogoutModal = () => {
         supabase.auth.signOut().then(() => {
-                    navigation.replace("signin");
-                });
-      };
-    // const handleLogout = () => {
-    //     supabase.auth.signOut().then(() => {
-    //         navigation.replace("signin");
-    //     });
-    // };
+            reset && reset();
+            navigation.replace("dashboard");
+        });
+    }
 
     return (
         <View className="pt-4 px-5  bg-[#ECF4FB] w-full h-full justify-between">
