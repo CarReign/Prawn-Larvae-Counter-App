@@ -37,7 +37,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
             setTimeout(() => {
                 navigation.pop();
             }, 2000)
-            setAuthMessage({ message: 'Sign in successful', status: 'success' });
+            setAuthMessage({ message: 'Signed in successfully', status: 'success' });
         }
         ).catch((error) => {
             setAuthMessage(error.message);
@@ -76,7 +76,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                         className="bg-[#F9FAFE] px-2 focus:border-[#24527A] border-[#24527a81] text-[#24527A] border border-t-0 border-x-0 border-b-[1px] rounded-[4px] min-h-[40px] w-full" 
                         onChangeText={handleEmailChange}
                         textContentType='emailAddress'
-                        placeholder='***@gmail.com'
+                        placeholder='Enter email'
                         value={authForm.email} />
                 </View>
                 <View className="w-full mb-[12px] flex flex-col justify-start items-start  space-y-[10px] ">
@@ -85,7 +85,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                         className="bg-[#F9FAFE] px-2 focus:border-[#24527A] border-[#24527a81] text-[#24527A] border border-t-0 border-x-0 border-b-[1px] rounded-[4px] min-h-[40px] w-full"
                         onChangeText={handlePasswordChange}
                         textContentType='password'
-                        placeholder='password'
+                        placeholder='Enter password'
                         secureTextEntry={true}
                         value={authForm.password} />
                 </View>

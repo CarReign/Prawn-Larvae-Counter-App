@@ -13,6 +13,7 @@ import EditAccount from "./src/views/editAccount";
 import ChangePassword from "./src/views/changepassword";
 import ChangeAlgorithm from "./src/views/changealgorithm";
 import SelectPond from "./src/views/selectpond/selectpond";
+import SignUpPage from "./src/views/signuppage";
 
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -30,6 +31,7 @@ export default function App() {
                   headerStyle: { backgroundColor: '#ECF4FB' },
                 }}>
                 <RootStack.Screen name="dashboard" options={{ header: () => null, }} component={Dashboard} />
+                <RootStack.Screen  name="signup" options={{ header: () => null, }} component={SignUpPage} />
                 <RootStack.Screen  name="signin" options={{ header: () => null, }} component={SignInPage} />
                 <RootStack.Screen name="settings" options={{title: "Settings"}} component={Settings}/>
                 <RootStack.Screen name="editAccount" options={{title: "Edit account"}} component={EditAccount}/>

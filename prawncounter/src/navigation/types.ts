@@ -3,6 +3,7 @@
 
 export type RootStackParamList = {
     default: undefined;
+    signup: undefined;
     signin: undefined;
     dashboard: undefined;
     settings: undefined;

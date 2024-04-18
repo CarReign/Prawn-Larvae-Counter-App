@@ -1,70 +1,91 @@
+import React, { useState } from "react";
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
-import type { RouteProp } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../navigation/types";
 import { supabase } from "../../libs/supabase";
-import { useState } from "react";
 
 interface IDashboardProps {
-    route: RouteProp<RootStackParamList, "selectPond">;
-    navigation: NativeStackNavigationProp<RootStackParamList, "selectPond">;
+  navigation: any; // Adjust the type based on your navigation setup
 }
 
-export default function SelectPond({ route, navigation }: IDashboardProps) {
-    const toggleLogoutModal = () => {
-        console.log("logout")
-        setLogoutModalVisibility(!logoutModalVisibility);
-    }
+export default function SelectPond({ navigation }: IDashboardProps) {
+  const [selectedPond, setSelectedPond] = useState<number | null>(null); // State to keep track of selected pond
 
-    const [ logoutModalVisibility, setLogoutModalVisibility ] = useState(false)
+  const toggleLogoutModal = () => {
+    console.log("logout");
+    setLogoutModalVisibility(!logoutModalVisibility);
+  };
 
-    const handleLogoutModal = (pond: any) => {
-        supabase.auth.signOut().then(() => {
-                    navigation.replace("signin");
-                });
-      };
-    // const handleLogout = () => {
-    //     supabase.auth.signOut().then(() => {
-    //         navigation.replace("signin");
-    //     });
-    // };
+  const [logoutModalVisibility, setLogoutModalVisibility] = useState(false);
 
-    return (
-        <View className=" bg-[#ECF4FB] w-full h-full justify-between">
-            <View className="pt-4 px-5 ">
-                <View className="mb-6">
-                    <View className="flex flex-row justify-between items-center mb-2">
-                        <Pressable className="flex flex-grow flex-row justify-center items-center h-[36px] border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
-                            onPress={() => navigation.navigate('editAccount')}>
-                            <Image className="" source={require('../../../assets/add.png')} style={{ width: 14, height: 14}} />
-                            <Text className="font-semibold text-[16px] text-[#24527A] pl-2">Create new pond</Text>
-                        </Pressable>
-                    </View>
-                    <View className="flex flex-row justify-between bg-transparent p-4">
-                        <Text className="text-[#24527A]">Pond no.</Text>
-                        <Text className="text-[#24527A]">Total prawn</Text>
-                        <Text className="text-[#24527A]">Feeds Needed</Text>
-                    </View>
-                    <ScrollView className="max-h-[450px] min-h-[300px]" contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className={`flex flex-row justify-between p-4 pl-5 pr-8 bg-[#E1EFFA] mb-2 text-[#0d1c29] rounded-lg items-center`}>
-                        <Text className="font-semibold text-[16px] text-[#24527A] flex flex-row border-[#24527A] rounded-md border-[.3px] pr-[12px] pl-[12px] pb-[5px] pt-[5px] text-center" >1</Text>
-                        <Image source={require('../../../assets/line.png')} style={{ width: .5, height: 15, tintColor:"#9fb7cc", marginTop:3}} />
-                        <Text className="font-semibold text-[24px] text-[#24527A]">0</Text>
-                        <Image source={require('../../../assets/line.png')} style={{ width: .5, height: 15, tintColor:"#9fb7cc", marginTop:3}} />
-                        <Text className="font-semibold text-[24px] text-[#24527A]">0 kg</Text>
-                    </View>
-                    </ScrollView>
-                </View>
+  const handleLogoutModal = (pond: any) => {
+    supabase.auth.signOut().then(() => {
+      navigation.replace("signin");
+    });
+  };
+
+  const pondItems = [
+    { pondNo: 1, totalPrawn: 0, feedsNeeded: "0 kg" },
+    { pondNo: 2, totalPrawn: 0, feedsNeeded: "0 kg" },
+    // Add more pond items as needed
+  ];
+
+  return (
+    <View className="bg-[#ECF4FB] h-full flex flex-col justify-between">
+        <View className="p-4 ">
+            <View className="mb-6">
+            <Pressable
+                className="flex-row justify-center items-center h-10 border rounded-md border-blue-500 px-4"
+                onPress={() => navigation.navigate("editAccount")}
+            >
+                <Image
+                source={require("../../../assets/add.png")}
+                style={{ width: 14, height: 14 }}
+                />
+                <Text className="font-bold text-base text-blue-500 pl-2">Create new pond</Text>
+            </Pressable>
             </View>
-            <View className="flex flex-row w-full justify-between bg-[#f0f6fc] border-t-[.3px] border-[#396387] h-[62px] pl-5 pr-5 pb-[6px] pt-[5px] items-center">
-                <View className="flex flex-col">
-                    <Text className="text-[16px] text-[#24527A] font-medium">Selected pond:</Text>
-                    <Text className="italic text-[16px] text-[#24527A] ">No selected pond yet</Text>
-                </View>
-                <Pressable onPress={toggleLogoutModal} className="flex flex-row bg-[#9DAEBC] rounded-md pr-2 h-[36px] pl-2 pb-[6px] pt-[5px] w-[96px] justify-center items-center">
-                    <Text className="text-[#ECF4FB] pl-1 text-[16px]">Continue</Text>
-                </Pressable>
+            <View className="flex-row justify-between p-4">
+            <Text className="text-blue-500">Pond no.</Text>
+            <Text className="text-blue-500">Total prawn</Text>
+            <Text className="text-blue-500">Feeds Needed</Text>
             </View>
+            <ScrollView className="max-h-96">
+            {pondItems.map((pond, index) => (
+                <Pressable
+                key={index}
+                className={`flex-row justify-between w-full p-4 bg-[#000000] mb-2 rounded-lg items-center`}
+                onPress={() => {
+                  // Handle selection of the pond item
+                  setSelectedPond(prevSelectedPond => prevSelectedPond === pond.pondNo ? null : pond.pondNo);
+                }}
+              >
+                <Text className="font-semibold text-lg text-blue-500 border rounded-md border-blue-500 px-3 py-1">{pond.pondNo}</Text>
+                <Image
+                  source={require("../../../assets/line.png")}
+                  style={{ width: 0.5, height: 15, tintColor: "#9fb7cc", marginTop: 3 }}
+                />
+                <Text className="font-semibold text-lg text-blue-500">{pond.totalPrawn}</Text>
+                <Image
+                  source={require("../../../assets/line.png")}
+                  style={{ width: 0.5, height: 15, tintColor: "#9fb7cc", marginTop: 3 }}
+                />
+                <Text className="font-semibold text-lg text-blue-500">{pond.feedsNeeded}</Text>
+              </Pressable>
+            ))}
+            </ScrollView>
         </View>
-    )
+        <View className="flex-row justify-between bg-[#ECF4FB]] border-t border-blue-500 h-16 p-4 items-center">
+            <View>
+            <Text className="text-lg font-bold text-blue-500">Selected pond:</Text>
+            <Text className="italic text-lg text-blue-500">{selectedPond ? `Pond ${selectedPond}` : 'No selected pond yet'}</Text>
+            </View>
+            <Pressable
+            onPress={toggleLogoutModal}
+            className={`rounded-md flex flex-row items-center h-[36px] px-4  ${selectedPond ? 'bg-[#396387]' : 'bg-[#9DAEBC]'}`}
+            disabled={!selectedPond} // Disable the button if no pond is selected
+            >
+            <Text className="text-white text-lg">Continue</Text>
+            </Pressable>
+        </View>
+    </View>
+  );
 }
