@@ -27,17 +27,17 @@ export default function App() {
           <CountProvider>
             <NavigationContainer>
               <RootStack.Navigator initialRouteName="signin" screenOptions={{
-                  headerTintColor: '#24527A',
-                  headerStyle: { backgroundColor: '#ECF4FB' },
-                }}>
+                headerTintColor: '#24527A',
+                headerStyle: { backgroundColor: '#ECF4FB' },
+              }}>
                 <RootStack.Screen name="dashboard" options={{ header: () => null, }} component={Dashboard} />
-                <RootStack.Screen  name="signup" options={{ header: () => null, }} component={SignUpPage} />
-                <RootStack.Screen  name="signin" options={{ header: () => null, }} component={SignInPage} />
-                <RootStack.Screen name="settings" options={{title: "Settings"}} component={Settings}/>
-                <RootStack.Screen name="editAccount" options={{title: "Edit account"}} component={EditAccount}/>
-                <RootStack.Screen name="changePassword" options={{title: "Change password"}} component={ChangePassword}/>
-                <RootStack.Screen name="changeAlgorithm" options={{title: "Change algorithm"}} component={ChangeAlgorithm}/>
-                <RootStack.Screen name="selectPond" options={{title: "Select a pond"}} component={SelectPond}/>
+                <RootStack.Screen name="signup" options={{ header: () => null, }} component={SignUpPage} />
+                <RootStack.Screen name="signin" options={{ header: () => null, }} component={SignInPage} />
+                <RootStack.Screen name="settings" options={{ title: "Settings" }} component={Settings} />
+                <RootStack.Screen name="editAccount" options={{ title: "Edit Account" }} component={EditAccount} />
+                <RootStack.Screen name="changePassword" options={{ title: "Change Password" }} component={ChangePassword} />
+                <RootStack.Screen name="changeAlgorithm" options={{ title: "Change Algorithm" }} component={ChangeAlgorithm} />
+                <RootStack.Screen name="selectPond" options={{ title: "Select Pond" }} component={SelectPond} />
               </RootStack.Navigator>
             </NavigationContainer>
           </CountProvider>
