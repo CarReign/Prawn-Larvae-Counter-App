@@ -20,39 +20,16 @@ interface IDashboardProps {
 }
 
 export default function Dashboard({ route, navigation }: IDashboardProps) {
-    const [proceed, setProceed] = useState<boolean>(false);
     const [timeoutNavigateToSignIn, setTimeoutNavigateToSignIn] = useState<any>(null);
     const { farm, loading: farmLoading, username } = useFarm();
     const { ponds } = usePond();
     const { counts } = useCount();
-
-    const { session, loading } = useAuth();
-
-    useEffect(() => {
-        let timeoutToProceed: NodeJS.Timeout;
-        if (loading) return;
-        if (session) {
-            timeoutToProceed = setTimeout(() => {
-                setProceed(true);
-            }, 1000);
-        } else if (!session) {
-            setTimeoutNavigateToSignIn(setTimeout(() => {
-                console.log("TIMEOUT NAVIGATION SIGNOUT: session:", session, " && loading:", loading)
-                navigation.push("signin");
-            }, 1000));
-        }
-        return () => {
-            clearTimeout(timeoutToProceed);
-        }
-    }, [session, loading]);
-    
-
     return (
         <>
         <ResultModal>
         <View className=" flex-1 bg-[#BAD8F2] py-8">
             {
-                proceed && <>
+                <>
                     <View className="">
                         {
                             !!farmLoading && <ActivityIndicator color="#2E78B8" />
@@ -79,11 +56,6 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                     </View>
                     <FloatingCamera />
                 </>
-            }
-            {
-                !proceed && <View className="flex-1 flex-col items-center justify-center">
-                    <Image source={require('../../../assets/title.png')} className="mb-[24px]" />
-                </View>
             }
         </View>
         </ResultModal>

@@ -26,7 +26,7 @@ export default function App() {
         <PondProvider>
           <CountProvider>
             <NavigationContainer>
-              <RootStack.Navigator initialRouteName="dashboard" screenOptions={{
+              <RootStack.Navigator initialRouteName="signin" screenOptions={{
                   headerTintColor: '#24527A',
                   headerStyle: { backgroundColor: '#ECF4FB' },
                 }}>

@@ -58,7 +58,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
         navigation.addListener('beforeRemove', handleNavigateToDashboard);
         return () => {
             navigation.removeListener('beforeRemove', handleNavigateToDashboard);
-        }
+        }   
     }, [session]);
 
     return (
