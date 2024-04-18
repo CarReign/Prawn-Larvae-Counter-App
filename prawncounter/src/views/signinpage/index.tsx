@@ -15,34 +15,34 @@ interface ISignInPageProps {
 
 export default function SignInPage({ route, navigation }: ISignInPageProps) {
     const { session } = useContext(AuthContext);
-    const [authMessage, setAuthMessage] = useState({ message: '', status: ''});
+    const [authMessage, setAuthMessage] = useState({ message: '', status: '' });
     const [authForm, setAuthForm] = useState({ email: '', password: '', loading: false });
 
     const handleEmailChange = (email: string) => {
-    setAuthForm({ ...authForm, email });
+        setAuthForm({ ...authForm, email });
     }
 
     const handlePasswordChange = (password: string) => {
-    setAuthForm({ ...authForm, password });
+        setAuthForm({ ...authForm, password });
     }
 
     const handleSignIn = () => {
-    setAuthForm({ ...authForm, loading: true });
-    supabase.auth.signInWithPassword({ email: authForm.email, password: authForm.password })
-        .then((response: AuthTokenResponsePassword) => {
-            if (response.error) {
-            setAuthMessage({ message: response.error.message, status: 'error' });
-            return;
-            }
-            setTimeout(() => {
-                navigation.pop();
-            }, 2000)
-            setAuthMessage({ message: 'Signed in successfully', status: 'success' });
-        }).catch((error) => {
-            setAuthMessage(error.message);
-        }).finally(() => {
-            setAuthForm({ ...authForm, loading: false });
-        });
+        setAuthForm({ ...authForm, loading: true });
+        supabase.auth.signInWithPassword({ email: authForm.email, password: authForm.password })
+            .then((response: AuthTokenResponsePassword) => {
+                if (response.error) {
+                    setAuthMessage({ message: response.error.message, status: 'error' });
+                    return;
+                }
+                setTimeout(() => {
+                    navigation.pop();
+                }, 2000)
+                setAuthMessage({ message: 'Signed in successfully', status: 'success' });
+            }).catch((error) => {
+                setAuthMessage(error.message);
+            }).finally(() => {
+                setAuthForm({ ...authForm, loading: false });
+            });
     };
 
     const handleNavigateToDashboard = (e: any) => {
@@ -58,8 +58,13 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
         navigation.addListener('beforeRemove', handleNavigateToDashboard);
         return () => {
             navigation.removeListener('beforeRemove', handleNavigateToDashboard);
-        }   
+        }
     }, [session]);
+
+    useEffect(() => {
+        if (session) navigation.replace("dashboard");
+
+    }, [session])
 
     return (
         <View className=" bg-[#BAD8F2] flex-1 justify-between">
@@ -72,7 +77,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                 <View className="w-full flex flex-col justify-start items-start space-y-[10px]">
                     <Text className="text-[#24527A]">Email</Text>
                     <TextInput
-                        className="bg-[#F9FAFE] px-2 focus:border-[#24527A] border-[#24527a81] text-[#24527A] border border-t-0 border-x-0 border-b-[1px] rounded-[4px] min-h-[40px] w-full" 
+                        className="bg-[#F9FAFE] px-2 focus:border-[#24527A] border-[#24527a81] text-[#24527A] border border-t-0 border-x-0 border-b-[1px] rounded-[4px] min-h-[40px] w-full"
                         onChangeText={handleEmailChange}
                         textContentType='emailAddress'
                         placeholder='Enter email'
@@ -89,7 +94,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                         value={authForm.password} />
                 </View>
                 <Pressable className="bg-[#24527A] w-full px-[20px] py-[12px] rounded-[4px] flex-row justify-center space-x-2" disabled={authForm.loading} onPress={handleSignIn}>
-                    {!!authForm.loading && <ActivityIndicator color="#fff"/>}
+                    {!!authForm.loading && <ActivityIndicator color="#fff" />}
                     <Text className="text-[#F9FAFE] text-center">
                         {!!authForm.loading ? 'Loading...' : 'Sign In'}
                     </Text>
@@ -103,11 +108,10 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-  });
+});
 
-  

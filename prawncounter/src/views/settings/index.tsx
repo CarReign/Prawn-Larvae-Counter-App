@@ -20,12 +20,12 @@ export default function Settings({ route, navigation }: IDashboardProps) {
         setLogoutModalVisibility(!logoutModalVisibility);
     }
 
-    const [ logoutModalVisibility, setLogoutModalVisibility ] = useState(false)
+    const [logoutModalVisibility, setLogoutModalVisibility] = useState(false)
 
     const handleLogoutModal = () => {
         supabase.auth.signOut().then(() => {
             reset && reset
-            navigation.replace("signout");
+            navigation.replace("signin");
         });
     }
 
@@ -37,7 +37,7 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                         <Text className="text-[#24527A] text-[16px] font-semibold">Account</Text>
                         <Pressable className="flex flex-row border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
                             onPress={() => navigation.navigate('editAccount')}>
-                            <Image className="" source={require('../../../assets/edit.png')} style={{ width: 16, height: 16}} />
+                            <Image className="" source={require('../../../assets/edit.png')} style={{ width: 16, height: 16 }} />
                             <Text className="font-semibold text-[16px] text-[#24527A] pl-1">Edit account</Text>
                         </Pressable>
                     </View>
@@ -61,9 +61,9 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                         <Text className="text-[#24527A] text-[16px] font-semibold">Privacy & Security</Text>
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
-                        <Pressable  className="flex flex-row justify-between" onPress={() => navigation.navigate('changePassword')}>
+                        <Pressable className="flex flex-row justify-between" onPress={() => navigation.navigate('changePassword')}>
                             <Text className="text-[16px] text-[#24527A]">Change Password</Text>
-                            <Image source={require('../../../assets/arrow-right.png')} style={{ width: 16, height: 16}}/>
+                            <Image source={require('../../../assets/arrow-right.png')} style={{ width: 16, height: 16 }} />
                         </Pressable>
                     </View>
                 </View>
@@ -72,7 +72,7 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                         <Text className="text-[#24527A] text-[16px] font-semibold">Counting algorithms</Text>
                         <Pressable className="flex flex-row border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
                             onPress={() => navigation.navigate('changeAlgorithm')}>
-                            <Image className="" source={require('../../../assets/edit.png')} style={{ width: 16, height: 16}} />
+                            <Image className="" source={require('../../../assets/edit.png')} style={{ width: 16, height: 16 }} />
                             <Text className="font-semibold text-[16px] text-[#24527A] pl-1">Change algorithm</Text>
                         </Pressable>
                     </View>
@@ -91,12 +91,12 @@ export default function Settings({ route, navigation }: IDashboardProps) {
             </View>
             <View className="flex flex-row w-full justify-center pb-5">
                 <Pressable onPress={toggleLogoutModal} className="flex flex-row bg-[#B41919] rounded-md pr-2 h-[36px] pl-2 pb-[6px] pt-[5px] w-[96px] justify-center items-center">
-                    <Image source={require('../../../assets/logout.png')} style={{ width: 16, height: 16}}></Image>
+                    <Image source={require('../../../assets/logout.png')} style={{ width: 16, height: 16 }}></Image>
                     <Text className="text-[#ECF4FB] pl-1 text-[16px]">Logout</Text>
                 </Pressable>
             </View>
             {logoutModalVisibility && (
-                <LogoutModal onClose={toggleLogoutModal} onLogout={handleLogoutModal}/>
+                <LogoutModal onClose={toggleLogoutModal} onLogout={handleLogoutModal} />
             )}
         </View>
     )
