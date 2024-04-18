@@ -1,39 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, Pressable, View, Image, TextInput } from 'react-native';
 import Overlay from "../overlay";
-
-type PondType = {
-    pondNo: number;
-    count: number;
-}
+import { PondType } from "../../../providers/pondprovider";
 
 type EditPondModalProps = {
     onClose: () => void;
-    onEditPond: (pond: PondType) => void;
+    editedPond: PondType;
 }
 
-export default function EditPondModal({ onClose, onEditPond }: EditPondModalProps) {
+export default function EditPondModal({ onClose, editedPond }: EditPondModalProps) {
     const [pondNumber, setPondNumber] = useState<number>(0);
     const [pondCount, setPondCount] = useState<number>(0);
+    const [deleting, setDeleting] = useState(false)
+    const [editing, setEditing] = useState(false);
 
     const handleEditPond = () => {
-        const newPond: PondType = {
-            pondNo: pondNumber,
-            count: pondCount,
-        };
+        setEditing(true);
 
-        onEditPond(newPond);
 
         onClose();
+        setEditing(false);
     };
+
+    const handleDeletePond = () => {
+        setDeleting(true);
+        onClose();
+        setDeleting(false);
+    }
 
     return (
         <Modal className="flex flex-1 max-w-2xl max-h-full z-10"
             animationType="slide"
             transparent={true}
-            visible={true} 
+            visible={true}
         >
-            <Overlay/>
+            <Overlay />
             <View className="flex items-center justify-center h-full">
                 <View className="bg-white w-3/4 p-4 rounded-lg flex">
                     <View className="flex flex-row mb-4 justify-between w-full border-b-[.3px] border-[#24527A] pb-2">
@@ -42,7 +43,7 @@ export default function EditPondModal({ onClose, onEditPond }: EditPondModalProp
                     </View>
                     <View className="flex mb-4 w-full justify-items-end">
                         <Text className="text-sm text-[#24527A] flex">Pond number:</Text>
-                        
+
                     </View>
                     <View className="mb-2">
                         <Text className="text-sm mb-1 text-[#24527A]">Prawn count</Text>
@@ -56,14 +57,14 @@ export default function EditPondModal({ onClose, onEditPond }: EditPondModalProp
                     <Text className="text-sm mb-6 text-[#24527A]">*Feeds Needed will be auto-generated</Text>
                     <View className="flex flex-row justify-between">
                         <View>
-                        <Pressable
+                            <Pressable
                                 className=" rounded p-2 text-center justify-center border-[#BD3D4C] border-[1px]"
-                                onPress={onClose}
+                                onPress={handleDeletePond}
                             >
-                            <Image source={require('../../../../assets/delete.png')} style={{width: 18, height: 18}} />
+                                <Image source={require('../../../../assets/delete.png')} style={{ width: 18, height: 18 }} />
                             </Pressable>
                         </View>
-                        <View  className="flex flex-row">
+                        <View className="flex flex-row">
                             <Pressable
                                 className="mr-2 rounded p-2 text-center border-[#24527A] border-[1px]"
                                 onPress={onClose}

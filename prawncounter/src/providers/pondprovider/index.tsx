@@ -2,17 +2,20 @@ import { createContext, useEffect, useState } from "react";
 import useAuth from "../../hooks/useauth";
 import useFarm from "../../hooks/useFarm";
 import { supabase } from "../../libs/supabase";
-import { PostgrestMaybeSingleResponse } from "@supabase/supabase-js";
+import { PostgrestMaybeSingleResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
+import { ToastAndroid } from "react-native";
 
-type PondType = {
+export type PondType = {
     pond_id: number;
     farm_id: number;
-    
+    total_count: number;
     created_at: string;
 }
 
+export type PondTypeWithOrWithoutPondNumber = PondType & { pondNumber?: number };
+
 type PondContextType = {
-    ponds?: PondType[];
+    ponds?: PondTypeWithOrWithoutPondNumber[];
     loading?: boolean;
     addPond?: (pond: Omit<Omit<PondType, "pond_id">, "created_at">) => void;
     editPond?: (pond: PondType) => void;
@@ -22,8 +25,8 @@ type PondContextType = {
 
 export const PondContext = createContext<PondContextType>({});
 
-export default function PondProvider({children}: {children: React.ReactNode}) {
-    const [ponds, setPonds] = useState<PondType[]>([]);
+export default function PondProvider({ children }: { children: React.ReactNode }) {
+    const [ponds, setPonds] = useState<PondTypeWithOrWithoutPondNumber[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const { farm, loading: farmLoading } = useFarm();
 
@@ -33,54 +36,62 @@ export default function PondProvider({children}: {children: React.ReactNode}) {
 
     useEffect(() => {
         if (farmLoading || !farm) return;
+        if (!farm.farm_id) {
+            ToastAndroid.showWithGravity("No Representative Farm Found", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+            return;
+        }
         supabase.from("ponds")
-                    .select("*")
-                    .eq("farm_id", farm.farm_id)
-                    .then((response: PostgrestMaybeSingleResponse<PondType[]>) => {
-                        if (response.error) {
-                            console.log(response.error.message);
-                        }
-                        setPonds(response.data || []);
-                        setLoading(false);
-                    });
+            .select("*")
+            .eq("farm_id", farm.farm_id)
+            .then((response: PostgrestMaybeSingleResponse<PondType[]>) => {
+                if (response.error) {
+                    console.log(response.error.message);
+
+                }
+                setPonds(response?.data?.map((pond: PondType, index: number) => ({ ...pond, pondNumber: index })) || []);
+                setLoading(false);
+            });
         return () => {
             setPonds([]);
         };
     }, [farmLoading]);
 
-    const handleAddPond = (pond: Omit<Omit<PondType, "pond_id">, "created_at">) => {
-        supabase.from("ponds")
-                .insert([{farm_id: farm?.farm_id}])
-                .then((response: PostgrestMaybeSingleResponse<PondType>) => {
-                    if (response.error) {
-                        console.log(response.error.message);
-                    }
-                    if(response.data) setPonds([...ponds, response.data]);
-                });
+    const handleAddPond = async (pond: Omit<Omit<PondType, "pond_id">, "created_at">) => {
+        await supabase.from("ponds")
+            .insert([{ ...pond }])
+            .select("*")
+            .then((response: any) => {
+                if (response.error) {
+                    console.log(response.error.message);
+                    ToastAndroid.showWithGravity("Something Went Wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+                }
+                setPonds([...ponds, response.data]);
+                ToastAndroid.showWithGravity("Successfully Added Pond", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+            });
     }
 
     const handleEditPond = (pond: PondType) => {
         supabase.from("ponds")
-                .update(pond)
-                .eq("pond_id", pond.pond_id)
-                .then((response: PostgrestMaybeSingleResponse<PondType>) => {
-                    if (response.error) {
-                        console.log(response.error.message);
-                    }
-                    if(response.data) setPonds(ponds.map((p: PondType) => p.pond_id === pond.pond_id ? response.data || pond : p));
-                });
+            .update(pond)
+            .eq("pond_id", pond.pond_id)
+            .then((response: PostgrestMaybeSingleResponse<PondType>) => {
+                if (response.error) {
+                    console.log(response.error.message);
+                }
+                if (response.data) setPonds(ponds.map((p: PondType) => p.pond_id === pond.pond_id ? response.data || pond : p));
+            });
     }
 
     const handleDeletePond = (pond_id: number) => {
         supabase.from("ponds")
-                .delete()
-                .eq("pond_id", pond_id)
-                .then((response) => {
-                    if (response.error) {
-                        console.log(response.error.message);
-                    }
-                    setPonds(ponds.filter((p: PondType) => p.pond_id !== pond_id));
-                });
+            .delete()
+            .eq("pond_id", pond_id)
+            .then((response) => {
+                if (response.error) {
+                    console.log(response.error.message);
+                }
+                setPonds(ponds.filter((p: PondType) => p.pond_id !== pond_id));
+            });
     }
 
     const handleRefetch = () => {

@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react"
 import usePond from "../../hooks/usePond";
 import { supabase } from "../../libs/supabase";
 import { add } from "@techstark/opencv-js";
+import { ToastAndroid } from "react-native";
 
 type CountType = {
     count_id: number;
@@ -25,7 +26,7 @@ export const CountContext = createContext<CountContextType>({})
 export default function CountProvider({ children }: { children: React.ReactNode }) {
     const [counts, setCounts] = useState<CountType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const {ponds, loading: pondLoading} = usePond();
+    const { ponds, loading: pondLoading } = usePond();
 
     useEffect(() => {
         const sum = counts.length && counts.reduce((acc, count) => acc + count.count, 0);
@@ -35,12 +36,12 @@ export default function CountProvider({ children }: { children: React.ReactNode 
     useEffect(() => {
         if (pondLoading || !ponds) return;
         supabase.from("counts")
-                .select("*")
-                .in("pond_id", ponds.map(pond => pond.pond_id))
-                .then((response) => {
-                    if (response.error) {
-                        console.log(response.error.message);
-                    }
+            .select("*")
+            .in("pond_id", ponds.map(pond => pond.pond_id))
+            .then((response) => {
+                if (response.error) {
+                    console.log(response.error.message);
+                }
                 setCounts(response.data || []);
                 setLoading(false);
             });
@@ -53,21 +54,22 @@ export default function CountProvider({ children }: { children: React.ReactNode 
                     if (response.error) {
                         console.log(response.error.message);
                     }
-                setCounts(response.data || []);
-                setLoading(false);
-            });
+                    setCounts(response.data || []);
+                    setLoading(false);
+                });
         }, 50000);
         return () => {
             clearInterval(pondFetchInterval);
         }
     }, [pondLoading]);
 
-    const handleAddCount = (pond_id: number, path: string, count: number) => {
-        supabase.from("counts")
-            .insert([{pond_id, path, count}])
+    const handleAddCount = async (pond_id: number, path: string, count: number) => {
+        await supabase.from("counts")
+            .insert([{ pond_id, path, count }])
             .then((response) => {
                 if (response.error) {
-                    console.log(response.error.message);
+                    console.log("Handle Add Count:", response.error.message);
+                    ToastAndroid.showWithGravity("Something Went Wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM)
                 }
                 if (response.data) setCounts([...counts, response.data]);
             });
@@ -101,7 +103,7 @@ export default function CountProvider({ children }: { children: React.ReactNode 
         setLoading(true);
     }
 
-    return <CountContext.Provider value={{counts, loading, addCount: handleAddCount, updateCount: handleUpdateCount, deleteCount: handleDeleteCount, refetch: handleRefetch}}>
+    return <CountContext.Provider value={{ counts, loading, addCount: handleAddCount, updateCount: handleUpdateCount, deleteCount: handleDeleteCount, refetch: handleRefetch }}>
         {children}
     </CountContext.Provider>
 }

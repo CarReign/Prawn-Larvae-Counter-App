@@ -20,45 +20,47 @@ interface IDashboardProps {
 }
 
 export default function Dashboard({ route, navigation }: IDashboardProps) {
-    const [timeoutNavigateToSignIn, setTimeoutNavigateToSignIn] = useState<any>(null);
-    const { farm, loading: farmLoading, username } = useFarm();
+    const { farm, loading: farmLoading, username, refresh } = useFarm();
     const { ponds } = usePond();
     const { counts } = useCount();
     return (
         <>
-        <ResultModal>
-        <View className=" flex-1 bg-[#BAD8F2] py-8">
-            {
-                <>
-                    <View className="">
-                        {
-                            !!farmLoading && <ActivityIndicator color="#2E78B8" />
-                        }
-                        {
-                            !farmLoading && <View className="flex flex-col space-y-2">
-                                <View className="flex flex-row w-full justify-between mt-4 px-[20px]">
-                                    <View className="">
-                                        <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username}</Text>
-                                        <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
+            <View className=" flex-1 bg-[#BAD8F2] py-8">
+                {
+                    <>
+                        <View className="">
+                            {
+                                !!farmLoading && <ActivityIndicator color="#2E78B8" />
+                            }
+                            {
+                                !farmLoading && <View className="flex flex-col space-y-2">
+                                    <View className="flex flex-row w-full justify-between mt-4 px-[20px]">
+                                        <View className="">
+                                            <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username}</Text>
+                                            <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
+                                        </View>
+                                        <View className="flex flex-row space-x-4">
+                                            <Pressable onPress={refresh} className="justify-center items-center py-1 px-2 border">
+                                                <Text className="p-0 m-0">Refresh </Text>
+                                            </Pressable>
+                                            <Pressable onPress={() => navigation.navigate('settings')}>
+                                                <Image className="" source={require('../../../assets/settings.png')}></Image>
+                                            </Pressable>
+                                        </View>
                                     </View>
-                                    <Pressable onPress={() => navigation.navigate('settings')}>
-                                        <Image className="" source={require('../../../assets/settings.png')}></Image>
-                                    </Pressable>
+                                    <View className="flex flex-row justify-between pt-2 pb-4 px-[20px] mt-5 mb-1">
+                                        <Stat figure={counts ? String(counts.length && counts.reduce((acc, count) => acc + count.count, 0)) : "0"} stat="Prawns" />
+                                        <Stat figure={String(getFeedNeeded(counts ? counts.length && counts.reduce((acc, count) => acc + count.count, 0) : 0)) + ' kg'} stat="Feeds Needed" />
+                                        <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
+                                    </View>
+                                    <DashboardTabs />
                                 </View>
-                                <View className="flex flex-row justify-between pt-2 pb-4 px-[20px] mt-5 mb-1">
-                                    <Stat figure={counts ? String(counts.length && counts.reduce((acc, count) => acc + count.count, 0)) : "0"} stat="Prawns" />
-                                    <Stat figure={String(getFeedNeeded(counts ? counts.length && counts.reduce((acc, count) => acc + count.count, 0) : 0)) + ' kg'} stat="Feeds Needed" />
-                                    <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
-                                </View>
-                                <DashboardTabs />
-                            </View>
-                        }
-                    </View>
-                    <FloatingCamera />
-                </>
-            }
-        </View>
-        </ResultModal>
+                            }
+                        </View>
+                        <FloatingCamera />
+                    </>
+                }
+            </View>
         </>
     );
 }

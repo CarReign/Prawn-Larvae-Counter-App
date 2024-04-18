@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Modal, StyleSheet, Text, Pressable, View, Image, TextInput } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Image, TextInput, ActivityIndicator } from 'react-native';
 import handleTakePicture from "../floatingcamera";
 import ImageComponent from "./resultPicture";
 import Overlay from "../overlay";
+import usePond from "../../../hooks/usePond";
+import useFarm from "../../../hooks/useFarm";
 
 
 type PondType = {
@@ -17,17 +19,16 @@ type AddPondModalProps = {
 }
 
 export default function AddPondModal({ onClose, onAddPond }: AddPondModalProps) {
-    const [pondNumber, setPondNumber] = useState<number>(0);
-    const [pondCount, setPondCount] = useState<number>(0);
+    const { ponds, addPond } = usePond()
+    const { farm } = useFarm();
+    const [pondCount, setPondCount] = useState<number | null>(0);
+    const [loading, setLoading] = useState(false);
 
-    const handleAddPond = () => {
-        const newPond: PondType = {
-            pondNo: pondNumber,
-            count: pondCount,
-        };
-
-        onAddPond(newPond);
-
+    const handleAddPond = async () => {
+        if (loading) return;
+        setLoading(true);
+        addPond && await addPond({ total_count: pondCount || 0, farm_id: farm?.farm_id || 0 });
+        setLoading(false);
         onClose();
     };
 
@@ -37,7 +38,7 @@ export default function AddPondModal({ onClose, onAddPond }: AddPondModalProps) 
             transparent={true}
             visible={true}
         >
-            <Overlay/>
+            <Overlay />
             <View className="flex items-center justify-center h-full">
                 <View className="bg-white w-3/4 p-4 rounded-lg flex">
                     <View className="flex flex-row mb-4 justify-between w-full border-b-[.3px] border-[#24527A] pb-2">
@@ -45,16 +46,15 @@ export default function AddPondModal({ onClose, onAddPond }: AddPondModalProps) 
                         <Pressable className="pt-1" onPress={() => onClose()}><Image source={require('../../../../assets/close.png')} /></Pressable>
                     </View>
                     <View className="flex mb-4 w-full justify-items-end">
-                        <Text className="text-sm text-[#24527A] flex">Pond number:</Text>
-                        
+                        <Text className="text-sm text-[#24527A] flex">Pond number: {(ponds && ponds?.length + 1) || 1}</Text>
                     </View>
                     <View className="mb-2">
                         <Text className="text-sm mb-1 text-[#24527A]">Prawn count</Text>
                         <TextInput
                             className="border border-gray-300 rounded p-2 text-[#24527A]"
-                            onChangeText={(text) => setPondCount(parseFloat(text))}
+                            onChangeText={(text) => setPondCount(Number(text))}
                             keyboardType="numeric"
-                            value={pondCount.toString()}
+                            value={pondCount?.toString()}
                         />
                     </View>
                     <Text className="text-sm mb-6 text-[#24527A]">*Feeds Needed will be auto-generated</Text>
@@ -69,7 +69,8 @@ export default function AddPondModal({ onClose, onAddPond }: AddPondModalProps) 
                             className="bg-[#24527A]  rounded p-2 text-center "
                             onPress={handleAddPond}
                         >
-                            <Text className="text-[#ECF4FB]">Add Pond</Text>
+                            {!loading && <Text className="text-[#ECF4FB]">Add Pond</Text>}
+                            {loading && <><ActivityIndicator color="#ffffff" /><Text> Adding..</Text></>}
                         </Pressable>
                     </View>
                 </View>
