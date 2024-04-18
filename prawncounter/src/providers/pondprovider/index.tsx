@@ -48,7 +48,7 @@ export default function PondProvider({ children }: { children: React.ReactNode }
                     console.log(response.error.message);
 
                 }
-                setPonds(response?.data?.map((pond: PondType, index: number) => ({ ...pond, pondNumber: index })) || []);
+                setPonds(response?.data?.sort((a, b) => b.pond_id - a.pond_id).map((pond: PondType, index: number) => ({ ...pond, pondNumber: index + 1 })) || []);
                 setLoading(false);
             });
         return () => {
@@ -65,7 +65,7 @@ export default function PondProvider({ children }: { children: React.ReactNode }
                     console.log(response.error.message);
                     ToastAndroid.showWithGravity("Something Went Wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM);
                 }
-                setPonds([...ponds, response.data]);
+                setPonds([...ponds, ...response.data]);
                 ToastAndroid.showWithGravity("Successfully Added Pond", ToastAndroid.LONG, ToastAndroid.BOTTOM);
             });
     }
@@ -77,20 +77,24 @@ export default function PondProvider({ children }: { children: React.ReactNode }
             .then((response: PostgrestMaybeSingleResponse<PondType>) => {
                 if (response.error) {
                     console.log(response.error.message);
+                    ToastAndroid.showWithGravity("Something Went Wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM);
                 }
-                if (response.data) setPonds(ponds.map((p: PondType) => p.pond_id === pond.pond_id ? response.data || pond : p));
+                setPonds(ponds.map((p: PondType) => p.pond_id === pond.pond_id ? { ...p, ...pond } : p));
+                ToastAndroid.showWithGravity("Successfully Edited Pond", ToastAndroid.LONG, ToastAndroid.BOTTOM);
             });
     }
 
-    const handleDeletePond = (pond_id: number) => {
-        supabase.from("ponds")
+    const handleDeletePond = async (pond_id: number) => {
+        await supabase.from("ponds")
             .delete()
             .eq("pond_id", pond_id)
             .then((response) => {
                 if (response.error) {
                     console.log(response.error.message);
+                    ToastAndroid.showWithGravity("Something Went Wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM);
                 }
                 setPonds(ponds.filter((p: PondType) => p.pond_id !== pond_id));
+                ToastAndroid.showWithGravity("Successfully Deleted Pond", ToastAndroid.LONG, ToastAndroid.BOTTOM);
             });
     }
 

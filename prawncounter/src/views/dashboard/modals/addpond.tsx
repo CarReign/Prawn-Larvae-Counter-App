@@ -15,10 +15,9 @@ type PondType = {
 
 type AddPondModalProps = {
     onClose: () => void;
-    onAddPond: (pond: PondType) => void;
 }
 
-export default function AddPondModal({ onClose, onAddPond }: AddPondModalProps) {
+export default function AddPondModal({ onClose }: AddPondModalProps) {
     const { ponds, addPond } = usePond()
     const { farm } = useFarm();
     const [pondCount, setPondCount] = useState<number | null>(0);

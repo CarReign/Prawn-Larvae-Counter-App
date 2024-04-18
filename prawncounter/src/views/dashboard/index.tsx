@@ -49,8 +49,8 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                                         </View>
                                     </View>
                                     <View className="flex flex-row justify-between pt-2 pb-4 px-[20px] mt-5 mb-1">
-                                        <Stat figure={counts ? String(counts.length && counts.reduce((acc, count) => acc + count.count, 0)) : "0"} stat="Prawns" />
-                                        <Stat figure={String(getFeedNeeded(counts ? counts.length && counts.reduce((acc, count) => acc + count.count, 0) : 0)) + ' kg'} stat="Feeds Needed" />
+                                        <Stat figure={String(ponds?.reduce((acc, pond) => acc + (pond.total_count || 0), 0)) || "0"} stat="Prawns" />
+                                        <Stat figure={String(getFeedNeeded(ponds?.reduce((acc, pond) => acc + (pond.total_count || 0), 0) || 0)) + ' kg'} stat="Feeds Needed" />
                                         <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
                                     </View>
                                     <DashboardTabs />
