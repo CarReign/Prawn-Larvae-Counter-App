@@ -82,7 +82,7 @@ export default function PondTab() {
                     </View>
                 }
 
-                <Pressable className="flex flex-row items-center justify-center p-2 border-dashed border border-[#2E78B8] p-4 ml-5 mr-5 "
+                <Pressable className="flex flex-row items-center justify-center border-dashed border border-[#2E78B8] p-4 ml-5 mr-5 "
                     onPress={() => toggleAddPondModal()}>
                     <Image source={require('../../../../../assets/add.png')} style={{ width: 20, height: 20 }} />
                     <Text className="pl-2 text-[16px] text-[#24527A]">Add new pond</Text>

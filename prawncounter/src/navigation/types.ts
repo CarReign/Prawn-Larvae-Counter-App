@@ -11,4 +11,5 @@ export type RootStackParamList = {
     changePassword: undefined;
     changeAlgorithm: undefined;
     selectPond: undefined;
+    selectFarm: undefined;
 };

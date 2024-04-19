@@ -97,12 +97,18 @@ export default function SignUpPage({ route, navigation }: IsignupPageProps) {
                             secureTextEntry={true}
                             value={authForm.password} />
                     </View>
-                    <Pressable className="bg-[#24527A] w-full px-[20px] py-[12px] rounded-[4px] flex-row justify-center space-x-2" disabled={authForm.loading} onPress={null}>
+                    <Pressable className="bg-[#24527A] w-full px-[20px] py-[12px] mb-3 rounded-[4px] flex-row justify-center space-x-2" disabled={authForm.loading} onPress={null}>
                         {!!authForm.loading && <ActivityIndicator color="#fff"/>}
                         <Text className="text-[#F9FAFE] text-center">
                             {!!authForm.loading ? 'Loading...' : 'Create account'}
                         </Text>
                     </Pressable>
+                    <View className=" flex flex-row justify-center items-center mt-[28px]">
+                        <Text className="text-[#24527A]">Already have an account? </Text>
+                        <Pressable onPress={() => navigation.navigate('signin')} className="flex flex-row items-center space-x-2">
+                            <Text className="text-[#24527A] font-medium">Sign In</Text>
+                        </Pressable>
+                    </View>
                 </View>
             </View>
             <View className=" flex flex-col items-center mb-[28px]">

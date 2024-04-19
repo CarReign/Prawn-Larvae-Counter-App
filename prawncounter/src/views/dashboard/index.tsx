@@ -21,6 +21,7 @@ interface IDashboardProps {
 
 export default function Dashboard({ route, navigation }: IDashboardProps) {
     const { farm, loading: farmLoading, username, refresh } = useFarm();
+    console.log(farmLoading, farm, username)
     const { ponds } = usePond();
     const { counts } = useCount();
     const { setNavigateCallback } = useResult();
@@ -36,7 +37,11 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                     <>
                         <View className="">
                             {
-                                !!farmLoading && <ActivityIndicator color="#2E78B8" />
+                                !!farmLoading && 
+                                <View className="flex items-center justify-center h-full">
+                                    <ActivityIndicator className="flex items-center " size={"large"} color="#24527A" />
+                                    <Text className="flex items text-[#24527A]">  Please wait...</Text>
+                                </View>
                             }
                             {
                                 !farmLoading && <View className="flex flex-col space-y-2">
@@ -60,10 +65,12 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                                         <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
                                     </View>
                                     <DashboardTabs />
+                                    <FloatingCamera />
                                 </View>
+                                
                             }
                         </View>
-                        <FloatingCamera />
+                        
                     </>
                 }
             </View>

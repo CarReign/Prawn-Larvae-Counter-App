@@ -26,7 +26,7 @@ export default function HistoryTab() {
                 </View>
             }
             {
-                !loading && <View className="bg-white min-h-full bg-[#eff6fc]">
+                !loading && <View className="min-h-full bg-[#eff6fc]">
                     {
                         counts ?
                             counts.map((count, index) => {

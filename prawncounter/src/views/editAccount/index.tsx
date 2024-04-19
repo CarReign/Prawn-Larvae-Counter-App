@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, TextInput } from "react-native";
+import { View, Text, Image, Pressable, TextInput, Alert } from "react-native";
 import { supabase } from "../../libs/supabase";
 import useAuth from "../../hooks/useauth";
 import useFarm from "../../hooks/useFarm";
@@ -46,6 +46,7 @@ export default function EditAccount() {
         }
         
         updateFullname();
+        Alert.alert("Success", "Account updated successfully.");
     }
 
     return (
