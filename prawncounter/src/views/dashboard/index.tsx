@@ -12,7 +12,7 @@ import useCount from "../../hooks/usecount";
 import FloatingCamera from "./floatingcamera";
 import DashboardTabs from "./tabs";
 import getFeedNeeded from "../../utils/getfeedneeded";
-import ResultModal from "./modals/resultmodal";
+import ResultModal, { useResult } from "./modals/resultmodal";
 
 interface IDashboardProps {
     route: RouteProp<RootStackParamList, "dashboard">;
@@ -20,45 +20,60 @@ interface IDashboardProps {
 }
 
 export default function Dashboard({ route, navigation }: IDashboardProps) {
-    const [timeoutNavigateToSignIn, setTimeoutNavigateToSignIn] = useState<any>(null);
-    const { farm, loading: farmLoading, username } = useFarm();
+    const { farm, loading: farmLoading, username, refresh } = useFarm();
+    console.log(farmLoading, farm, username)
     const { ponds } = usePond();
     const { counts } = useCount();
+    const { setNavigateCallback } = useResult();
+
+    useEffect(() => {
+        setNavigateCallback(() => () => { navigation.navigate("selectPond") })
+    }, [])
+
     return (
         <>
-        <ResultModal>
-        <View className=" flex-1 bg-[#BAD8F2] py-8">
-            {
-                <>
-                    <View className="">
-                        {
-                            !!farmLoading && <ActivityIndicator color="#2E78B8" />
-                        }
-                        {
-                            !farmLoading && <View className="flex flex-col space-y-2">
-                                <View className="flex flex-row w-full justify-between mt-4 px-[20px]">
-                                    <View className="">
-                                        <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username}</Text>
-                                        <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
+            <View className=" flex-1 bg-[#BAD8F2] py-8">
+                {
+                    <>
+                        <View className="">
+                            {
+                                !!farmLoading && 
+                                <View className="flex items-center justify-center h-full">
+                                    <ActivityIndicator className="flex items-center " size={"large"} color="#24527A" />
+                                    <Text className="flex items text-[#24527A]">  Please wait...</Text>
+                                </View>
+                            }
+                            {
+                                !farmLoading && <View className="flex flex-col space-y-2">
+                                    <View className="flex flex-row w-full justify-between mt-4 px-[20px]">
+                                        <View className="">
+                                            <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username}</Text>
+                                            <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
+                                        </View>
+                                        <View className="flex flex-row space-x-4">
+                                            <Pressable onPress={refresh} className="justify-center items-center py-1 px-2 border">
+                                                <Text className="p-0 m-0">Refresh </Text>
+                                            </Pressable>
+                                            <Pressable onPress={() => navigation.navigate('settings')}>
+                                                <Image className="" source={require('../../../assets/settings.png')}></Image>
+                                            </Pressable>
+                                        </View>
                                     </View>
-                                    <Pressable onPress={() => navigation.navigate('settings')}>
-                                        <Image className="" source={require('../../../assets/settings.png')}></Image>
-                                    </Pressable>
+                                    <View className="flex flex-row justify-between pt-2 pb-4 px-[20px] mt-5 mb-1">
+                                        <Stat figure={String(ponds?.reduce((acc, pond) => acc + (pond.total_count || 0), 0)) || "0"} stat="Prawns" />
+                                        <Stat figure={String(getFeedNeeded(ponds?.reduce((acc, pond) => acc + (pond.total_count || 0), 0) || 0)) + ' kg'} stat="Feeds Needed" />
+                                        <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
+                                    </View>
+                                    <DashboardTabs />
+                                    <FloatingCamera />
                                 </View>
-                                <View className="flex flex-row justify-between pt-2 pb-4 px-[20px] mt-5 mb-1">
-                                    <Stat figure={counts ? String(counts.length && counts.reduce((acc, count) => acc + count.count, 0)) : "0"} stat="Prawns" />
-                                    <Stat figure={String(getFeedNeeded(counts ? counts.length && counts.reduce((acc, count) => acc + count.count, 0) : 0)) + ' kg'} stat="Feeds Needed" />
-                                    <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
-                                </View>
-                                <DashboardTabs />
-                            </View>
-                        }
-                    </View>
-                    <FloatingCamera />
-                </>
-            }
-        </View>
-        </ResultModal>
+                                
+                            }
+                        </View>
+                        
+                    </>
+                }
+            </View>
         </>
     );
 }

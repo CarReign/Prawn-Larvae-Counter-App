@@ -1,39 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { Modal, StyleSheet, Text, Pressable, View, Image, TextInput } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Image, TextInput, ActivityIndicator } from 'react-native';
 import Overlay from "../overlay";
-
-type PondType = {
-    pondNo: number;
-    count: number;
-}
+import { PondType, PondTypeWithOrWithoutPondNumber } from "../../../providers/pondprovider";
+import usePond from "../../../hooks/usePond";
 
 type EditPondModalProps = {
     onClose: () => void;
-    onEditPond: (pond: PondType) => void;
+    editedPond: PondTypeWithOrWithoutPondNumber;
 }
 
-export default function EditPondModal({ onClose, onEditPond }: EditPondModalProps) {
-    const [pondNumber, setPondNumber] = useState<number>(0);
-    const [pondCount, setPondCount] = useState<number>(0);
+export default function EditPondModal({ onClose, editedPond }: EditPondModalProps) {
+    const { deletePond, editPond } = usePond();
+    const [pondCount, setPondCount] = useState<number>(editedPond.total_count);
+    const [deleting, setDeleting] = useState(false)
+    const [editing, setEditing] = useState(false);
 
-    const handleEditPond = () => {
-        const newPond: PondType = {
-            pondNo: pondNumber,
-            count: pondCount,
-        };
-
-        onEditPond(newPond);
-
+    const handleEditPond = async () => {
+        const { pondNumber, ...rest } = editedPond;
+        setEditing(true);
+        editPond && await editPond({ ...rest, total_count: pondCount });
         onClose();
+        setEditing(false);
     };
+
+    const handleDeletePond = async () => {
+        setDeleting(true);
+        deletePond && await deletePond(editedPond.pond_id);
+        onClose();
+        setDeleting(false);
+    }
 
     return (
         <Modal className="flex flex-1 max-w-2xl max-h-full z-10"
             animationType="slide"
             transparent={true}
-            visible={true} 
+            visible={true}
         >
-            <Overlay/>
+            <Overlay />
             <View className="flex items-center justify-center h-full">
                 <View className="bg-white w-3/4 p-4 rounded-lg flex">
                     <View className="flex flex-row mb-4 justify-between w-full border-b-[.3px] border-[#24527A] pb-2">
@@ -41,14 +44,14 @@ export default function EditPondModal({ onClose, onEditPond }: EditPondModalProp
                         <Pressable className="pt-1" onPress={() => onClose()}><Image source={require('../../../../assets/close.png')} /></Pressable>
                     </View>
                     <View className="flex mb-4 w-full justify-items-end">
-                        <Text className="text-sm text-[#24527A] flex">Pond number:</Text>
-                        
+                        <Text className="text-sm text-[#24527A] flex">Pond number: {editedPond.pondNumber}</Text>
+
                     </View>
                     <View className="mb-2">
                         <Text className="text-sm mb-1 text-[#24527A]">Prawn count</Text>
                         <TextInput
                             className="border border-gray-300 rounded p-2 text-[#24527A]"
-                            onChangeText={(text) => setPondCount(parseFloat(text))}
+                            onChangeText={(text) => setPondCount(Number(text))}
                             keyboardType="numeric"
                             value={pondCount.toString()}
                         />
@@ -56,17 +59,18 @@ export default function EditPondModal({ onClose, onEditPond }: EditPondModalProp
                     <Text className="text-sm mb-6 text-[#24527A]">*Feeds Needed will be auto-generated</Text>
                     <View className="flex flex-row justify-between">
                         <View>
-                        <Pressable
+                            <Pressable
                                 className=" rounded p-2 text-center justify-center border-[#BD3D4C] border-[1px]"
-                                onPress={onClose}
+                                onPress={handleDeletePond}
                             >
-                            <Image source={require('../../../../assets/delete.png')} style={{width: 18, height: 18}} />
+                                {!editing && <Image source={require('../../../../assets/delete.png')} style={{ width: 18, height: 18 }} />}
+                                {editing && <><ActivityIndicator color="#ff0000" /></>}
                             </Pressable>
                         </View>
-                        <View  className="flex flex-row">
+                        <View className="flex flex-row">
                             <Pressable
                                 className="mr-2 rounded p-2 text-center border-[#24527A] border-[1px]"
-                                onPress={onClose}
+                                onPress={() => { if (!editing || !deleting) onClose() }}
                             >
                                 <Text className="text-[#24527A]">Cancel</Text>
                             </Pressable>
@@ -74,7 +78,8 @@ export default function EditPondModal({ onClose, onEditPond }: EditPondModalProp
                                 className="bg-[#24527A]  rounded p-2 text-center "
                                 onPress={handleEditPond}
                             >
-                                <Text className="text-[#ECF4FB]">Save</Text>
+                                {!editing && <Text className="text-[#ECF4FB]">Save</Text>}
+                                {editing && <><ActivityIndicator color="#ffffff" /><Text> Editing...</Text></>}
                             </Pressable>
                         </View>
                     </View>

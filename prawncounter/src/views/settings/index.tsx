@@ -25,7 +25,7 @@ export default function Settings({ route, navigation }: IDashboardProps) {
     const handleLogoutModal = () => {
         supabase.auth.signOut().then(() => {
             reset && reset
-            navigation.replace("signout");
+            navigation.replace("signin");
         });
     }
 

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, Image } from 'react-native';
 import ImageComponent from "./resultPicture";
 import handleTakePicture from "../floatingcamera";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../navigation/types";
+import { PondTypeWithOrWithoutPondNumber } from "../../../providers/pondprovider";
 
 
 type ResultType = {
@@ -15,35 +16,39 @@ type ResultType = {
 type ResultContextProps = {
     result: ResultType;
     setResult: React.Dispatch<React.SetStateAction<ResultType>>;
+    setIsPaused: React.Dispatch<React.SetStateAction<boolean>>;
+    setNavigateCallback: Dispatch<SetStateAction<(() => void) | undefined>>;
 }
 
-interface IDashboardProps {
-    route: RouteProp<RootStackParamList, "dashboard">;
-    navigation: NativeStackNavigationProp<RootStackParamList, "dashboard">;
-}
-
-export const ResultContext = React.createContext<ResultContextProps>({ result: { count: 0, path: "" }, setResult: () => { } });
+export const ResultContext = React.createContext<ResultContextProps>({ result: { count: 0, path: "" }, setResult: () => { }, setIsPaused: () => { }, setNavigateCallback: () => { } });
 
 export function useResult() {
     return React.useContext(ResultContext);
 }
 
-export default function ResultModal({ children }: { children: React.ReactNode },{ route, navigation }: IDashboardProps) {
+export default function ResultModal({ children, navigation }: { children: React.ReactNode, navigation: any }) {
+    const [isPaused, setIsPaused] = useState(false);
     const [result, setResult] = useState<ResultType>(null);
+    const [navigateCallback, setNavigateCallback] = useState<() => void>();
+
+    useEffect(() => {
+        console.log("NAVIGATE CALLBACK -", navigateCallback);
+    }, [navigateCallback])
+
     useEffect(() => {
         console.log("result is:", result);
     }, [result]);
-    // count, path
+
     return (
-        <ResultContext.Provider value={{ result, setResult }}>
+        <ResultContext.Provider value={{ result, setResult, setIsPaused, setNavigateCallback }}>
             <Modal className="flex flex-1 max-w-2xl max-h-full z-10 "
                 animationType="slide"
                 transparent={true}
-                visible={!!result}
+                visible={!!result && !isPaused}
             >
                 <View className="absolute w-full bg-black opacity-50 h-full"></View>
                 <View className="flex flex-col justify-center relative p-4 w-full content-center">
-                    
+
                     <View className="bg-[#F9FCFF] flex flex-col justify-between p-4 mt-12 h-[540px] shadow-md rounded-md opacity-100">
                         <View className="flex flex-row mb-4 justify-between w-full border-b-[.3px] border-[#24527A] pb-2 mt-0">
                             <Text className="text-[20px] text-[#24527A]">Count result</Text>
@@ -61,16 +66,16 @@ export default function ResultModal({ children }: { children: React.ReactNode },
                         <Pressable
                             className="bg-[#24527A] rounded-md py-3 px-3 mb-2 justify-center flex flex-row items-center"
                             onPress={() => handleTakePicture()}
-                            
+
                         >
-                            <Image source={require('../../../../assets/count-again.png')} style={{ width: 12, height: 12}} />
+                            <Image source={require('../../../../assets/count-again.png')} style={{ width: 12, height: 12 }} />
                             <Text className="text-[#F9FCFF] pl-1">Count again</Text>
                         </Pressable>
                         <Pressable
                             className="bg-[#F9FCFF] py-3 px-3 flex flex-row justify-center items-center border-[#315f88] rounded-md border"
-                            onPress={() => navigation.navigate('selectPond')}
+                            onPress={() => { setIsPaused(true); navigateCallback && navigateCallback() }}
                         >
-                            <Image source={require('../../../../assets/add.png')} style={{ width: 12, height: 12}} />
+                            <Image source={require('../../../../assets/add.png')} style={{ width: 12, height: 12 }} />
                             <Text className="text-[#24527A] pl-1 text-center">Add to pond</Text>
                         </Pressable>
                     </View>
