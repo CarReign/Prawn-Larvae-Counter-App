@@ -20,6 +20,7 @@ interface IDashboardProps {
 }
 
 export default function Dashboard({ route, navigation }: IDashboardProps) {
+    const{ session } = useAuth();
     const { farm, loading: farmLoading, username, refresh } = useFarm();
     console.log(farmLoading, farm, username)
     const { ponds } = usePond();
@@ -65,12 +66,12 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                                         <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
                                     </View>
                                     <DashboardTabs />
-                                    <FloatingCamera />
+                                    
                                 </View>
                                 
                             }
                         </View>
-                        
+                        <FloatingCamera />
                     </>
                 }
             </View>
