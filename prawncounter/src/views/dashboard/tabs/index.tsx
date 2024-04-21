@@ -13,7 +13,7 @@ export default function DashboardTabs() {
         }
     };
 
-    return <View className="h-full bg-[#B2D1ED]">
+    return <View className="flex h-[550] bg-[#B2D1ED]">
         <View className="min-h-[40px] flex flex-row justify-between ">
             <Pressable 
                 className={`rounded-t-lg items-center flex-grow justify-center ${selectedTab === "pond" ? "bg-[#eff6fc]" : "bg-[#E2EFFA]"}`}
@@ -28,7 +28,7 @@ export default function DashboardTabs() {
                 <Text className="text-[16px] text-[#24527A]">History</Text>
             </Pressable>
         </View>
-        <View>
+        <View className="flex min-h-full">
             {
                 selectedTab === "pond" && <PondTab />
             }

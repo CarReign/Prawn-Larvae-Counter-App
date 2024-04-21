@@ -1,4 +1,4 @@
-import { ActivityIndicator, Button, Image, Modal, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Button, Image, Modal, Pressable, ScrollView, Text, View, RefreshControl } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -26,41 +26,48 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
     const { ponds } = usePond();
     const { counts } = useCount();
     const { setNavigateCallback } = useResult();
+    const [ refreshing, setRefreshing ] = useState<boolean>(false);
 
     useEffect(() => {
         setNavigateCallback(() => () => { navigation.navigate("selectPond") })
     }, [])
 
+    const onRefresh = async () => {
+        setRefreshing(true);
+        refresh
+        console.log('refreshed')
+        setRefreshing(false);
+    }
+
     return (
         <>
-            <View className=" flex-1 bg-[#BAD8F2] py-8">
+            <View className=" flex-1 bg-[#BAD8F2] justify-center items-center pt-8 h-full">
                 {
                     <>
-                        <View className="">
+                        <ScrollView className="flex-1 h-full" refreshControl={
+                            <RefreshControl progressBackgroundColor={"#eff6fc"} colors={["#24527A"]} refreshing={refreshing} onRefresh={refresh} />
+                        }>
                             {
                                 !!farmLoading && 
-                                <View className="flex items-center justify-center h-full">
+                                <View className="flex text-center items-center justify-center h-full">
                                     <ActivityIndicator className="flex items-center " size={"large"} color="#24527A" />
                                     <Text className="flex items text-[#24527A]">  Please wait...</Text>
                                 </View>
                             }
                             {
-                                !farmLoading && <View className="flex flex-col space-y-2">
+                                !farmLoading && <View className="flex flex-col">
                                     <View className="flex flex-row w-full justify-between mt-4 px-[20px]">
                                         <View className="">
                                             <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username}</Text>
                                             <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
                                         </View>
                                         <View className="flex flex-row space-x-4">
-                                            <Pressable onPress={refresh} className="justify-center items-center py-1 px-2 border">
-                                                <Text className="p-0 m-0">Refresh </Text>
-                                            </Pressable>
                                             <Pressable onPress={() => navigation.navigate('settings')}>
                                                 <Image className="" source={require('../../../assets/settings.png')}></Image>
                                             </Pressable>
                                         </View>
                                     </View>
-                                    <View className="flex flex-row justify-between pt-2 pb-4 px-[20px] mt-5 mb-1">
+                                    <View className="flex flex-row justify-between pb-4 px-[20px] mt-4 mb-1">
                                         <Stat figure={String(ponds?.reduce((acc, pond) => acc + (pond.total_count || 0), 0)) || "0"} stat="Prawns" />
                                         <Stat figure={String(getFeedNeeded(ponds?.reduce((acc, pond) => acc + (pond.total_count || 0), 0) || 0)) + ' kg'} stat="Feeds Needed" />
                                         <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
@@ -70,7 +77,7 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                                 </View>
                                 
                             }
-                        </View>
+                        </ScrollView>
                         <FloatingCamera />
                     </>
                 }
