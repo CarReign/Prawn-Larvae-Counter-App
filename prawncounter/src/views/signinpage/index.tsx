@@ -64,28 +64,27 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
 
     
     useEffect(() => {
-        const fetchData = async () => {
-            await supabase.from('farmers').select('*').then(({ data, error }) => {
-                if (error) {
-                    console.error(error);
-                    return Promise.reject(error);
-                }
-                setFarmers(data);
-                return Promise.resolve(data);
-            })};
-        fetchData();
-
-        const farmer = farmers.filter((farmer: any) => farmer.user_id === session?.user?.id)
-        console.log(farmer)
-
-        if (session) {
-            if (farmer[0].farm_id !== null) {
-                navigation.replace("dashboard");
-            } else {
-                navigation.replace("selectFarm");
+        supabase.from('farmers').select('*').then(({ data, error }) => {
+            if (error) {
+                console.error(error);
+                return Promise.reject(error);
             }
-            
-        } 
+            setFarmers(data);
+
+            const farmer = data.filter((farmer: any) => farmer.user_id === session?.user?.id)
+            console.log("FARMER:", farmer)
+
+            if (session) {
+                if (farmer[0].farm_id !== null) {
+                    navigation.replace("dashboard");
+                } else {
+                    navigation.replace("selectFarm");
+                }
+                
+            } 
+        })
+
+        
 
     }, [session])
 
