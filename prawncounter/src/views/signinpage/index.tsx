@@ -34,10 +34,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                 if (response.error) {
                     setAuthMessage({ message: response.error.message, status: 'error' });
                     return;
-                }
-                setTimeout(() => {
-                    navigation.pop();
-                }, 2000)
+                };
                 setAuthMessage({ message: 'Signed in successfully', status: 'success' });
             }).catch((error) => {
                 setAuthMessage(error.message);
@@ -70,10 +67,8 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                 return Promise.reject(error);
             }
             setFarmers(data);
-
             const farmer = data.filter((farmer: any) => farmer.user_id === session?.user?.id)
             console.log("FARMER:", farmer)
-
             if (session) {
                 if (farmer[0].farm_id !== null) {
                     navigation.replace("dashboard");
@@ -83,9 +78,6 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                 
             } 
         })
-
-        
-
     }, [session])
 
     return (
