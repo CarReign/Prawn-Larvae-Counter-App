@@ -36,7 +36,7 @@ export default function PondTab() {
 
     return <>
 
-        <View className="bg-[#eff6fc] flex-col min-h-full">
+        <View className="bg-[#eff6fc] flex min-h-full">
             <View className="flex flex-row justify-evenly p-4 pl-2 ml-[0px] mr-3">
                 <Text className="text-[#24527A]">Pond no.</Text>
                 <Text className="text-[#24527A]">Total prawn</Text>
@@ -56,7 +56,7 @@ export default function PondTab() {
 
                         {
                             ponds ?
-                                [...ponds].map((pond, index) => {
+                                [...ponds].reverse().map((pond, index) => {
                                     return (
                                         <View key={index} className={`flex flex-row justify-between p-4 pl-4 pr-4 ${index === 0 || !!(index && !(index % 2)) ? "bg-[#C8E2F9]" : "bg-[#E1EFFA]"}  ml-5 mr-5 mb-2 text-[#24527A] rounded-lg items-center`}>
                                             <Text className="font-semibold text-[16px] text-[#24527A]flex flex-row border-[#24527A] rounded-md border-[.3px] pr-[12px] pl-[12px] pb-[5px] pt-[5px] text-center" >{index + 1}</Text>

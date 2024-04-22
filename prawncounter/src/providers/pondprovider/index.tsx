@@ -66,7 +66,7 @@ export default function PondProvider({ children }: { children: React.ReactNode }
                     console.log(response.error.message);
                     ToastAndroid.showWithGravity("Something Went Wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM);
                 }
-                setPonds([...ponds, ...response.data]);
+                setPonds([...response.data, ...ponds]);
                 ToastAndroid.showWithGravity("Successfully Added Pond", ToastAndroid.LONG, ToastAndroid.BOTTOM);
             });
     }

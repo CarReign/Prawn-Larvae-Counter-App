@@ -4,7 +4,7 @@
     "slug": "prawncounter",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/title.png",
     "userInterfaceStyle": "light",
     "plugins": [
       [
@@ -17,7 +17,7 @@
     "splash": {
       "image": "./assets/title.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#BAD8F2"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -28,11 +28,11 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/title.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#BAD8F2"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/title.png"
     }
   }
 }

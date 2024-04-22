@@ -17,6 +17,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
     const { session } = useContext(AuthContext);
     const [authMessage, setAuthMessage] = useState({ message: '', status: '' });
     const [authForm, setAuthForm] = useState({ email: '', password: '', loading: false });
+    const [farmers, setFarmers] = useState<any[]>([]);
 
     const handleEmailChange = (email: string) => {
         setAuthForm({ ...authForm, email });
@@ -61,8 +62,30 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
         }
     }, [session]);
 
+    
     useEffect(() => {
-        if (session) navigation.replace("dashboard");
+        const fetchData = async () => {
+            await supabase.from('farmers').select('*').then(({ data, error }) => {
+                if (error) {
+                    console.error(error);
+                    return Promise.reject(error);
+                }
+                setFarmers(data);
+                return Promise.resolve(data);
+            })};
+        fetchData();
+
+        const farmer = farmers.filter((farmer: any) => farmer.user_id === session?.user?.id)
+        console.log(farmer)
+
+        if (session) {
+            if (farmer[0].farm_id !== null) {
+                navigation.replace("dashboard");
+            } else {
+                navigation.replace("selectFarm");
+            }
+            
+        } 
 
     }, [session])
 

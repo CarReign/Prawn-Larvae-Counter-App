@@ -32,7 +32,7 @@ export default function App() {
           <CountProvider>
             <ResultModal navigation={navigatorRef}>
               <NavigationContainer ref={navigatorRef}>
-                <RootStack.Navigator initialRouteName="selectFarm" screenOptions={{
+                <RootStack.Navigator initialRouteName="signin" screenOptions={{
                   headerTintColor: '#24527A',
                   headerStyle: { backgroundColor: '#ECF4FB' },
                 }}>
