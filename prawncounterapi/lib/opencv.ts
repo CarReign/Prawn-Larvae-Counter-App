@@ -22,7 +22,7 @@ export function getCountWithSpecificKernelSize(imageMat: Mat, kernelSize: number
 export function getAverageCount(imageMat: Mat): CountType {
     const counts = [];
     const arrContours: MatVector[] = [];
-    for (let i = 2; i <= 4; i++) {
+    for (let i = 3; i <= 4; i++) {
         const { contours } = processCount(imageMat, i);
         counts.push((contours?.size() && (contours?.size() - 1) / 2) || 0);
         arrContours.push(contours || new MatVector());
