@@ -69,9 +69,10 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
             .single()
             .then(({ data, error }) => {console.log("data:"+ data + "error:"+ error)})
         Alert.alert('Farm selected successfully')
-        // navigation.replace("dashboard")
+        navigation.replace("dashboard")
         setAddLoading(false);
     };
+    
     return (
         <>
             <View className=" flex-1 bg-[#BAD8F2] pt-[60px]">
