@@ -16,7 +16,7 @@ export function processCount(imageMat: Mat, kernelSize: number = 3): ProcessedMa
 export function getCountWithSpecificKernelSize(imageMat: Mat, kernelSize: number): number {
     console.log("counting with kernel size:", kernelSize, "x", kernelSize,);
     const { contours }: Omit<ProcessedMatType, "processedMat"> = processCount(imageMat, kernelSize);
-    return (contours?.size() && contours?.size() / 2) || 0;
+    return (contours?.size() && (contours?.size() - 1) / 2) || 0;
 }
 
 export function getAverageCount(imageMat: Mat): CountType {
@@ -24,7 +24,7 @@ export function getAverageCount(imageMat: Mat): CountType {
     const arrContours: MatVector[] = [];
     for (let i = 2; i <= 6; i++) {
         const { contours } = processCount(imageMat, i);
-        counts.push((contours?.size() && contours?.size() / 2) || 0);
+        counts.push((contours?.size() && (contours?.size() - 1) / 2) || 0);
         arrContours.push(contours || new MatVector());
     };
     // average using reduce
