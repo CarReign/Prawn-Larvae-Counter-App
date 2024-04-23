@@ -15,13 +15,14 @@ export default async function saveImageMatToBucket(imageMat: Mat, originalname: 
         const result = await supabase.storage
             .from("countimg")
             .upload(
-                `public/${String(hashFromString(originalname))}.jpg`, 
+                `public/${String(hashFromString(originalname))}.jpg`,
                 canvasToSave.toBuffer('image/jpeg').buffer,
                 {
                     cacheControl: '3600',
                     upsert: true
                 }
             );
+
 
         return result;
     } catch (error: any) {
