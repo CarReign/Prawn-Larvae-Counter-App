@@ -1,12 +1,12 @@
-import { dilate, findContours, RETR_TREE, MORPH_OPEN, morphologyEx, CHAIN_APPROX_SIMPLE, MatVector, getStructuringElement, MORPH_ELLIPSE, adaptiveThreshold, Mat, COLOR_RGBA2GRAY, cvtColor, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, BORDER_DEFAULT, Point, Size, GaussianBlur, KeyPoint, RETR_EXTERNAL, RETR_LIST, RETR_CCOMP } from "@techstark/opencv-js";
+import { dilate, findContours, RETR_TREE, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, MORPH_OPEN, morphologyEx, CHAIN_APPROX_SIMPLE, MatVector, getStructuringElement, MORPH_ELLIPSE, adaptiveThreshold, Mat, COLOR_RGBA2GRAY, cvtColor, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, BORDER_DEFAULT, Point, Size, GaussianBlur, KeyPoint, RETR_EXTERNAL, RETR_LIST, RETR_CCOMP } from "@techstark/opencv-js";
 import { CountType, ProcessedMatType } from "../routes/types";
 import * as cv from "@techstark/opencv-js";
 
 export function processCount(imageMat: Mat, kernelSize: number = 3): ProcessedMatType {
     const processedMat: Mat = new Mat();
     cvtColor(imageMat, processedMat, COLOR_RGBA2GRAY);
-    GaussianBlur(processedMat, processedMat, new Size(3, 3), 0,);
-    adaptiveThreshold(processedMat, processedMat, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 12);
+    // GaussianBlur(processedMat, processedMat, new Size(3, 3), 0,);
+    adaptiveThreshold(processedMat, processedMat, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, 21, 10);
     // dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
     morphologyEx(processedMat, processedMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(3, 3)), new Point(-1, -1), 3);;
     const contours: MatVector = new MatVector();
