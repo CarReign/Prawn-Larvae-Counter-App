@@ -22,7 +22,7 @@ app.get("/test", (req, res) => {
     res.status(200).json({ message: "test run OK" });
 });
 app.use("/api", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.headers['x-prawncounter-api-key'] === (process.env.NEXT_PUBLIC_SUPABASE_URL || "carreigniab123456")) {
+    if (req.headers['x-prawncounter-api-key'] === (process.env.API_KEY || "carreigniab123456")) {
         next();
     }
     else {

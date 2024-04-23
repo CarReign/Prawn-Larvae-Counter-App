@@ -30,7 +30,6 @@ router.post("/counter", upload.single("image-to-count"), async (req: Request, re
         const imageData: ImageData = getImageDataFromBuffer(file.buffer);
 
         if (imageData.data.every((value: number) => value === 0)) throw new Error("Invalid image data");
-        console.log("get image data:", imageData);
         const imageMat = matFromImageData(imageData);
 
         let data: { count: number } | CountType;

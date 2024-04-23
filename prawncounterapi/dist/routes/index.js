@@ -37,7 +37,6 @@ router.post("/counter", upload.single("image-to-count"), (req, res) => __awaiter
         const imageData = (0, canvas_1.getImageDataFromBuffer)(file.buffer);
         if (imageData.data.every((value) => value === 0))
             throw new Error("Invalid image data");
-        console.log("get image data:", imageData);
         const imageMat = (0, opencv_js_1.matFromImageData)(imageData);
         let data;
         if (kernelSize) {

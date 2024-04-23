@@ -1,32 +1,35 @@
-import { dilate, findContours, RETR_TREE, CHAIN_APPROX_SIMPLE, MatVector, getStructuringElement, MORPH_ELLIPSE, adaptiveThreshold, Mat, COLOR_RGBA2GRAY, cvtColor, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, BORDER_DEFAULT, Point, Size, GaussianBlur, KeyPoint } from "@techstark/opencv-js";
+import { dilate, findContours, RETR_TREE, CHAIN_APPROX_SIMPLE, MatVector, getStructuringElement, MORPH_ELLIPSE, adaptiveThreshold, Mat, COLOR_RGBA2GRAY, cvtColor, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, BORDER_DEFAULT, Point, Size, GaussianBlur, KeyPoint, RETR_EXTERNAL, RETR_LIST, RETR_CCOMP } from "@techstark/opencv-js";
 import { CountType, ProcessedMatType } from "../routes/types";
 import * as cv from "@techstark/opencv-js";
+
+cv.Canny
 
 export function processCount(imageMat: Mat, kernelSize: number = 3): ProcessedMatType {
     const processedMat: Mat = new Mat();
     cvtColor(imageMat, processedMat, COLOR_RGBA2GRAY);
     GaussianBlur(processedMat, processedMat, new Size(3, 3), 0,);
     adaptiveThreshold(processedMat, processedMat, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 12);
-    dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
+    // dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
     const contours: MatVector = new MatVector();
-    findContours(processedMat, contours, new Mat(), RETR_TREE, CHAIN_APPROX_SIMPLE);
+    findContours(processedMat, contours, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
     return { contours, processedMat };
 }
 
 export function getCountWithSpecificKernelSize(imageMat: Mat, kernelSize: number): number {
     console.log("counting with kernel size:", kernelSize, "x", kernelSize,);
     const { contours }: Omit<ProcessedMatType, "processedMat"> = processCount(imageMat, kernelSize);
-    return (contours?.size() && contours?.size() / 2) || 0;
+    return (contours?.size() && contours?.size()) || 0;
 }
 
 export function getAverageCount(imageMat: Mat): CountType {
     const counts = [];
     const arrContours: MatVector[] = [];
-    for (let i = 3; i <= 4; i++) {
+    for (let i = 1; i <= 6; i++) {
         const { contours } = processCount(imageMat, i);
-        counts.push((contours?.size() && contours?.size() / 2) || 0);
+        counts.push((contours?.size() && contours?.size()) || 0);
         arrContours.push(contours || new MatVector());
     };
+    console.log("counts:", counts);
     // average using reduce
     const total = counts.reduce((acc, curr) => acc + curr);
     const mean = total / counts.length;
