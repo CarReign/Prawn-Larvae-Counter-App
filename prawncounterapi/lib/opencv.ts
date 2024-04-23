@@ -8,7 +8,7 @@ export function processCount(imageMat: Mat, kernelSize: number = 3): ProcessedMa
     GaussianBlur(processedMat, processedMat, new Size(3, 3), 0,);
     adaptiveThreshold(processedMat, processedMat, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 12);
     // dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
-    morphologyEx(processedMat, processedMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(3, 3)), undefined, 3);;
+    morphologyEx(processedMat, processedMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(3, 3)), new Point(-1, -1), 3);;
     const contours: MatVector = new MatVector();
     findContours(processedMat, contours, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
     return { contours, processedMat };
