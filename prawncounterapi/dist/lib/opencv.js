@@ -5,10 +5,10 @@ const opencv_js_1 = require("@techstark/opencv-js");
 function processCount(imageMat, kernelSize = 3) {
     const processedMat = new opencv_js_1.Mat();
     (0, opencv_js_1.cvtColor)(imageMat, processedMat, opencv_js_1.COLOR_RGBA2GRAY);
-    (0, opencv_js_1.GaussianBlur)(processedMat, processedMat, new opencv_js_1.Size(3, 3), 0);
-    (0, opencv_js_1.adaptiveThreshold)(processedMat, processedMat, 255, opencv_js_1.ADAPTIVE_THRESH_GAUSSIAN_C, opencv_js_1.THRESH_BINARY, 11, 12);
+    // GaussianBlur(processedMat, processedMat, new Size(3, 3), 0,);
+    (0, opencv_js_1.adaptiveThreshold)(processedMat, processedMat, 255, opencv_js_1.ADAPTIVE_THRESH_MEAN_C, opencv_js_1.THRESH_BINARY_INV, 21, 10);
     // dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
-    (0, opencv_js_1.morphologyEx)(processedMat, processedMat, opencv_js_1.MORPH_OPEN, (0, opencv_js_1.getStructuringElement)(opencv_js_1.MORPH_ELLIPSE, new opencv_js_1.Size(3, 3)), undefined, 3);
+    (0, opencv_js_1.morphologyEx)(processedMat, processedMat, opencv_js_1.MORPH_OPEN, (0, opencv_js_1.getStructuringElement)(opencv_js_1.MORPH_ELLIPSE, new opencv_js_1.Size(3, 3)), new opencv_js_1.Point(-1, -1), 3);
     ;
     const contours = new opencv_js_1.MatVector();
     (0, opencv_js_1.findContours)(processedMat, contours, new opencv_js_1.Mat(), opencv_js_1.RETR_EXTERNAL, opencv_js_1.CHAIN_APPROX_SIMPLE);
