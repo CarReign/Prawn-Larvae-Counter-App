@@ -33,7 +33,7 @@ export default function FloatingCamera() {
                 console.log("formdata:", formData)
                 axios.post('https://prawn-larvae-counter-app.vercel.app/api/counter/image',
                     formData,
-                    { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "carreigniab123456" } }
+                    { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "2020-0550" } }
                 ).then((response: any) => {
                     setResult({ count: response.data.count, path: response.data.path });
                 }).catch((error) => console.log("error is:", error)).finally(() => setLoading(false))
