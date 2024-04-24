@@ -53,7 +53,7 @@ function App() {
     <>
       <input type='file' accept='image/*' onChange={(e: any) => setFile(e.target.files[0])} />
       <input type='button' value='Upload' onClick={handleSubmit} />
-      <div>
+      { imgUrl && <div>
         <h1>Original</h1>
         <img src={imgUrl} onLoad={(e: any) => { setImg(e.target) }} />
         <h1>Grayyed out</h1>
@@ -65,7 +65,7 @@ function App() {
         <h1>Contours</h1>
         <canvas ref={contoursCanvasRef} />
         <h1>Result: {count}</h1>
-      </div>
+      </div>}
     </>
   )
 }
