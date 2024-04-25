@@ -15,7 +15,7 @@
       ]
     ],
     "splash": {
-      "image": "./assets/title.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#BAD8F2"
     },
@@ -27,12 +27,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/title.png",
+        "foregroundImage": "./assets/prawn.png",
         "backgroundColor": "#BAD8F2"
       }
     },
     "web": {
-      "favicon": "./assets/title.png"
+      "favicon": "./assets/prawn.png"
     }
   }
 }

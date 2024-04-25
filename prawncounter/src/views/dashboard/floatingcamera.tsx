@@ -10,10 +10,11 @@ import axios from "axios";
 import * as FileSystem from 'expo-file-system';
 import FormData from 'form-data';
 import { useResult } from "./modals/resultmodal";
+import { handleTakePicture } from "../../utils/takepicture/takepicture";
 
 export default function FloatingCamera() {
     const [currentImageUri, setCurrentImageUri] = useState<string>("");
-    const { result, setResult, setNavigateCallback } = useResult();
+    const { result, setResult, setNavigateCallback, loading: resultLoading } = useResult();
     const [loading, setLoading] = useState<boolean>(false);
     const { addCount } = useCount();
 
@@ -33,7 +34,7 @@ export default function FloatingCamera() {
                 console.log("formdata:", formData)
                 axios.post('https://prawn-larvae-counter-app.vercel.app/api/counter/image',
                     formData,
-                    { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "carreigniab123456" } }
+                    { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "2020-0550" } }
                 ).then((response: any) => {
                     setResult({ count: response.data.count, path: response.data.path });
                 }).catch((error) => console.log("error is:", error)).finally(() => setLoading(false))
@@ -45,32 +46,11 @@ export default function FloatingCamera() {
         };
     }, [currentImageUri])
 
-    const handleTakePicture = async () => {
-        // setResult({ count: 666, path: "public/test.jpg" });
-        if (loading) return;
-        let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (permission.granted) {
-            let result = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: false,
-                aspect: [16, 9],
-                quality: 1,
-            });
-            if (!result.canceled) {
-                const image = await ImageManipulator.manipulateAsync(result.assets[0].uri,
-                    [{ resize: { width: 500 } }],
-                    { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
-                );
-                setCurrentImageUri(image.uri);
-            }
-        }
-    }
-
     return <Pressable
         className=" flex items-center justify-center min-h-[55px] min-w-[55px] rounded-full bg-[#2E78B8] absolute bottom-[30px] right-[30px] pb-[2px] pr-[2px]"
-        onPress={handleTakePicture}
+        onPress={() => !loading && !resultLoading && handleTakePicture((imageUri) => setCurrentImageUri(imageUri))}
     >
-        {loading && <ActivityIndicator color="white" />}
-        {!loading && <Image className="" source={require('../../../assets/camera.png')} style={{ width: 32, height: 32 }} />}
+        {(loading || resultLoading) && <ActivityIndicator color="#eff6fc" size={"small"}/>}
+        {(!loading && !resultLoading) && <Image className="" source={require('../../../assets/camera.png')} style={{ width: 32, height: 32 }} />}
     </Pressable>
 }

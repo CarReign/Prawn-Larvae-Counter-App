@@ -6,6 +6,7 @@ import AddPondModal from "../../modals/addpond";
 import EditPondModal from "../../modals/editpond";
 import Overlay from "../../overlay";
 import { PondType, PondTypeWithOrWithoutPondNumber } from "../../../../providers/pondprovider";
+import getFeedNeeded from "../../../../utils/getfeedneeded";
 
 export default function PondTab() {
     const { ponds, loading } = usePond();
@@ -37,10 +38,10 @@ export default function PondTab() {
     return <>
 
         <View className="bg-[#eff6fc] flex min-h-full">
-            <View className="flex flex-row justify-evenly p-4 pl-2 ml-[0px] mr-3">
+            <View className="flex flex-row justify-evenly p-4 pl-2 ml-[0px] mr-5">
                 <Text className="text-[#24527A]">Pond no.</Text>
                 <Text className="text-[#24527A]">Total prawn</Text>
-                <Text className="text-[#24527A]">Feeds Needed</Text>
+                <Text className="text-[#24527A]">Feeds Needed    </Text>
                 <Text className="text-[#24527A]">Action</Text>
             </View>
             <ScrollView className="max-h-[450px] min-h-[300px]" contentContainerStyle={{ flexGrow: 1 }}>
@@ -56,14 +57,17 @@ export default function PondTab() {
 
                         {
                             ponds ?
-                                [...ponds].reverse().map((pond, index) => {
+                                [...ponds].map((pond, index) => {
                                     return (
                                         <View key={index} className={`flex flex-row justify-between p-4 pl-4 pr-4 ${index === 0 || !!(index && !(index % 2)) ? "bg-[#C8E2F9]" : "bg-[#E1EFFA]"}  ml-5 mr-5 mb-2 text-[#24527A] rounded-lg items-center`}>
                                             <Text className="font-semibold text-[16px] text-[#24527A]flex flex-row border-[#24527A] rounded-md border-[.3px] pr-[12px] pl-[12px] pb-[5px] pt-[5px] text-center" >{index + 1}</Text>
                                             <Image source={require('../../../../../assets/line.png')} style={{ width: .5, height: 15, tintColor: "#9fb7cc", marginTop: 3 }} />
-                                            <Text className="font-semibold text-[24px] text-[#24527A]">{pond.total_count || (counts && counts.length && counts.filter(count => count.pond_id === pond.pond_id).reduce((acc, count) => acc + count.count, 0).toString()) || 0}</Text>
-                                            <Image source={require('../../../../../assets/line.png')} style={{ width: .1, height: 15, tintColor: "#9fb7cc", marginTop: 3 }} />
-                                            <Text className="font-semibold text-[24px] text-[#24527A]">0 kg</Text>
+                                            <Text className="font-semibold text-[24px] text-[#24527A]">{pond.total_count || 0}</Text>
+                                            <Image source={require('../../../../../assets/line.png')} style={{ width: .5, height: 15, tintColor: "#9fb7cc", marginTop: 3 }} />
+                                            <View className="flex flex-row justify-end items-end"> 
+                                                <Text className="font-semibold text-[24px] text-[#24527A]">{getFeedNeeded(pond.total_count || 0)}</Text>
+                                                <Text className="font-semibold text-[16px] mb-[2px] text-[#24527A]"> kg</Text>
+                                            </View>
                                             <Image source={require('../../../../../assets/line.png')} style={{ width: .5, height: 15, tintColor: "#9fb7cc", marginTop: 3 }} />
                                             <Pressable className="flex flex-row border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
                                                 onPress={() => setEditedPond(pond)}>
@@ -71,7 +75,7 @@ export default function PondTab() {
                                                 <Text className="font-semibold text-[16px] text-[#24527A] pl-1">Edit</Text>
                                             </Pressable>
                                         </View>
-
+ 
                                     )
                                 })
                                 :

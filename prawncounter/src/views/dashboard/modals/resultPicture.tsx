@@ -53,13 +53,13 @@ export default function ImageComponent({ path }: { path: string }) {
   }, [path]);
 
   return (
-    <View className='bg-cover flex-row flex'>
+    <View className='bg-cover flex-row flex w-full justify-center items-center'>
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#24527A" />
       ) : <>
         {path && imageData && <Image
           source={{ uri: `data:image/jpeg;base64,${imageData}` }}
-          className=' aspect-auto min-h-[300px] w-full'
+          className=' aspect-auto h-[400px] w-full'
         />}
       </>}
     </View>

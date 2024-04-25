@@ -1,12 +1,15 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, Image } from 'react-native';
 import ImageComponent from "./resultPicture";
-import handleTakePicture from "../floatingcamera";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../navigation/types";
 import { PondTypeWithOrWithoutPondNumber } from "../../../providers/pondprovider";
-
+import { handleTakePicture } from "../../../utils/takepicture/takepicture";
+import * as FileSystem from 'expo-file-system';
+import FormData from 'form-data';
+import uuid from 'react-native-uuid';
+import axios from "axios";
 
 type ResultType = {
     count: number;
@@ -18,6 +21,7 @@ type ResultContextProps = {
     setResult: React.Dispatch<React.SetStateAction<ResultType>>;
     setIsPaused: React.Dispatch<React.SetStateAction<boolean>>;
     setNavigateCallback: Dispatch<SetStateAction<(() => void) | undefined>>;
+    loading?: boolean;
 }
 
 export const ResultContext = React.createContext<ResultContextProps>({ result: { count: 0, path: "" }, setResult: () => { }, setIsPaused: () => { }, setNavigateCallback: () => { } });
@@ -29,6 +33,7 @@ export function useResult() {
 export default function ResultModal({ children, navigation }: { children: React.ReactNode, navigation: any }) {
     const [isPaused, setIsPaused] = useState(false);
     const [result, setResult] = useState<ResultType>(null);
+    const [loading, setLoading] = useState(false);
     const [navigateCallback, setNavigateCallback] = useState<() => void>();
 
     useEffect(() => {
@@ -39,17 +44,41 @@ export default function ResultModal({ children, navigation }: { children: React.
         console.log("result is:", result);
     }, [result]);
 
+    const handleTakePictureAgain = () => {
+        setResult(null);
+        setLoading(true);
+        handleTakePicture((resultingImageUri) => {
+            FileSystem.readAsStringAsync(resultingImageUri).then(async (response: string) => {
+                const formData = new FormData();
+                // // const newBlob: any =  await axios.get(`data:image/jpeg;base64,${Buffer.from(response, 'binary').toString('base64')}`);
+                // console.log("Blob Value:", `data:image/jpeg;base64,${Buffer.from(response, 'binary').toString('base64')}`)
+                formData.append('image-to-count', {
+                    uri: resultingImageUri,
+                    name: `${uuid.v4()}.jpg`,
+                    type: 'image/jpeg'
+                });
+                console.log("formdata:", formData)
+                axios.post('https://prawn-larvae-counter-app.vercel.app/api/counter/image',
+                    formData,
+                    { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "2020-0550" } }
+                ).then((response: any) => {
+                    setResult({ count: response.data.count, path: response.data.path });
+                }).catch((error) => console.log("error is:", error)).finally(() => setLoading(false))
+            });
+        });
+    }
+
     return (
-        <ResultContext.Provider value={{ result, setResult, setIsPaused, setNavigateCallback }}>
-            <Modal className="flex flex-1 max-w-2xl max-h-full z-10 "
+        <ResultContext.Provider value={{ result, setResult, setIsPaused, setNavigateCallback, loading }}>
+            <Modal className="flex  max-w-2xl max-h-full z-10 "
                 animationType="slide"
                 transparent={true}
                 visible={!!result && !isPaused}
             >
                 <View className="absolute w-full bg-black opacity-50 h-full"></View>
-                <View className="flex flex-col justify-center relative p-4 w-full content-center">
+                <View className="flex flex-col justify-center relative p-4 w-full  content-center">
 
-                    <View className="bg-[#F9FCFF] flex flex-col justify-between p-4 mt-12 h-[540px] shadow-md rounded-md opacity-100">
+                    <View className="bg-[#F9FCFF] flex flex-col justify-between p-4 mt-6 h-[640px] shadow-md rounded-md opacity-100">
                         <View className="flex flex-row mb-4 justify-between w-full border-b-[.3px] border-[#24527A] pb-2 mt-0">
                             <Text className="text-[20px] text-[#24527A]">Count result</Text>
                             <Pressable onPress={() => setResult(null)}
@@ -65,7 +94,7 @@ export default function ResultModal({ children, navigation }: { children: React.
                         </View>
                         <Pressable
                             className="bg-[#24527A] rounded-md py-3 px-3 mb-2 justify-center flex flex-row items-center"
-                            onPress={() => handleTakePicture()}
+                            onPress={handleTakePictureAgain}
 
                         >
                             <Image source={require('../../../../assets/count-again.png')} style={{ width: 12, height: 12 }} />
