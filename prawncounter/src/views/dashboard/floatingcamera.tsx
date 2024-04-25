@@ -33,6 +33,7 @@ export default function FloatingCamera() {
                 });
                 console.log("formdata:", formData)
                 axios.post('https://prawn-larvae-counter-app.vercel.app/api/counter/image',
+                // axios.post('http://localhost:3000/api/counter/image',
                     formData,
                     { headers: { 'Content-Type': 'multipart/form-data', 'x-prawncounter-api-key': "2020-0550" } }
                 ).then((response: any) => {
