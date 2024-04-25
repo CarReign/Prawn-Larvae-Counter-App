@@ -62,10 +62,7 @@ export default function FarmProvider({ children }: { children: React.ReactNode }
                 setUsername(response.data?.username);
                 setLoading(false);
             });
-        const farmRefetchInterval = setInterval(handleRefetch, 120000);
-        return () => {
-            clearInterval(farmRefetchInterval);
-        }
+        
     }, [session, sessionLoading, refetch]);
 
     const handleAddFarm = (farm: Omit<FarmType, "farm_id">) => {

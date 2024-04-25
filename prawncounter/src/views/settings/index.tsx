@@ -6,6 +6,7 @@ import { supabase } from "../../libs/supabase";
 import { useState } from "react";
 import LogoutModal from "../dashboard/modals/logoutmodal";
 import useAuth from "../../hooks/useauth";
+import useFarm from "../../hooks/useFarm";
 
 interface IDashboardProps {
     route: RouteProp<RootStackParamList, "settings">;
@@ -13,7 +14,12 @@ interface IDashboardProps {
 }
 
 export default function Settings({ route, navigation }: IDashboardProps) {
-    const { loading, reset } = useAuth();
+    const { session, loading: sessionLoading, reset } = useAuth();
+    const { farm, loading: farmLoading, username, refresh, editFarm } = useFarm();
+    const [ newUsername, setNewUsername] = useState<any>(username);
+    const [ newFarmName, setNewFarmName ] = useState<any>(farm?.farm_name);
+    
+    
 
     const toggleLogoutModal = () => {
         console.log("logout")
@@ -43,16 +49,12 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <View className="flex flex-row justify-between mb-3">
-                            <Text className="text-[16px] text-[#24527A]">Name:</Text>
-                            <Text className="text-[16px] text-[#24527A]">Carren Mae Yongco</Text>
-                        </View>
-                        <View className="flex flex-row justify-between mb-3">
                             <Text className="text-[16px] text-[#24527A]">Username:</Text>
-                            <Text className="text-[16px] text-[#24527A]">Carreign</Text>
+                            <Text className="text-[16px] text-[#24527A]">{username}</Text>
                         </View>
                         <View className="flex flex-row justify-between">
                             <Text className="text-[16px] text-[#24527A]">Farm name:</Text>
-                            <Text className="text-[16px] text-[#24527A]">RDEX Prawn Farm</Text>
+                            <Text className="text-[16px] text-[#24527A]">{farm?.farm_name}</Text>
                         </View>
                     </View>
                 </View>
@@ -67,7 +69,7 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                         </Pressable>
                     </View>
                 </View>
-                <View className="mb-6">
+                {/* <View className="mb-6">
                     <View className="flex flex-row justify-between items-center mb-2">
                         <Text className="text-[#24527A] text-[16px] font-semibold">Counting algorithms</Text>
                         <Pressable className="flex flex-row border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
@@ -87,7 +89,7 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                             <Text className="text-[16px] text-[#24527A]">Blob-detection</Text>
                         </View>
                     </View>
-                </View>
+                </View> */}
             </View>
             <View className="flex flex-row w-full justify-center pb-5">
                 <Pressable onPress={toggleLogoutModal} className="flex flex-row bg-[#B41919] rounded-md pr-2 h-[36px] pl-2 pb-[6px] pt-[5px] w-[96px] justify-center items-center">

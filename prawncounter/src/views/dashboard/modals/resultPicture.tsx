@@ -59,7 +59,7 @@ export default function ImageComponent({ path }: { path: string }) {
       ) : <>
         {path && imageData && <Image
           source={{ uri: `data:image/jpeg;base64,${imageData}` }}
-          className=' aspect-auto min-h-[300px] w-full'
+          className=' aspect-auto h-[400px] w-full'
         />}
       </>}
     </View>

@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, Pressable, View, Image, TextInput, ActivityInd
 import Overlay from "../overlay";
 import { PondType, PondTypeWithOrWithoutPondNumber } from "../../../providers/pondprovider";
 import usePond from "../../../hooks/usePond";
+import { supabase } from "../../../libs/supabase";
 
 type EditPondModalProps = {
     onClose: () => void;
@@ -15,19 +16,21 @@ export default function EditPondModal({ onClose, editedPond }: EditPondModalProp
     const [deleting, setDeleting] = useState(false)
     const [editing, setEditing] = useState(false);
 
+    
     const handleEditPond = async () => {
         const { pondNumber, ...rest } = editedPond;
         setEditing(true);
         editPond && await editPond({ ...rest, total_count: pondCount });
-        onClose();
         setEditing(false);
+        onClose();
     };
 
     const handleDeletePond = async () => {
+        const { pondNumber, ...rest } = editedPond;
         setDeleting(true);
-        deletePond && await deletePond(editedPond.pond_id);
-        onClose();
+        editPond && await editPond({ ...rest, total_count: 0 });
         setDeleting(false);
+        onClose();
     }
 
     return (
@@ -63,8 +66,8 @@ export default function EditPondModal({ onClose, editedPond }: EditPondModalProp
                                 className=" rounded p-2 text-center justify-center border-[#BD3D4C] border-[1px]"
                                 onPress={handleDeletePond}
                             >
-                                {!editing && <Image source={require('../../../../assets/delete.png')} style={{ width: 18, height: 18 }} />}
-                                {editing && <><ActivityIndicator color="#ff0000" /></>}
+                                {!deleting && <Text className="text-[#BD3D4C]">Clear count</Text>}
+                                {deleting && <><ActivityIndicator color="#ff0000" /></>}
                             </Pressable>
                         </View>
                         <View className="flex flex-row">
@@ -75,11 +78,12 @@ export default function EditPondModal({ onClose, editedPond }: EditPondModalProp
                                 <Text className="text-[#24527A]">Cancel</Text>
                             </Pressable>
                             <Pressable
-                                className="bg-[#24527A]  rounded p-2 text-center "
+                                className="bg-[#24527A] flex flex-row  rounded p-2 text-center "
                                 onPress={handleEditPond}
                             >
-                                {!editing && <Text className="text-[#ECF4FB]">Save</Text>}
-                                {editing && <><ActivityIndicator color="#ffffff" /><Text> Editing...</Text></>}
+                                {!editing && <Text className="text-[#ECF4FB]">  Save  </Text>}
+                                {editing && <><ActivityIndicator color="#ECF4FB" />
+                                <Text className="text-[#ECF4FB]"> Editing..</Text></>}
                             </Pressable>
                         </View>
                     </View>

@@ -21,6 +21,8 @@ export default function SignUpPage({ route, navigation }: IsignupPageProps) {
     const [ confirmPassword, setConfirmPassword ] = useState<any>('')
     const [loading, setLoading] = useState(false)
    
+    
+
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
             alert('Password does not match');
@@ -29,8 +31,12 @@ export default function SignUpPage({ route, navigation }: IsignupPageProps) {
         setLoading(true)
         const { data: {user}, error } = await supabase.auth.signUp({
             email: email,
-            password: password
+            password: password,
         });
+
+        
+
+        console.log("userrr:",user)
         if (error) {
             alert(error.message);
             setLoading(false)

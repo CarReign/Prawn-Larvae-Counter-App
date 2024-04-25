@@ -11,19 +11,12 @@ export default function EditAccount() {
     
     const { farm, loading: farmLoading, username, refresh, editFarm } = useFarm();
     
-    const [ newUser, setNewUser ] = useState<any>('')
     const [ newUsername, setNewUsername] = useState<any>(username);
     const [ newFarmName, setNewFarmName ] = useState<any>(farm?.farm_name);
     useEffect(() => {
-        setNewUser(session?.user.email)
         setNewUsername(username)
         setNewFarmName(farm?.farm_name)
-        supabase.from("farmers")
-            .select('fullname')
-            .eq('user_id', session?.user.id)
-            .then((response: any) => {
-                setNewUser(response.data[0].fullname)
-            })
+        
             
     },[farm, username] ) 
     const handleEditAccount = () => {
@@ -38,14 +31,6 @@ export default function EditAccount() {
         };
         updateUsername();
         
-        const updateFullname = async () => {
-            await supabase.from("farmers")
-                .update({fullname : newUser})
-                .eq('user_id', session?.user.id)
-                .single()
-        }
-        
-        updateFullname();
         Alert.alert("Success", "Account updated successfully.");
     }
 
@@ -53,15 +38,6 @@ export default function EditAccount() {
         <View className="pt-4 px-5  bg-[#ECF4FB] w-full h-full justify-between"> 
             <View className="">
                 <View className="mb-6">
-                    <View className="mb-3 flex flex-row w-full items-center justify-between">
-                        <Text className="text-[18px] mb-1 mr-3 text-[#24527A]">Name:</Text>
-                        <TextInput
-                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#24527A]  w-[228px] h-[36px]"
-                            onChangeText={setNewUser}
-                            keyboardType="default"
-                            value={newUser}
-                        />
-                    </View>
                     <View className="mb-3 flex flex-row w-full items-center justify-between">
                         <Text className="mb-1 text-[18px] mr-3 text-[#24527A]">Username:</Text>
                         <TextInput

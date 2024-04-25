@@ -84,9 +84,9 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
         <View className=" bg-[#BAD8F2] flex-1 justify-between">
             <View></View>
             <View className=" h-full flex-1 items-center justify-center space-y-2 px-[36px]">
-                <Image source={require('../../../assets/title.png')} className="mb-[24px]" />
+                <Image source={require('../../../assets/title.png')} className="mb-[12px]" />
                 <Text className="text-center text-[#24527A] text-[18px] font-bold">Login</Text>
-                <Text className="text-center text-[#24527A]">Please fill in the following information to continue</Text>
+                <Text className="text-center mb-3 text-[#24527A]">Please fill in the following information to continue</Text>
                 <Text className={`${authMessage.status === 'success' ? "text-green-500" : "text-red-500"} ${authMessage.message ? "" : "hidden"}`}>{authMessage.message}</Text>
                 <View className="w-full flex flex-col justify-start items-start space-y-[10px]">
                     <Text className="text-[#24527A]">Email</Text>

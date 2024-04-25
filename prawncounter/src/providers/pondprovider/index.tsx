@@ -49,7 +49,7 @@ export default function PondProvider({ children }: { children: React.ReactNode }
                     console.log(response.error.message);
 
                 }
-                setPonds(response?.data?.sort((a, b) => b.pond_id - a.pond_id).map((pond: PondType, index: number) => ({ ...pond, pondNumber: index + 1 })) || []);
+                setPonds(response?.data?.sort((a, b) => a.pond_id - b.pond_id).map((pond: PondType, index: number) => ({ ...pond, pondNumber: index + 1 })) || []);
                 setLoading(false);
             });
         return () => {
