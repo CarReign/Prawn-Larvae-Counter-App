@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import uuid from 'react-native-uuid';
-import { ActivityIndicator, Image, Pressable } from "react-native";
+import { ActivityIndicator, Image, Pressable, View, Text } from "react-native";
 import { Buffer } from 'buffer';
 
 import * as ImagePicker from 'expo-image-picker';
@@ -48,10 +48,17 @@ export default function FloatingCamera() {
     }, [currentImageUri])
 
     return <Pressable
-        className=" flex items-center justify-center min-h-[55px] min-w-[55px] rounded-full bg-[#2E78B8] absolute bottom-[30px] right-[30px] pb-[2px] pr-[2px]"
+        className=" flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#2E78B8] absolute bottom-[30px] pl-[12px] shadow-xl pr-[16px] py-[8px] right-[20px]"
         onPress={() => !loading && !resultLoading && handleTakePicture((imageUri) => setCurrentImageUri(imageUri))}
     >
         {(loading || resultLoading) && <ActivityIndicator color="#eff6fc" size={"small"}/>}
-        {(!loading && !resultLoading) && <Image className="" source={require('../../../assets/camera.png')} style={{ width: 32, height: 32 }} />}
+        {(!loading && !resultLoading) && 
+        <View className="flex flex-row">
+            <Image className="" source={require('../../../assets/camera.png')} style={{ width: 36, height: 36 }} />
+            <View className="flex flex-col pl-[8px] pt-[2px]">
+                <Text className="text-white text-[16px] font-medium">Start</Text>
+                <Text className="text-white mt-[-4px] text-[16px] font-medium">Count</Text>
+            </View>
+        </View>}
     </Pressable>
 }
