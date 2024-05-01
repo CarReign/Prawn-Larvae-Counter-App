@@ -20,17 +20,23 @@ interface IDashboardProps {
 }
 
 export default function Dashboard({ route, navigation }: IDashboardProps) {
-    const{ session } = useAuth();
+    const { session } = useAuth();
     const { farm, loading: farmLoading, username, refresh } = useFarm();
     console.log(farmLoading, farm, username)
     const { ponds } = usePond();
     const { counts } = useCount();
     const { setNavigateCallback } = useResult();
-    const [ refreshing, setRefreshing ] = useState<boolean>(false);
+    const [refreshing, setRefreshing] = useState<boolean>(false);
 
     useEffect(() => {
         setNavigateCallback(() => () => { navigation.navigate("selectPond") })
     }, [])
+
+    useEffect(() => {
+        if (!Object.keys(farm || {}).length) {
+            navigation.replace("selectFarm");
+        }
+    }, [farm, farmLoading]);
 
     const onRefresh = async () => {
         setRefreshing(true);
@@ -48,7 +54,7 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                             <RefreshControl progressBackgroundColor={"#eff6fc"} colors={["#24527A"]} refreshing={refreshing} onRefresh={refresh} />
                         }>
                             {
-                                !!farmLoading && 
+                                !!farmLoading &&
                                 <View className="flex text-center items-center justify-center h-full">
                                     <ActivityIndicator className="flex items-center " size={"large"} color="#24527A" />
                                     <Text className="flex items text-[#24527A]">  Please wait...</Text>
@@ -58,7 +64,7 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                                 !farmLoading && <View className="flex flex-col">
                                     <View className="flex flex-row w-full justify-between mt-4 px-[20px]">
                                         <View className="">
-                                            <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username}</Text>
+                                            <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username || ""}</Text>
                                             <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
                                         </View>
                                         <View className="flex flex-row space-x-4">
@@ -73,9 +79,9 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
                                         <Stat figure={String(ponds?.length || 0)} stat="Ponds" />
                                     </View>
                                     <DashboardTabs />
-                                    
+
                                 </View>
-                                
+
                             }
                         </ScrollView>
                         <FloatingCamera />

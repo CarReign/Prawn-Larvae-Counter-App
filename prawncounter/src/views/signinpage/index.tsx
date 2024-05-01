@@ -14,7 +14,7 @@ interface ISignInPageProps {
 }
 
 export default function SignInPage({ route, navigation }: ISignInPageProps) {
-    const { session } = useContext(AuthContext);
+    const { session, loading } = useContext(AuthContext);
     const [authMessage, setAuthMessage] = useState({ message: '', status: '' });
     const [authForm, setAuthForm] = useState({ email: '', password: '', loading: false });
     const [farmers, setFarmers] = useState<any[]>([]);
@@ -59,31 +59,32 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
         }
     }, [session]);
 
-    
+
     useEffect(() => {
-        supabase.from('farmers').select('*').then(({ data, error }) => {
-            if (error) {
-                console.error(error);
-                return Promise.reject(error);
-            }
-            setFarmers(data);
-            const farmer = data.filter((farmer: any) => farmer.user_id === session?.user?.id)
-            console.log("FARMER:", farmer)
-            if (session) {
-                if (farmer[0].farm_id !== null) {
-                    navigation.replace("dashboard");
-                } else {
-                    navigation.replace("selectFarm");
-                }
-                
-            } 
-        })
+        if (!session) {
+            return;
+        } else {
+            navigation.replace('dashboard');
+        }
+        // supabase.from('farmers').select('*').then(({ data, error }) => {
+        //     if (error) {
+        //         console.error(error);
+        //         return Promise.reject(error);
+        //     }
+        //     setFarmers(data);
+        //     const farmer = data.filter((farmer: any) => farmer.user_id === session?.user?.id)
+        //     console.log("FARMER:", farmer)
+        // })
     }, [session])
 
     return (
         <View className=" bg-[#BAD8F2] flex-1 justify-between">
             <View></View>
-            <View className=" h-full flex-1 items-center justify-center space-y-2 px-[36px]">
+            {loading && <View className="h-full flex-1 items-center justify-center space-y-2">
+                <ActivityIndicator />
+                <Text>Please wait...</Text>
+            </View>}
+            {!loading && <View className=" h-full flex-1 items-center justify-center space-y-2 px-[36px]">
                 <Image source={require('../../../assets/title.png')} className="mb-[12px]" />
                 <Text className="text-center text-[#24527A] text-[18px] font-bold">Login</Text>
                 <Text className="text-center mb-3 text-[#24527A]">Please fill in the following information to continue</Text>
@@ -119,7 +120,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                         <Text className="text-[#24527A] font-medium">Sign Up</Text>
                     </Pressable>
                 </View>
-            </View>
+            </View>}
         </View>
     );
 }

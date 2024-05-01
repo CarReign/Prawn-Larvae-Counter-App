@@ -4,15 +4,15 @@ import { AuthError, Session } from "@supabase/supabase-js";
 import { Text } from "react-native";
 
 
-export const AuthContext = createContext<{ 
-    session?: Session | null, 
+export const AuthContext = createContext<{
+    session?: Session | null,
     loading?: boolean,
-    reset?: () => void 
+    reset?: () => void
 }>({});
 
-type SessionData = { 
-    data: { session: Session | null; }; error: AuthError | null; 
-} 
+type SessionData = {
+    data: { session: Session | null; }; error: AuthError | null;
+}
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [session, setSession] = useState<Session | null>(null);
@@ -31,13 +31,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             setSession(null);
         }).catch(() => {
             setSession(null);
-        }).finally(() => {
-            setLoading(false);
         });
         const { data: authListener } = supabase.auth.onAuthStateChange(
             (event, updatedSession) => {
-                console.log(`Supabase Auth: ${event}${updatedSession?.user ? `@ user ${updatedSession.user.email}` : " @ no auth" }`);
-                if(!(session === null && updatedSession === null)) setSession(updatedSession);
+                console.log(`Supabase Auth: ${event}${updatedSession?.user ? `@ user ${updatedSession.user.email}` : " @ no auth"}`);
+                if (!(session === null && updatedSession === null)) setSession(updatedSession);
+                if (event === "INITIAL_SESSION") setLoading(false);
             }
         );
         return () => {

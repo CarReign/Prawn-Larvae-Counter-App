@@ -24,12 +24,13 @@ export type FarmTypeWithOrWithoutFarmNumber = FarmType;
 
 export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
     const { session, loading } = useAuth();
-    const [ farm, setFarm ] = useState<any[]>([]);
-    const [ farmLoading, setFarmLoading ] = useState(true);
+    const { setFarm, refresh } = useFarm();
+    const [farms, setFarms] = useState<any[]>([]);
+    const [farmLoading, setFarmLoading] = useState(true);
 
-    const [ farmers, setFarmers ] = useState<any[]>([]);
-    const [ selectedFarm, setSelectedFarm ] = useState<FarmTypeWithOrWithoutFarmNumber | null>(null);
-    const [ addLoading, setAddLoading ] = useState(false);
+    const [farmers, setFarmers] = useState<any[]>([]);
+    const [selectedFarm, setSelectedFarm] = useState<FarmTypeWithOrWithoutFarmNumber | null>(null);
+    const [addLoading, setAddLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,16 +48,16 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
                     console.error(error);
                     return;
                 }
-                setFarm(data)
+                setFarms(data)
                 setFarmLoading(false)
             })
         };
 
         fetchData();
     }, []);
-        
 
-    
+
+
     const farmer = farmers.filter((farmer: any) => farmer.user_id === session?.user?.id)
     console.log(farmer)
     const toggleSelectFarm = async () => {
@@ -67,12 +68,16 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
             .update({ farm_id: selectedFarm?.farm_id })
             .eq('user_id', session?.user?.id)
             .single()
-            .then(({ data, error }) => {console.log("data:"+ data + "error:"+ error)})
+            .then(({ data, error }) => {
+                setFarm && setFarm(selectedFarm);
+                refresh && refresh();
+                console.log("data:" + data + "error:" + error)
+            })
         Alert.alert('Farm selected successfully')
         navigation.replace("dashboard")
         setAddLoading(false);
     };
-    
+
     return (
         <>
             <View className=" flex-1 bg-[#BAD8F2] pt-[60px]">
@@ -80,26 +85,26 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
                     <>
                         <View className="">
                             {
-                                !!farmLoading && 
+                                !!farmLoading &&
                                 <View className="flex items-center justify-center h-full">
                                     <ActivityIndicator className="flex items-center " size={"large"} color="#24527A" />
                                     <Text className="flex items text-[#24527A]">  Please wait...</Text>
                                 </View>
                             }
                             {
-                                !farmLoading && 
+                                !farmLoading &&
                                 <View className="flex flex-col w-full h-full justify-between items-center mt-4 ">
                                     <Text className="flex text-[#24527A] text-[18px] font-bold mb-[8px]">Welcome, {farmer[0].username}</Text>
                                     <Text className="flex text-[#24527A] text-[16px] mb-[16px]">It seems that you don't belong to any farm yet</Text>
                                     <Pressable className="flex flex-row items-center justify-center border-dashed bg-[#E1EFFA] mb-[16px] px-[16px] rounded-md h-[36px]">
-                                        <Image source={require('../../../assets/add.png')} style={{ width: 16, height: 16 }} tintColor={"#24527A"}/>
+                                        <Image source={require('../../../assets/add.png')} style={{ width: 16, height: 16 }} tintColor={"#24527A"} />
                                         <Text className="pl-2 text-[16px] text-[#24527A] font-medium">Add new farm</Text>
                                     </Pressable>
                                     <Text className="text-[#24527A] text-[16px] mb-[16px]">OR</Text>
                                     <View className="flex flex-grow bg-[#ECF4FB] w-full items-center p-4 rounded-xl">
                                         <Text className="text-[#24527A] text-[16px] mb-[16px] font-medium flex items-center justify-center border-[#24527a85] w-full text-center pb-4 border-b-[.3px]">Select existing farm:</Text>
                                         <ScrollView className="max-h-96 flex w-full">
-                                            {farm ? farm.map((farm:any, index:any) => (
+                                            {farms ? farms.map((farm: any, index: any) => (
                                                 <Pressable
                                                     key={index}
                                                     className={`flex w-full justify-between py-4 bg-${selectedFarm?.farm_id === farm.farm_id ? '[#C8E2F9]' : '[#E1EFFA]'} mb-2 rounded-lg items-center`}
@@ -130,7 +135,7 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
                                         </Pressable>
                                     </View>
                                 </View>
-                            
+
                             }
                         </View>
                     </>
