@@ -26,7 +26,7 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
     const { session, loading } = useAuth();
     const [ farm, setFarm ] = useState<any[]>([]);
     const [ farmLoading, setFarmLoading ] = useState(true);
-
+    const { refresh } = useFarm();
     const [ farmers, setFarmers ] = useState<any[]>([]);
     const [ selectedFarm, setSelectedFarm ] = useState<FarmTypeWithOrWithoutFarmNumber | null>(null);
     const [ addLoading, setAddLoading ] = useState(false);
@@ -69,7 +69,8 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
             .single()
             .then(({ data, error }) => {console.log("data:"+ data + "error:"+ error)})
         Alert.alert('Farm selected successfully')
-        navigation.replace("dashboard")
+        refresh?.()
+        navigation.navigate("dashboard")
         setAddLoading(false);
     };
     

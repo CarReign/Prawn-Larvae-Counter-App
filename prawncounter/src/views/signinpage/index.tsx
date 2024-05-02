@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, Button, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { RootStackParamList } from "../../navigation/types";
 import { AuthContext } from "../../providers/authprovider";
+import useFarm from "../../hooks/useFarm";
 
 interface ISignInPageProps {
     route: RouteProp<RootStackParamList, "signin">;
@@ -15,6 +16,7 @@ interface ISignInPageProps {
 
 export default function SignInPage({ route, navigation }: ISignInPageProps) {
     const { session } = useContext(AuthContext);
+    const { loading, refresh }  = useFarm();
     const [authMessage, setAuthMessage] = useState({ message: '', status: '' });
     const [authForm, setAuthForm] = useState({ email: '', password: '', loading: false });
     const [farmers, setFarmers] = useState<any[]>([]);
@@ -35,6 +37,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                     setAuthMessage({ message: response.error.message, status: 'error' });
                     return;
                 };
+                refresh?.();
                 setAuthMessage({ message: 'Signed in successfully', status: 'success' });
             }).catch((error) => {
                 setAuthMessage(error.message);
@@ -43,21 +46,21 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
             });
     };
 
-    const handleNavigateToDashboard = (e: any) => {
-        e.preventDefault();
-        // check if invoked by user or by sign in success
-        if (!session) {
-            return;
-        }
-        navigation.dispatch(e.data.action);
-    }
+    // const handleNavigateToDashboard = (e: any) => {
+    //     e.preventDefault();
+    //     // check if invoked by user or by sign in success
+    //     if (!session) {
+    //         return;
+    //     }
+    //     navigation.dispatch(e.data.action);
+    // }
 
-    useEffect(() => {
-        navigation.addListener('beforeRemove', handleNavigateToDashboard);
-        return () => {
-            navigation.removeListener('beforeRemove', handleNavigateToDashboard);
-        }
-    }, [session]);
+    // useEffect(() => {
+    //     navigation.addListener('beforeRemove', handleNavigateToDashboard);
+    //     return () => {
+    //         navigation.removeListener('beforeRemove', handleNavigateToDashboard);
+    //     }
+    // }, [session]);
 
     
     useEffect(() => {
@@ -82,7 +85,6 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
 
     return (
         <View className=" bg-[#BAD8F2] flex-1 justify-between">
-            <View></View>
             <View className=" h-full flex-1 items-center justify-center space-y-2 px-[36px]">
                 <Image source={require('../../../assets/title.png')} className="mb-[12px]" />
                 <Text className="text-center text-[#24527A] text-[18px] font-bold">Login</Text>

@@ -26,7 +26,7 @@ export default function DashboardTabs() {
                 className={`rounded-t-lg flex-grow  flex-row items-center justify-center ${selectedTab === "history" ? "bg-[#eff6fc]" : "bg-[#E2EFFA]"}`}
                 onPress={handleChangeTab("history")}
                 >
-                <Image className="" source={require('../../../../assets/ponds.png')} style={{ width: 16, height: 16 }} />
+                <Image className="" source={require('../../../../assets/history.png')} style={{ width: 16, height: 16 }} />
                 <Text className="text-[16px] text-[#24527A]">  History</Text>
             </Pressable>
         </View>

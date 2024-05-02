@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "./src/navigation/types";
-import AuthProvider from "./src/providers/authprovider";
-import { NavigationContainer } from "@react-navigation/native";
+import AuthProvider, { AuthContext } from "./src/providers/authprovider";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Dashboard from "./src/views/dashboard";
 import SignInPage from "./src/views/signinpage";
 import { Text, View } from "react-native";
@@ -15,7 +15,7 @@ import ChangeAlgorithm from "./src/views/changealgorithm";
 import SelectPond from "./src/views/selectpond/selectpond";
 import SignUpPage from "./src/views/signuppage";
 import ResultModal from "./src/views/dashboard/modals/resultmodal";
-import { useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import SelectFarm from "./src/views/selectfarm";
 
 
@@ -24,6 +24,14 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
 
   const navigatorRef = useRef<any>();
+  // const navigation = useNavigation();
+
+  // useEffect(() => {
+  //   const { session } = useContext(AuthContext);
+  //   if (session) {
+  //     navigation.navigate("dashboard"); // Update the code to pass the screen name directly
+  //   }
+  // }, []);
 
   return (
     <AuthProvider>
@@ -32,7 +40,7 @@ export default function App() {
           <CountProvider>
             <ResultModal navigation={navigatorRef}>
               <NavigationContainer ref={navigatorRef}>
-                <RootStack.Navigator initialRouteName="signin" screenOptions={{
+                <RootStack.Navigator initialRouteName="dashboard" screenOptions={{
                   headerTintColor: '#24527A',
                   headerStyle: { backgroundColor: '#ECF4FB' },
                 }}>

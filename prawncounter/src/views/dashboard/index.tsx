@@ -22,13 +22,17 @@ interface IDashboardProps {
 export default function Dashboard({ route, navigation }: IDashboardProps) {
     const{ session } = useAuth();
     const { farm, loading: farmLoading, username, refresh } = useFarm();
-    console.log(farmLoading, farm, username)
+    console.log("farm details:", farmLoading, farm, username)
     const { ponds } = usePond();
     const { counts } = useCount();
     const { setNavigateCallback } = useResult();
     const [ refreshing, setRefreshing ] = useState<boolean>(false);
 
     useEffect(() => {
+        if (!session) {
+            navigation.navigate("signin");
+        } 
+
         setNavigateCallback(() => () => { navigation.navigate("selectPond") })
     }, [])
 
