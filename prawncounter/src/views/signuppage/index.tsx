@@ -46,7 +46,7 @@ export default function SignUpPage({ route, navigation }: IsignupPageProps) {
                 {
                     user_id: user?.id,
                     username: username,
-                    farm_id: 1,
+                    farm_id: null,
                 }
             ]);
             setLoading(false)
