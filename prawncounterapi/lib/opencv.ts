@@ -40,7 +40,7 @@ import * as cv from "@techstark/opencv-js";
 //     return { contours, processedMat: processedImageMat };
 // }
 
-export function processCount(imageMat: Mat, kernelSize: number = 3): ProcessedMatType {
+export function processCount(imageMat: Mat, kernelSize: number = 1): ProcessedMatType {
     const processedMat: Mat = new Mat();
     cvtColor(imageMat, processedMat, COLOR_RGBA2GRAY);
     GaussianBlur(processedMat, processedMat, new Size(3, 3), 0);
