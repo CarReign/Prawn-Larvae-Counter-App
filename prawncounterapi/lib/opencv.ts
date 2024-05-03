@@ -40,25 +40,38 @@ import * as cv from "@techstark/opencv-js";
 //     return { contours, processedMat: processedImageMat };
 // }
 
+//recentt
+// export function processCount(imageMat: Mat, kernelSize: number = 1): ProcessedMatType {
+//     const processedMat: Mat = new Mat();
+//     cvtColor(imageMat, processedMat, COLOR_RGBA2GRAY);
+//     GaussianBlur(processedMat, processedMat, new Size(3, 3), 0);
+//     adaptiveThreshold(processedMat, processedMat, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, 21, 10);
+//     dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
+//     morphologyEx(processedMat, processedMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(1, 1)), new Point(-1, -1), 3);
+
+//     // Additional preprocessing to enhance small features
+//     const additionalProcessedMat: Mat = new Mat();
+//     GaussianBlur(processedMat, additionalProcessedMat, new Size(3, 3), 0);
+//     morphologyEx(additionalProcessedMat, additionalProcessedMat, MORPH_CLOSE, getStructuringElement(MORPH_ELLIPSE, new Size(3, 3)));
+
+//     const contours: MatVector = new MatVector();
+//     findContours(additionalProcessedMat, contours, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+//     return { contours, processedMat: additionalProcessedMat };
+// }
+
+
 export function processCount(imageMat: Mat, kernelSize: number = 1): ProcessedMatType {
-    const processedMat: Mat = new Mat();
-    cvtColor(imageMat, processedMat, COLOR_RGBA2GRAY);
-    GaussianBlur(processedMat, processedMat, new Size(3, 3), 0);
-    adaptiveThreshold(processedMat, processedMat, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, 21, 10);
-    dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
-    morphologyEx(processedMat, processedMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(1, 1)), new Point(-1, -1), 3);
-
-    // Additional preprocessing to enhance small features
-    const additionalProcessedMat: Mat = new Mat();
-    GaussianBlur(processedMat, additionalProcessedMat, new Size(3, 3), 0);
-    morphologyEx(additionalProcessedMat, additionalProcessedMat, MORPH_CLOSE, getStructuringElement(MORPH_ELLIPSE, new Size(3, 3)));
-
+    const imgGray = new Mat();
+    cvtColor(imageMat, imgGray, COLOR_RGBA2GRAY);
+    const adaptiveThresholdMat = new Mat();
+    adaptiveThreshold(imgGray, adaptiveThresholdMat, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, 21, 10);
+    const openingMat = new Mat();
+    morphologyEx(adaptiveThresholdMat, openingMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(3, 3)), new Point(-1, -1), 3);
     const contours: MatVector = new MatVector();
-    findContours(additionalProcessedMat, contours, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-
-    return { contours, processedMat: additionalProcessedMat };
+    findContours(openingMat, contours, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+    return { contours, processedMat: openingMat };
 }
-
 
 // export function processCount(imageMat: Mat, kernelSize: number = 3): ProcessedMatType {
 //     const processedMat: Mat = new Mat();
