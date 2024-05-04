@@ -4,10 +4,11 @@ import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useContext, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { ActivityIndicator, Button, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Button, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { RootStackParamList } from "../../navigation/types";
 import { AuthContext } from "../../providers/authprovider";
 import useFarm from "../../hooks/useFarm";
+import NetInfo from "@react-native-community/netinfo";
 
 interface ISignInPageProps {
     route: RouteProp<RootStackParamList, "signin">;
@@ -16,7 +17,7 @@ interface ISignInPageProps {
 
 export default function SignInPage({ route, navigation }: ISignInPageProps) {
     const { session, loading } = useContext(AuthContext);
-    const { loading, refresh }  = useFarm();
+    const { refresh }  = useFarm();
     const [authMessage, setAuthMessage] = useState({ message: '', status: '' });
     const [authForm, setAuthForm] = useState({ email: '', password: '', loading: false });
     const [farmers, setFarmers] = useState<any[]>([]);
@@ -62,13 +63,27 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
     //     }
     // }, [session]);
 
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            if (!state.isConnected) {
+                navigation.replace("noInternet");
+            }
+        });
+        return () => {
+            unsubscribe();
+        };  
+    },[]);
 
     useEffect(() => {
-        if (!session) {
-            return;
-        } else {
-            navigation.replace('dashboard');
-        }
+        NetInfo.fetch().then(state => {
+            if (!session) {
+                return;
+            } else if (!state.isConnected) {
+                navigation.replace("noInternet");
+            } else {
+                navigation.replace('dashboard');
+            }
+        });
         // supabase.from('farmers').select('*').then(({ data, error }) => {
         //     if (error) {
         //         console.error(error);
@@ -84,7 +99,10 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
         <View className=" bg-[#BAD8F2] flex-1 justify-between">
             <View></View>
             <View className=" h-full flex-1 items-center justify-center space-y-2 px-[36px]">
-                <Image source={require('../../../assets/title.png')} className="mb-[12px]" />
+                {
+                    loading && <ActivityIndicator color="#24527A" size="large" />
+                }
+                { !loading && <><Image source={require('../../../assets/title.png')} className="mb-[12px]" />
                 <Text className="text-center text-[#24527A] text-[18px] font-bold">Login</Text>
                 <Text className="text-center mb-3 text-[#24527A]">Please fill in the following information to continue</Text>
                 <Text className={`${authMessage.status === 'success' ? "text-green-500" : "text-red-500"} ${authMessage.message ? "" : "hidden"}`}>{authMessage.message}</Text>
@@ -118,8 +136,8 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
                     <Pressable onPress={() => navigation.navigate('signup')} className="flex flex-row items-center space-x-2">
                         <Text className="text-[#24527A] font-medium">Sign Up</Text>
                     </Pressable>
-                </View>
-            </View>}
+                </View></>}
+            </View>
         </View>
     );
 }

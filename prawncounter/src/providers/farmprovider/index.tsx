@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, createContext, useEffect, useState } from "re
 import { supabase } from "../../libs/supabase";
 import useAuth from "../../hooks/useauth";
 import { PostgrestMaybeSingleResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
+import NetInfo from "@react-native-community/netinfo";
 
 type FarmType = {
     farm_id?: number;
@@ -31,6 +32,16 @@ export default function FarmProvider({ children }: { children: React.ReactNode }
         console.log(`FarmProvider: ${loading ? "loading @" : "loaded @"} ${farm?.farm_name && farm?.farm_name}`)
     }, [farm]);
 
+    useEffect(() => {
+        const subscription = NetInfo.addEventListener(state => {
+            if (!state.isConnected) setLoading(true);
+            if (state.isConnected) handleRefetch();
+        });
+        return () => {
+            subscription();
+        }
+    }, []);
+
     const handleRefetch = () => {
         setLoading(true);
         supabase.from("farmers")
@@ -59,6 +70,7 @@ export default function FarmProvider({ children }: { children: React.ReactNode }
                     console.log(response.error.message);
                 }
                 if (!response.data?.farms) {
+                    setFarm({});
                     setLoading(false);
                     return;
                 };

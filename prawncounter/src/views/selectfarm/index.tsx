@@ -47,15 +47,13 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
                     console.error(error);
                     return;
                 }
-                setFarms(data)
+                setFarm(data)
                 setFarmLoading(false)
             })
         };
 
         fetchData();
     }, []);
-
-
 
     const farmer = farmers.filter((farmer: any) => farmer.user_id === session?.user?.id)
     console.log(farmer)
@@ -68,8 +66,6 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
             .eq('user_id', session?.user?.id)
             .single()
             .then(({ data, error }) => {
-                setFarm && setFarm(selectedFarm);
-                refresh && refresh();
                 console.log("data:" + data + "error:" + error)
             })
         Alert.alert('Farm selected successfully')
@@ -104,7 +100,7 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
                                     <View className="flex flex-grow bg-[#ECF4FB] w-full items-center p-4 rounded-xl">
                                         <Text className="text-[#24527A] text-[16px] mb-[16px] font-medium flex items-center justify-center border-[#24527a85] w-full text-center pb-4 border-b-[.3px]">Select existing farm:</Text>
                                         <ScrollView className="max-h-96 flex w-full">
-                                            {farms ? farms.map((farm: any, index: any) => (
+                                            {farm ? farm.map((farm: any, index: any) => (
                                                 <Pressable
                                                     key={index}
                                                     className={`flex w-full justify-between py-4 bg-${selectedFarm?.farm_id === farm.farm_id ? '[#C8E2F9]' : '[#E1EFFA]'} mb-2 rounded-lg items-center`}

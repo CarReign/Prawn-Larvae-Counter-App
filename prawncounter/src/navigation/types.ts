@@ -12,4 +12,5 @@ export type RootStackParamList = {
     changeAlgorithm: undefined;
     selectPond: undefined;
     selectFarm: undefined;
+    noInternet: undefined;
 };

@@ -17,6 +17,7 @@ import SignUpPage from "./src/views/signuppage";
 import ResultModal from "./src/views/dashboard/modals/resultmodal";
 import { useContext, useEffect, useRef } from "react";
 import SelectFarm from "./src/views/selectfarm";
+import NoInternet from "./src/views/nointernet";
 
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -53,6 +54,7 @@ export default function App() {
                   <RootStack.Screen name="changeAlgorithm" options={{ title: "Change Algorithm" }} component={ChangeAlgorithm} />
                   <RootStack.Screen name="selectPond" options={{ title: "Select Pond" }} component={SelectPond} />
                   <RootStack.Screen name="selectFarm" options={{ header: () => null, }} component={SelectFarm} />
+                  <RootStack.Screen name="noInternet" options={{ header: () => null, }} component={NoInternet} />
                 </RootStack.Navigator>
               </NavigationContainer>
             </ResultModal>

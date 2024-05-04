@@ -1,4 +1,4 @@
-import { ActivityIndicator, Button, Image, Modal, Pressable, ScrollView, Text, View, RefreshControl } from "react-native";
+import { ActivityIndicator, Button, Image, Modal, Pressable, ScrollView, Text, View, RefreshControl, Alert } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -13,6 +13,7 @@ import FloatingCamera from "./floatingcamera";
 import DashboardTabs from "./tabs";
 import getFeedNeeded from "../../utils/getfeedneeded";
 import ResultModal, { useResult } from "./modals/resultmodal";
+import NetInfo from "@react-native-community/netinfo";
 
 interface IDashboardProps {
     route: RouteProp<RootStackParamList, "dashboard">;
@@ -37,6 +38,7 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
     }, [])
 
     useEffect(() => {
+        if (farmLoading) return;
         if (!Object.keys(farm || {}).length) {
             navigation.replace("selectFarm");
         }
@@ -48,6 +50,17 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
         console.log('refreshed')
         setRefreshing(false);
     }
+
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            if (!state.isConnected) {
+                navigation.replace("noInternet");
+            }
+        });
+        return () => {
+            unsubscribe();
+        };  
+    },[]);
 
     return (
         <>
