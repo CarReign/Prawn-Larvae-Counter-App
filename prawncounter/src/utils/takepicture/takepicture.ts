@@ -13,10 +13,10 @@ export const handleTakePicture = async (resultCallback: (result: string) => void
         });
         if (!result.canceled) {
             const image = await ImageManipulator.manipulateAsync(result.assets[0].uri,
-                [{ resize: { width: 500 } }],
+                [],
                 { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
             );
-            resultCallback(image.uri);
+            resultCallback(result.assets[0].uri);
         }
     }
 }
