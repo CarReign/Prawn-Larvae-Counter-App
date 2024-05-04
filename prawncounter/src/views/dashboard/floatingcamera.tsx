@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import uuid from 'react-native-uuid';
-import { ActivityIndicator, Image, Pressable, View, Text } from "react-native";
+import { ActivityIndicator, Image, Pressable, View, Text,} from "react-native";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { Buffer } from 'buffer';
 
 import * as ImagePicker from 'expo-image-picker';
@@ -14,9 +15,28 @@ import { handleTakePicture } from "../../utils/takepicture/takepicture";
 
 export default function FloatingCamera() {
     const [currentImageUri, setCurrentImageUri] = useState<string>("");
+    const [toggle, setToggle] = useState<boolean>(false);
     const { result, setResult, setNavigateCallback, loading: resultLoading } = useResult();
     const [loading, setLoading] = useState<boolean>(false);
     const { addCount } = useCount();
+
+    const opacity = useSharedValue(0);
+    const uploadButtonBottom = useSharedValue(30);
+    const cameraButtonBottom = useSharedValue(30);
+
+    const config = {
+        duration: 500,
+        easing: Easing.bezier(0.5, 0.01, 0, 1),
+    };
+
+    const uploadStyle = useAnimatedStyle(() => ({ 
+        bottom: withTiming(uploadButtonBottom.value, config), 
+        opacity: withTiming(opacity.value, config) 
+    }));
+    const cameraStyle = useAnimatedStyle(() => ({ 
+        bottom: withTiming(cameraButtonBottom.value, config), 
+        opacity: withTiming(opacity.value, config) 
+    }));
 
     useEffect(() => {
         if (currentImageUri) {
@@ -45,20 +65,60 @@ export default function FloatingCamera() {
                     setCurrentImageUri("");
                 });
         };
-    }, [currentImageUri])
+    }, [currentImageUri]);
 
-    return <Pressable
-        className=" flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#2E78B8] absolute bottom-[30px] pl-[12px] shadow-xl pr-[16px] py-[8px] right-[20px]"
-        onPress={() => !loading && !resultLoading && handleTakePicture((imageUri) => setCurrentImageUri(imageUri))}
+    useEffect(() => {
+        if (toggle) {
+            opacity.value = 1;
+            uploadButtonBottom.value = 94.5;
+            cameraButtonBottom.value = 160;
+        } else {
+            opacity.value = 0;
+            uploadButtonBottom.value = 30;
+            cameraButtonBottom.value = 30;
+        }
+    }, [toggle]);
+
+    return <><Pressable
+        className="z-[1000] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#2E78B8] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]"
+        style={{ bottom: 30, right: 25}}
+        onPress={() => !loading && !resultLoading && setToggle(!toggle)}
     >
         {(loading || resultLoading) && <ActivityIndicator color="#eff6fc" size={"small"}/>}
         {(!loading && !resultLoading) && 
         <View className="flex flex-row">
-            <Image className="" source={require('../../../assets/camera.png')} style={{ width: 36, height: 36 }} />
+            {!toggle && <><Image className="" source={require('../../../assets/camera.png')} style={{ width: 36, height: 36 }} />
             <View className="flex flex-col pl-[8px] pt-[2px]">
                 <Text className="text-white text-[16px] font-medium">Start</Text>
                 <Text className="text-white mt-[-4px] text-[16px] font-medium">Count</Text>
-            </View>
+            </View></>}
+            {
+                toggle && <><Image className="" source={require('../../../assets/camera.png')} style={{ width: 36, height: 36 }} />
+                <View className="flex flex-col pl-[8px] pt-[2px]">
+                    <Text className="text-white text-[16px] font-medium">Cancel</Text>
+                    </View></>
+            }
         </View>}
     </Pressable>
+    <Animated.View className=" z-[10] right-[25px] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#2E78B8] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]" style={{...uploadStyle}}>
+        <Pressable onPress={() => {
+            handleTakePicture((imageUri) => setCurrentImageUri(imageUri), false);
+            setToggle(false);
+        }}>
+            <Text className="text-white text-[16px] font-medium">Upload Image</Text>
+        </Pressable>
+    </Animated.View>
+    <Animated.View className=" z-[10] right-[25px] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#2E78B8] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]" style={{...cameraStyle}}>
+        <Pressable
+            onPress={() => {
+                handleTakePicture((imageUri) => setCurrentImageUri(imageUri));
+                setToggle(false);
+            }}
+        >
+            <Text className="text-white text-[16px] font-medium">Take Picture</Text>
+        </Pressable>
+    </Animated.View>
+    </>
 }
+
+// handleTakePicture((imageUri) => setCurrentImageUri(imageUri)

@@ -32,7 +32,7 @@ function App() {
     const imgGray = new Mat();
     cv.cvtColor(image, imgGray, cv.COLOR_RGBA2GRAY);
     grayCanvasRef.current && cv.imshow(grayCanvasRef.current, imgGray);
-    console.log("1")
+    console.log("1 ")
     const adaptiveThresholdMat = new Mat();
     cv.adaptiveThreshold(imgGray, adaptiveThresholdMat, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY_INV, 21, 10);
     adaptiveCanvasRef.current && cv.imshow(adaptiveCanvasRef.current, adaptiveThresholdMat);
