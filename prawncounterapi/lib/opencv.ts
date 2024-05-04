@@ -66,7 +66,7 @@ export function processCount(imageMat: Mat, kernelSize: number = 1): ProcessedMa
     const adaptiveThresholdMat = new Mat();
     adaptiveThreshold(imgGray, adaptiveThresholdMat, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, 21, 10);
     const openingMat = new Mat();
-    morphologyEx(adaptiveThresholdMat, openingMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(3, 3)), new Point(-1, -1), 3);
+    morphologyEx(adaptiveThresholdMat, openingMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(1, 1)), new Point(-1, -1), 3);
     const contours: MatVector = new MatVector();
     findContours(openingMat, contours, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
     return { contours, processedMat: openingMat };
