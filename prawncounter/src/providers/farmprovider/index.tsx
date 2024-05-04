@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useEffect, useState } from "react";
 import { supabase } from "../../libs/supabase";
 import useAuth from "../../hooks/useauth";
 import { PostgrestMaybeSingleResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
@@ -10,6 +10,7 @@ type FarmType = {
 
 type FarmContextType = {
     farm: FarmType | null;
+    setFarm?: Dispatch<SetStateAction<any>>;
     username?: string;
     addFarm?: (farm: Omit<FarmType, "farm_id">) => void;
     editFarm?: (farm: FarmType) => void;
@@ -57,12 +58,15 @@ export default function FarmProvider({ children }: { children: React.ReactNode }
                 if (response.error) {
                     console.log(response.error.message);
                 }
-                if (!response.data?.farms) return;
+                if (!response.data?.farms) {
+                    setLoading(false);
+                    return;
+                };
                 setFarm(response.data?.farms);
                 setUsername(response.data?.username);
                 setLoading(false);
             });
-        
+
     }, [session, sessionLoading, refetch]);
 
     const handleAddFarm = (farm: Omit<FarmType, "farm_id">) => {
@@ -91,7 +95,7 @@ export default function FarmProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <FarmContext.Provider value={{ farm, username, addFarm: handleAddFarm, editFarm: handleEditFarm, loading, refresh: handleRefetch }}>
+        <FarmContext.Provider value={{ farm, username, setFarm, addFarm: handleAddFarm, editFarm: handleEditFarm, loading, refresh: handleRefetch }}>
             {children}
         </FarmContext.Provider>
     )
