@@ -64,7 +64,7 @@ router.get("/counter/image/:filepath", async (req: Request, res: Response) => {
 
 router.post("/counter/image", upload.single("image-to-count"), async (req: Request, res: Response) => {
     try {
-        const { kernelSize, } = req.body;
+        const { kernelSize, } = req.body || 1;
         const { file } = req;
 
         if (!file) throw new Error("No image file found");
@@ -79,14 +79,16 @@ router.post("/counter/image", upload.single("image-to-count"), async (req: Reque
         const imageMat = matFromImageData(imageData);
 
         let resultingContours: MatVector | undefined;
-        
-        if (kernelSize) {
-            const { contours, processedMat }: ProcessedMatType = processCount(imageMat, Number(kernelSize));
+        const { contours, processedMat }: ProcessedMatType = processCount(imageMat, Number(kernelSize));
             resultingContours = contours;
-        } else {
-            const { count, contours, kernelSize: resultingKernelSize }: CountType = getAverageCount(imageMat);
-            resultingContours = contours;
-        }
+
+        // if (kernelSize) {
+        //     const { contours, processedMat }: ProcessedMatType = processCount(imageMat, Number(kernelSize));
+        //     resultingContours = contours;
+        // } else {
+        //     const { count, contours, kernelSize: resultingKernelSize }: CountType = getAverageCount(imageMat);
+        //     resultingContours = contours;
+        // }
 
         if (!resultingContours) throw new Error("Contours value is undefined");
     
