@@ -5,19 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const routes_1 = __importDefault(require("./routes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.get("/test", (req, res) => {
     res.status(200).json({ message: "test run OK" });
 });
-// app.use("/api", async (req: Request, res: Response, next: NextFunction) => {
-//     if (req.headers['x-prawncounter-api-key'] === (process.env.API_KEY || "carreigniab123456")) {
-//         next();
-//     } else {
-//         res.status(404).send(`Cannot ${req.method} ${req.originalUrl}`);
-//     };
-// }, router);
+app.use("/api", routes_1.default);
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
 });
