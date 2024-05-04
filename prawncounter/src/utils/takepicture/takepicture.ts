@@ -9,12 +9,12 @@ export const handleTakePicture = async (resultCallback: (result: string) => void
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
             aspect: [16, 9],
-            quality: 1,
+            quality: 0.5,
         });
         if (!result.canceled) {
             const image = await ImageManipulator.manipulateAsync(result.assets[0].uri,
                 [],
-                { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+                { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
             );
             resultCallback(result.assets[0].uri);
         }
