@@ -1,31 +1,7 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAverageCount = exports.getCountWithSpecificKernelSize = exports.processCount = void 0;
 const opencv_js_1 = require("@techstark/opencv-js");
-const cv = __importStar(require("@techstark/opencv-js"));
 // export function processCount(imageMat: Mat, kernelSize: number = 3): ProcessedMatType {
 //     const processedMat: Mat = new Mat();
 //     cvtColor(imageMat, processedMat, COLOR_RGBA2GRAY);
@@ -50,7 +26,7 @@ const cv = __importStar(require("@techstark/opencv-js"));
 //     processedMat.convertTo(processedImageMat, CV_8UC3);
 //     cvtColor(processedImageMat, processedImageMat, COLOR_GRAY2RGB);
 //     for (let i = 0; i < contours.size(); i++) {
-//         const color = new cv.Scalar(Math.random() * 255, Math.random() * 255, Math.random() * 255);
+//         const color = new  Scalar(Math.random() * 255, Math.random() * 255, Math.random() * 255);
 //         drawContours(processedImageMat, contours, i, color, 2, LINE_8);
 //     }
 //     return { contours, processedMat: processedImageMat };
@@ -72,13 +48,13 @@ const cv = __importStar(require("@techstark/opencv-js"));
 // }
 function processCount(imageMat, kernelSize = 1) {
     const imgGray = new opencv_js_1.Mat();
-    cv.cvtColor(imageMat, imgGray, cv.COLOR_RGBA2GRAY);
-    const adaptiveThresholdMat = new cv.Mat();
-    cv.adaptiveThreshold(imgGray, adaptiveThresholdMat, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY_INV, 21, 10);
-    const openingMat = new cv.Mat();
-    cv.morphologyEx(adaptiveThresholdMat, openingMat, cv.MORPH_OPEN, cv.getStructuringElement(cv.MORPH_ELLIPSE, new cv.Size(3, 3)), new cv.Point(-1, -1), 3);
-    const contours = new cv.MatVector();
-    cv.findContours(openingMat, contours, new cv.Mat(), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+    (0, opencv_js_1.cvtColor)(imageMat, imgGray, opencv_js_1.COLOR_RGBA2GRAY);
+    const adaptiveThresholdMat = new opencv_js_1.Mat();
+    (0, opencv_js_1.adaptiveThreshold)(imgGray, adaptiveThresholdMat, 255, opencv_js_1.ADAPTIVE_THRESH_MEAN_C, opencv_js_1.THRESH_BINARY_INV, 21, 10);
+    const openingMat = new opencv_js_1.Mat();
+    (0, opencv_js_1.morphologyEx)(adaptiveThresholdMat, openingMat, opencv_js_1.MORPH_OPEN, (0, opencv_js_1.getStructuringElement)(opencv_js_1.MORPH_ELLIPSE, new opencv_js_1.Size(3, 3)), new opencv_js_1.Point(-1, -1), 3);
+    const contours = new opencv_js_1.MatVector();
+    (0, opencv_js_1.findContours)(openingMat, contours, new opencv_js_1.Mat(), opencv_js_1.RETR_EXTERNAL, opencv_js_1.CHAIN_APPROX_SIMPLE);
     return { contours, processedMat: openingMat };
 }
 exports.processCount = processCount;

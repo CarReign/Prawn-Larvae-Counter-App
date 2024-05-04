@@ -33,7 +33,7 @@ import * as cv from "@techstark/opencv-js";
 //     cvtColor(processedImageMat, processedImageMat, COLOR_GRAY2RGB);
     
 //     for (let i = 0; i < contours.size(); i++) {
-//         const color = new cv.Scalar(Math.random() * 255, Math.random() * 255, Math.random() * 255);
+//         const color = new  Scalar(Math.random() * 255, Math.random() * 255, Math.random() * 255);
 //         drawContours(processedImageMat, contours, i, color, 2, LINE_8);
 //     }
 
@@ -62,13 +62,13 @@ import * as cv from "@techstark/opencv-js";
 
 export function processCount(imageMat: Mat, kernelSize: number = 1): ProcessedMatType {
     const imgGray = new Mat();
-    cv.cvtColor(imageMat, imgGray, cv.COLOR_RGBA2GRAY);
-    const adaptiveThresholdMat = new cv.Mat();
-    cv.adaptiveThreshold(imgGray, adaptiveThresholdMat, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY_INV, 21, 10);
-    const openingMat = new cv.Mat();
-    cv.morphologyEx(adaptiveThresholdMat, openingMat, cv.MORPH_OPEN, cv.getStructuringElement(cv.MORPH_ELLIPSE, new cv.Size(3, 3)), new cv.Point(-1, -1), 3);
-    const contours: cv.MatVector = new cv.MatVector();
-    cv.findContours(openingMat, contours, new cv.Mat(), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+     cvtColor(imageMat, imgGray,  COLOR_RGBA2GRAY);
+    const adaptiveThresholdMat = new  Mat();
+     adaptiveThreshold(imgGray, adaptiveThresholdMat, 255,  ADAPTIVE_THRESH_MEAN_C,  THRESH_BINARY_INV, 21, 10);
+    const openingMat = new  Mat();
+     morphologyEx(adaptiveThresholdMat, openingMat,  MORPH_OPEN,  getStructuringElement( MORPH_ELLIPSE, new  Size(3, 3)), new  Point(-1, -1), 3);
+    const contours:  MatVector = new  MatVector();
+     findContours(openingMat, contours, new  Mat(),  RETR_EXTERNAL,  CHAIN_APPROX_SIMPLE);
     return { contours, processedMat: openingMat };
 }
 
