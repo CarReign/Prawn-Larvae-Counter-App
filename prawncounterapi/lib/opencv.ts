@@ -49,7 +49,6 @@ import * as cv from "@techstark/opencv-js";
 //     dilate(processedMat, processedMat, getStructuringElement(MORPH_ELLIPSE, new Size(kernelSize, kernelSize)));
 //     morphologyEx(processedMat, processedMat, MORPH_OPEN, getStructuringElement(MORPH_ELLIPSE, new Size(1, 1)), new Point(-1, -1), 3);
 
-//     // Additional preprocessing to enhance small features
 //     const additionalProcessedMat: Mat = new Mat();
 //     GaussianBlur(processedMat, additionalProcessedMat, new Size(3, 3), 0);
 //     morphologyEx(additionalProcessedMat, additionalProcessedMat, MORPH_CLOSE, getStructuringElement(MORPH_ELLIPSE, new Size(3, 3)));
@@ -95,7 +94,7 @@ export function getAverageCount(imageMat: Mat): CountType {
     const counts = [];
     const arrContours: MatVector[] = [];
     // NOTE: removed for loop to avoid redundancy
-    const { contours } = processCount(imageMat, 3);
+    const { contours } = processCount(imageMat, 1);
     counts.push((contours?.size() && contours?.size()) || 0);
     arrContours.push(contours || new MatVector());
     console.log("counts:", counts);

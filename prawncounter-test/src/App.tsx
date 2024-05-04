@@ -23,7 +23,7 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("refs:", originalCanvasRef.current, grayCanvasRef, adaptiveCanvasRef, openingCanvasRef, contoursCanvasRef);
+    console.log("refs: ", originalCanvasRef.current, grayCanvasRef, adaptiveCanvasRef, openingCanvasRef, contoursCanvasRef);
 
     if (!img) return;
     const image = cv.imread(img);
