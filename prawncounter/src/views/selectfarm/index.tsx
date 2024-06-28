@@ -76,39 +76,39 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
 
     return (
         <>
-            <View className=" flex-1 bg-[#BAD8F2] pt-[60px]">
+            <View className=" flex-1 bg-[#EFF4FF] pt-[60px]">
                 {
                     <>
                         <View className="">
                             {
                                 !!farmLoading &&
                                 <View className="flex items-center justify-center h-full">
-                                    <ActivityIndicator className="flex items-center " size={"large"} color="#24527A" />
-                                    <Text className="flex items text-[#24527A]">  Please wait...</Text>
+                                    <ActivityIndicator className="flex items-center " size={"large"} color="#1F375D" />
+                                    <Text className="flex items text-[#1F375D]">  Please wait...</Text>
                                 </View>
                             }
                             {
                                 !farmLoading &&
                                 <View className="flex flex-col w-full h-full justify-between items-center mt-4 ">
-                                    <Text className="flex text-[#24527A] text-[18px] font-bold mb-[8px]">Welcome, {farmer[0].username}</Text>
-                                    <Text className="flex text-[#24527A] text-[16px] mb-[16px]">It seems that you don't belong to any farm yet</Text>
-                                    <Pressable className="flex flex-row items-center justify-center border-dashed bg-[#E1EFFA] mb-[16px] px-[16px] rounded-md h-[36px]">
-                                        <Image source={require('../../../assets/add.png')} style={{ width: 16, height: 16 }} tintColor={"#24527A"} />
-                                        <Text className="pl-2 text-[16px] text-[#24527A] font-medium">Add new farm</Text>
+                                    <Text className="flex text-[#1F375D] text-[18px] font-bold mb-[8px]">Welcome, {farmer[0].username}</Text>
+                                    <Text className="flex text-[#1F375D] text-[16px] mb-[16px]">It seems that you don't belong to any farm yet</Text>
+                                    <Pressable className="flex flex-row items-center justify-center border-dashed bg-[#D5E0F1] mb-[16px] px-[16px] rounded-md h-[36px]">
+                                        <Image source={require('../../../assets/add.png')} style={{ width: 16, height: 16 }} tintColor={"#1F375D"} />
+                                        <Text className="pl-2 text-[16px] text-[#1F375D] font-medium">Add new farm</Text>
                                     </Pressable>
-                                    <Text className="text-[#24527A] text-[16px] mb-[16px]">OR</Text>
+                                    <Text className="text-[#1F375D] text-[16px] mb-[16px]">OR</Text>
                                     <View className="flex flex-grow bg-[#ECF4FB] w-full items-center p-4 rounded-xl">
-                                        <Text className="text-[#24527A] text-[16px] mb-[16px] font-medium flex items-center justify-center border-[#24527a85] w-full text-center pb-4 border-b-[.3px]">Select existing farm:</Text>
+                                        <Text className="text-[#1F375D] text-[16px] mb-[16px] font-medium flex items-center justify-center border-[#1F375D85] w-full text-center pb-4 border-b-[.3px]">Select existing farm:</Text>
                                         <ScrollView className="max-h-96 flex w-full">
                                             {farm ? farm.map((farm: any, index: any) => (
                                                 <Pressable
                                                     key={index}
-                                                    className={`flex w-full justify-between py-4 bg-${selectedFarm?.farm_id === farm.farm_id ? '[#C8E2F9]' : '[#E1EFFA]'} mb-2 rounded-lg items-center`}
+                                                    className={`flex w-full justify-between py-4 bg-${selectedFarm?.farm_id === farm.farm_id ? '[#C8E2F9]' : '[#D5E0F1]'} mb-2 rounded-lg items-center`}
                                                     onPress={() => {
                                                         setSelectedFarm(farm);
                                                     }}
                                                 >
-                                                    <Text className="font-semibold text-lg text-[#24527A] text-[18px] px-3 py-1">{farm.farm_name}</Text>
+                                                    <Text className="font-semibold text-lg text-[#1F375D] text-[18px] px-3 py-1">{farm.farm_name}</Text>
                                                 </Pressable>
                                             )) :
                                                 <View className="flex-1 justify-center items-center">
@@ -116,10 +116,10 @@ export default function SelectFarm({ route, navigation }: ISelectFarmProps) {
                                                 </View>}
                                         </ScrollView>
                                     </View>
-                                    <View className="flex-row flex  bg-[#ECF4FB] w-full justify-between border-t-[.3px] border-[#24527A] mb-8 p-4 items-center">
+                                    <View className="flex-row flex  bg-[#ECF4FB] w-full justify-between border-t-[.3px] border-[#1F375D] mb-8 p-4 items-center">
                                         <View>
-                                            <Text className="text-lg font-bold text-[#24527A]">Selected farm:</Text>
-                                            <Text className="italic text-lg text-[#24527A]">{selectedFarm ? `${selectedFarm.farm_name}` : 'No selected farm yet'}</Text>
+                                            <Text className="text-lg font-bold text-[#1F375D]">Selected farm:</Text>
+                                            <Text className="italic text-lg text-[#1F375D]">{selectedFarm ? `${selectedFarm.farm_name}` : 'No selected farm yet'}</Text>
                                         </View>
                                         <Pressable
                                             onPress={toggleSelectFarm}

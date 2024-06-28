@@ -28,11 +28,11 @@ export default function NoInternet({ navigation }:  { navigation: NativeStackNav
 
     return (
         <View className="flex flex-1 justify-center items-center bg-[#E2ECF4]">
-            <Image source={require('../../../assets/error-page.png')} style={{ width: 150, height: 150 }} tintColor={"#24527A"} />
+            <Image source={require('../../../assets/error-page.png')} style={{ width: 150, height: 150 }} tintColor={"#1F375D"} />
             <Text>Oh no! Please check your internet connection</Text>
             <View className="flex flex-row">
                 <Text>Reconnecting...</Text>
-                <ActivityIndicator size="large" color="#24527A" />
+                <ActivityIndicator size="large" color="#1F375D" />
             </View>
             
         </View>

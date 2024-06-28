@@ -23,17 +23,17 @@ export default function ChangeFeedCalculation() {
                     <View className="mb-3 flex flex-row w-full items-center justify-between">
                         <View className="flex flex-row items-center">
                             <TextInput
-                                className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#24527A] mr-1 text-center w-[68px] h-[36px]"
+                                className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#1F375D] mr-1 text-center w-[68px] h-[36px]"
                                 onChangeText={setNewFeed}
                                 keyboardType="default"
                                 value={String(newFeed)} 
                             />
-                            <Text className="mb-1 text-[18px] mr-3 text-[#24527A]">kilo/s</Text>
+                            <Text className="mb-1 text-[18px] mr-3 text-[#1F375D]">kilo/s</Text>
                         </View>
-                        <Text className="mb-1 text-[18px] mr-3 text-[#24527A]">for</Text>
+                        <Text className="mb-1 text-[18px] mr-3 text-[#1F375D]">for</Text>
                         <View className="flex flex-row items-center">
-                            <Text className="mb-1 text-[24px] mr-1 text-[#24527A]">100k</Text>
-                            <Text className="mb-1 text-[18px] mr-3 text-[#24527A]">prawns</Text>
+                            <Text className="mb-1 text-[24px] mr-1 text-[#1F375D]">100k</Text>
+                            <Text className="mb-1 text-[18px] mr-3 text-[#1F375D]">prawns</Text>
                         </View>
                         </View>
                 </View>

@@ -39,18 +39,18 @@ export default function EditAccount() {
             <View className="">
                 <View className="mb-6">
                     <View className="mb-3 flex flex-row w-full items-center justify-between">
-                        <Text className="mb-1 text-[18px] mr-3 text-[#24527A]">Username:</Text>
+                        <Text className="mb-1 text-[18px] mr-3 text-[#1F375D]">Username:</Text>
                         <TextInput
-                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#24527A] w-[228px] h-[36px]"
+                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#1F375D] w-[228px] h-[36px]"
                             onChangeText={setNewUsername}
                             keyboardType="default"
                             value={newUsername}
                         />
                     </View>
                     <View className="mb-3 flex flex-row w-full items-center justify-between">
-                        <Text className="text-[18px] mb-1 mr-3 text-[#24527A]">Prawn farm:</Text>
+                        <Text className="text-[18px] mb-1 mr-3 text-[#1F375D]">Prawn farm:</Text>
                         <TextInput
-                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#24527A]  w-[228px] h-[36px]"
+                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#1F375D]  w-[228px] h-[36px]"
                             onChangeText={setNewFarmName}
                             keyboardType="default"
                             value={newFarmName}

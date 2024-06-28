@@ -19,7 +19,7 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
     const { session, loading } = useContext(AuthContext);
     const { refresh }  = useFarm();
     const [authMessage, setAuthMessage] = useState({ message: '', status: '' });
-    const [authForm, setAuthForm] = useState({ email: '', password: '', loading: false });
+    const [authForm, setAuthForm] = useState({ email: '', password: '', demoLoading: false, loading: false });
     const [farmers, setFarmers] = useState<any[]>([]);
 
     const handleEmailChange = (email: string) => {
@@ -95,48 +95,72 @@ export default function SignInPage({ route, navigation }: ISignInPageProps) {
         // })
     }, [session])
 
+    const handleDemoSignIn = () => {
+        setAuthForm({ ...authForm, email: "", password: "", demoLoading: true });
+        supabase.auth.signInWithPassword({ email: 'sunnystartupofficial@gmail.com', password: 'sunny123' })
+            .then((response: AuthTokenResponsePassword) => {
+                if (response.error) {
+                    setAuthMessage({ message: response.error.message, status: 'error' });
+                    return;
+                };
+                refresh?.();
+                setAuthMessage({ message: 'Signed in successfully', status: 'success' });
+            }).catch((error) => {
+                setAuthMessage(error.message);
+            }).finally(() => {
+                setAuthForm({ ...authForm, demoLoading: false });
+            });
+    }
+
     return (
-        <View className=" bg-[#BAD8F2] flex-1 justify-between">
+        <View className=" bg-[#EFF4FF] flex-1 justify-between">
             <View></View>
             <View className=" h-full flex-1 items-center justify-center space-y-2 px-[36px]">
                 {
-                    loading && <ActivityIndicator color="#24527A" size="large" />
+                    loading && <ActivityIndicator color="#1F375D" size="large" />
                 }
-                { !loading && <><Image source={require('../../../assets/title.png')} className="mb-[12px]" />
-                <Text className="text-center text-[#24527A] text-[18px] font-bold">Login</Text>
-                <Text className="text-center mb-3 text-[#24527A]">Please fill in the following information to continue</Text>
+                { !loading && <><Image source={require('../../../assets/title.png')} className=" w-[200px] h-[80px] mb-[12px]" />
+                <Text className="text-center text-[#1F375D] text-[18px] font-bold">Login</Text>
+                <Text className="text-center mb-3 text-[#1F375D]">Please fill in the following information to continue</Text>
                 <Text className={`${authMessage.status === 'success' ? "text-green-500" : "text-red-500"} ${authMessage.message ? "" : "hidden"}`}>{authMessage.message}</Text>
                 <View className="w-full flex flex-col justify-start items-start space-y-[10px]">
-                    <Text className="text-[#24527A]">Email</Text>
+                    <Text className="text-[#1F375D]">Email</Text>
                     <TextInput
-                        className="bg-[#F9FAFE] px-2 focus:border-[#24527A] border-[#24527a81] text-[#24527A] border border-t-0 border-x-0 border-b-[1px] rounded-[4px] min-h-[40px] w-full"
+                        className="bg-[#F9FAFE] px-2 focus:border-[#1F375D] border-[#1F375D81] text-[#1F375D] border border-t-0 border-x-0 border-b-[1px] rounded-[4px] min-h-[40px] w-full"
                         onChangeText={handleEmailChange}
                         textContentType='emailAddress'
                         placeholder='Enter email'
                         value={authForm.email} />
                 </View>
                 <View className="w-full mb-[12px] flex flex-col justify-start items-start  space-y-[10px] ">
-                    <Text className="text-[#24527A]">Password</Text>
+                    <Text className="text-[#1F375D]">Password</Text>
                     <TextInput
-                        className="bg-[#F9FAFE] px-2 focus:border-[#24527A] border-[#24527a81] text-[#24527A] border border-t-0 border-x-0 border-b-[1px] rounded-[4px] min-h-[40px] w-full"
+                        className="bg-[#F9FAFE] px-2 focus:border-[#1F375D] border-[#1F375D81] text-[#1F375D] border border-t-0 border-x-0 border-b-[1px] rounded-[4px] min-h-[40px] w-full"
                         onChangeText={handlePasswordChange}
                         textContentType='password'
                         placeholder='Enter password'
                         secureTextEntry={true}
                         value={authForm.password} />
                 </View>
-                <Pressable className="bg-[#24527A] w-full px-[20px] py-[12px] mb-3 rounded-[4px] flex-row justify-center space-x-2" disabled={authForm.loading} onPress={handleSignIn}>
+                <Pressable className="bg-[#1F375D] w-full px-[20px] py-[12px] mb-3 rounded-[4px] flex-row justify-center space-x-2" disabled={authForm.loading} onPress={handleSignIn}>
                     {!!authForm.loading && <ActivityIndicator color="#fff" />}
                     <Text className="text-[#F9FAFE] text-center">
                         {!!authForm.loading ? 'Loading...' : 'Sign In'}
                     </Text>
                 </Pressable>
-                <View className=" flex flex-row justify-center items-center mt-[28px]">
-                    <Text className="text-[#24527A]">Don't have an account yet? </Text>
+                <Pressable className="border border-[#1F375D] w-full px-[20px] py-[12px] mb-3 rounded-[4px] flex-row justify-center space-x-2" disabled={authForm.loading} onPress={handleDemoSignIn}>
+                    {!!authForm.demoLoading && <ActivityIndicator color="#1F375D" />}
+                    <Text className="text-[hsl(217,50%,24%)] text-center">
+                        {!!authForm.demoLoading ? 'Loading...' : 'Demo Sign In'}
+                    </Text>
+                </Pressable>
+                {/* <View className=" flex flex-row justify-center items-center mt-[28px]">
+                    <Text className="text-[#1F375D]">Don't have an account yet? </Text>
                     <Pressable onPress={() => navigation.navigate('signup')} className="flex flex-row items-center space-x-2">
-                        <Text className="text-[#24527A] font-medium">Sign Up</Text>
+                        <Text className="text-[#1F375D] font-medium">Sign Up</Text>
                     </Pressable>
-                </View></>}
+                </View> */}
+                </>}
             </View>
         </View>
     );

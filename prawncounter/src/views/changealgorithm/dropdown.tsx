@@ -18,7 +18,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
   return (
     <View className='flex w-full '>
       <Pressable className="bg-[#F2F9FF]  rounded p-2 pr-3 mt-[12px] h-[36px] w-full flex flex-row items-center justify-between" onPress={() => setIsVisible(true)}>
-        <Text className='text-[18px] text-[#24527A]'>Select</Text>
+        <Text className='text-[18px] text-[#1F375D]'>Select</Text>
         <Image className="" source={require('../../../assets/arrow-up.png')} style={{ width: 16, height: 16 }} />
       </Pressable>
 
@@ -33,11 +33,11 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
           <View className="bg-white w-3/4 rounded-lg flex">
             {options.map((option, index) => (
               <Pressable className="border-b-[.3px] border-b-[#cbdbe9] rounded py-4 px-3 mt-[0px] w-full flex flex-row items-center justify-between" key={index} onPress={() => handleSelect(option)}>
-                <Text  className='text-[18px] text-[#24527A]'>{option}</Text>
+                <Text  className='text-[18px] text-[#1F375D]'>{option}</Text>
               </Pressable>
             ))}
-            <Pressable  className="bg-[#E1EFFA] border-b-[.9px] border-b-[#cbdbe9] rounded py-4 px-3 mt-[0px] w-full flex flex-row items-center justify-between"  onPress={() => setIsVisible(false)}>
-              <Text  className='text-[18px] text-[#24527A]'>Close</Text>
+            <Pressable  className="bg-[#D5E0F1] border-b-[.9px] border-b-[#cbdbe9] rounded py-4 px-3 mt-[0px] w-full flex flex-row items-center justify-between"  onPress={() => setIsVisible(false)}>
+              <Text  className='text-[18px] text-[#1F375D]'>Close</Text>
             </Pressable>
           </View>
         </View>

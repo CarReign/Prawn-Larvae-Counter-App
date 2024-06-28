@@ -80,7 +80,7 @@ export default function FloatingCamera() {
     }, [toggle]);
 
     return <><Pressable
-        className="z-[1000] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#2E78B8] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]"
+        className="z-[1000] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#1F375D] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]"
         style={{ bottom: 30, right: 25}}
         onPress={() => !loading && !resultLoading && setToggle(!toggle)}
     >
@@ -100,7 +100,7 @@ export default function FloatingCamera() {
             }
         </View>}
     </Pressable>
-    <Animated.View className=" z-[10] right-[25px] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#2E78B8] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]" style={{...uploadStyle}}>
+    <Animated.View className=" z-[10] right-[25px] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#1F375D] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]" style={{...uploadStyle}}>
         <Pressable onPress={() => {
             handleTakePicture((imageUri) => setCurrentImageUri(imageUri), false);
             setToggle(false);
@@ -108,7 +108,7 @@ export default function FloatingCamera() {
             <Text className="text-white text-[16px] font-medium">Upload Image</Text>
         </Pressable>
     </Animated.View>
-    <Animated.View className=" z-[10] right-[25px] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#2E78B8] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]" style={{...cameraStyle}}>
+    <Animated.View className=" z-[10] right-[25px] flex items-center justify-center min-h-[55px] min-w-[55px] rounded-[8px] bg-[#1F375D] absolute pl-[12px] shadow-xl pr-[16px] py-[8px]" style={{...cameraStyle}}>
         <Pressable
             onPress={() => {
                 handleTakePicture((imageUri) => setCurrentImageUri(imageUri));

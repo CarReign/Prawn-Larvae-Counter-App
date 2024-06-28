@@ -37,27 +37,27 @@ export default function ChangePassword() {
             <View className="">
                 <View className="mb-6">
                     <View className="mb-3 flex flex-row w-full items-center justify-between">
-                        <Text className="text-[18px] mb-1 mr-3 text-[#24527A]">Current password:</Text>
+                        <Text className="text-[18px] mb-1 mr-3 text-[#1F375D]">Current password:</Text>
                         <TextInput
-                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#24527A]  w-[180px] h-[36px]"
+                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#1F375D]  w-[180px] h-[36px]"
                             onChangeText={setCurrentPassword}
                             secureTextEntry={true}
                             value={currentPassword}
                         />
                     </View>
                     <View className="mb-3 flex flex-row w-full items-center justify-between">
-                        <Text className="text-[18px] mb-1 mr-3 text-[#24527A]">New password:</Text>
+                        <Text className="text-[18px] mb-1 mr-3 text-[#1F375D]">New password:</Text>
                         <TextInput
-                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#24527A] w-[180px] h-[36px]"
+                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#1F375D] w-[180px] h-[36px]"
                             onChangeText={setNewPassword}
                             secureTextEntry={true}
                             value={newPassword}
                         />
                     </View>
                     <View className="mb-3 flex flex-row w-full items-center justify-between">
-                        <Text className="text-[18px] mb-1 mr-3 text-[#24527A]">Confirm password:</Text>
+                        <Text className="text-[18px] mb-1 mr-3 text-[#1F375D]">Confirm password:</Text>
                         <TextInput
-                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#24527A]  w-[180px] h-[36px]"
+                            className="bg-[#F2F9FF] text-[18px] rounded p-2 text-[#1F375D]  w-[180px] h-[36px]"
                             onChangeText={setConfirmPassword}
                             secureTextEntry={true}
                             value={confirmPassword}

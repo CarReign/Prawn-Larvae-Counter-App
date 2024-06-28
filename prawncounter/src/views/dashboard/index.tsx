@@ -1,5 +1,5 @@
 import { ActivityIndicator, Button, Image, Modal, Pressable, ScrollView, Text, View, RefreshControl, Alert } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import useAuth from "../../hooks/useauth";
@@ -31,7 +31,7 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
 
     useEffect(() => {
         if (!session) {
-            navigation.navigate("signin");
+            navigation.replace("signin");
         } 
 
         setNavigateCallback(() => () => { navigation.navigate("selectPond") })
@@ -44,13 +44,6 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
         }
     }, [farm, farmLoading]);
 
-    const onRefresh = async () => {
-        setRefreshing(true);
-        refresh
-        console.log('refreshed')
-        setRefreshing(false);
-    }
-
     useEffect(() => {
         const unsubscribe = NetInfo.addEventListener(state => {
             if (!state.isConnected) {
@@ -62,27 +55,36 @@ export default function Dashboard({ route, navigation }: IDashboardProps) {
         };  
     },[]);
 
+    const onRefresh = async () => {
+        setRefreshing(true);
+        refresh
+        console.log('refreshed')
+        setRefreshing(false);
+    }
+
+
+
     return (
         <>
-            <View className=" flex-1 bg-[#BAD8F2] justify-center items-center pt-8 h-full">
+            <View className=" flex-1 to-[#EFF4FF] bg-gradient-to-t from-[#DEDEDE] justify-center items-center pt-8 h-full">
                 {
                     <>
                         <ScrollView className="flex-1 h-full" refreshControl={
-                            <RefreshControl progressBackgroundColor={"#eff6fc"} colors={["#24527A"]} refreshing={refreshing} onRefresh={refresh} />
+                            <RefreshControl progressBackgroundColor={"#eff6fc"} colors={["#1F375D"]} refreshing={refreshing} onRefresh={refresh} />
                         }>
                             {
                                 !!farmLoading &&
                                 <View className="flex text-center items-center justify-center h-full">
-                                    <ActivityIndicator className="flex items-center " size={"large"} color="#24527A" />
-                                    <Text className="flex items text-[#24527A]">  Please wait...</Text>
+                                    <ActivityIndicator className="flex items-center " size={"large"} color="#1F375D" />
+                                    <Text className="flex items text-[#1F375D]">  Please wait...</Text>
                                 </View>
                             }
                             {
                                 !farmLoading && <View className="flex flex-col">
                                     <View className="flex flex-row w-full justify-between mt-4 px-[20px]">
                                         <View className="">
-                                            <Text className="text-[#24527A] text-[20px] font-bold">Welcome, {username || ""}</Text>
-                                            <Text className="text-[#24527A] text-[16px]">{farm?.farm_name}</Text>
+                                            <Text className="text-[#1F375D] text-[20px] font-bold">Welcome, {username || ""}</Text>
+                                            <Text className="text-[#1F375D] text-[16px]">{farm?.farm_name}</Text>
                                         </View>
                                         <View className="flex flex-row space-x-4">
                                             <Pressable onPress={() => navigation.navigate('settings')}>

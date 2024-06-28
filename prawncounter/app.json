@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Prawn Larvae Counter",
-    "slug": "prawncounter",
+    "name": "LarvaEye",
+    "slug": "larvaeye",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/prawn.png",
@@ -10,14 +10,15 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "The app accesses your photos and sends them online for image processing purposes."
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#BAD8F2"
+      "backgroundColor": "#EFF4FF"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -26,14 +27,24 @@
       "supportsTablet": true
     },
     "android": {
+      "favicon": "./assets/prawn.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/prawn.png",
-        "backgroundColor": "#BAD8F2"
+        "backgroundColor": "#EFF4FF"
       },
-      "package": "com.companyname.appname"
+      "package": "com.sunnystartup.appname",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/prawn.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b517850a-0a34-4a40-b751-c61c87b5a954"
+      }
+    },
+    "owner": "ren_fuse"
   }
 }

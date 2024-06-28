@@ -45,7 +45,7 @@ export default function App() {
               <ResultModal navigation={navigatorRef}>
                 <NavigationContainer ref={navigatorRef}>
                   <RootStack.Navigator initialRouteName="dashboard" screenOptions={{
-                    headerTintColor: '#24527A',
+                    headerTintColor: '#1F375D',
                     headerStyle: { backgroundColor: '#ECF4FB' },
                   }}>
                     <RootStack.Screen name="dashboard" options={{ header: () => null, }} component={Dashboard} />

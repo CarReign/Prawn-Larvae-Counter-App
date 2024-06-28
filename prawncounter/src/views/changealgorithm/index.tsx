@@ -12,17 +12,17 @@ export default function ChangeAlgorithm() {
             <View className="">
                 <View className="mb-6">
                     <View className="pb-3 pt-3 flex flex-col w-full items-center justify-between border-b-[.3px] border-b-[#cbdbe9]">
-                        <Text className="bg-[#E1EFFA] text-[18px] rounded p-2 text-[#24527A]  w-full h-[36px]">Canny-edge detection</Text>
+                        <Text className="bg-[#D5E0F1] text-[18px] rounded p-2 text-[#1F375D]  w-full h-[36px]">Canny-edge detection</Text>
                         <Dropdown options={options} onSelect={handleSelect}/>
                         <Image className="mr-2 ml-2 absolute mt-[42px]" source={require('../../../assets/swap.png')} style={{ width: 24, height: 24 }} />
                     </View>
                     <View className="pb-3 pt-3 flex flex-col w-full items-center justify-between border-b-[.3px] border-b-[#cbdbe9]">
-                        <Text className="bg-[#E1EFFA] text-[18px] rounded p-2 text-[#24527A]  w-full h-[36px]">Contour-based</Text>
+                        <Text className="bg-[#D5E0F1] text-[18px] rounded p-2 text-[#1F375D]  w-full h-[36px]">Contour-based</Text>
                         <Dropdown options={options} onSelect={handleSelect}/>
                         <Image className="mr-2 ml-2 absolute mt-[42px]" source={require('../../../assets/swap.png')} style={{ width: 24, height: 24 }} />
                     </View>
                     <View className="pb-3 pt-3 flex flex-col w-full items-center justify-between">
-                        <Text className="bg-[#E1EFFA] text-[18px] rounded p-2 text-[#24527A]  w-full h-[36px]">Blob-detection</Text>
+                        <Text className="bg-[#D5E0F1] text-[18px] rounded p-2 text-[#1F375D]  w-full h-[36px]">Blob-detection</Text>
                         <Dropdown options={options} onSelect={handleSelect}/>
                         <Image className="mr-2 ml-2 absolute mt-[42px]" source={require('../../../assets/swap.png')} style={{ width: 24, height: 24 }} />
                     </View>

@@ -28,7 +28,7 @@ export default function Settings({ route, navigation }: IDashboardProps) {
 
     const handleLogoutModal = () => {
         supabase.auth.signOut().then(() => {
-            reset && reset
+            reset && reset();
             navigation.replace("signin");
         });
     }
@@ -38,64 +38,64 @@ export default function Settings({ route, navigation }: IDashboardProps) {
             <View className="">
                 <View className="mb-6">
                     <View className="flex flex-row justify-between items-center mb-2">
-                        <Text className="text-[#24527A] text-[16px] font-semibold">Account</Text>
-                        <Pressable className="flex flex-row border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
+                        <Text className="text-[#1F375D] text-[16px] font-semibold">Account</Text>
+                        <Pressable className="flex flex-row border-[#1F375D] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
                             onPress={() => navigation.navigate('editAccount')}>
                             <Image className="" source={require('../../../assets/edit.png')} style={{ width: 16, height: 16}} />
-                            <Text className="font-semibold text-[16px] text-[#24527A] pl-1">Edit account</Text>
+                            <Text className="font-semibold text-[16px] text-[#1F375D] pl-1">Edit account</Text>
                         </Pressable>
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <View className="flex flex-row justify-between mb-3">
-                            <Text className="text-[16px] text-[#24527A]">Username:</Text>
-                            <Text className="text-[16px] text-[#24527A]">{username}</Text>
+                            <Text className="text-[16px] text-[#1F375D]">Username:</Text>
+                            <Text className="text-[16px] text-[#1F375D]">{username}</Text>
                         </View>
                         <View className="flex flex-row justify-between">
-                            <Text className="text-[16px] text-[#24527A]">Farm name:</Text>
-                            <Text className="text-[16px] text-[#24527A]">{farm?.farm_name}</Text>
+                            <Text className="text-[16px] text-[#1F375D]">Farm name:</Text>
+                            <Text className="text-[16px] text-[#1F375D]">{farm?.farm_name}</Text>
                         </View>
                     </View>
                 </View>
                 <View className="mb-6">
                     <View className="flex flex-row justify-between items-center mb-2">
-                        <Text className="text-[#24527A] text-[16px] font-semibold">Privacy & Security</Text>
+                        <Text className="text-[#1F375D] text-[16px] font-semibold">Privacy & Security</Text>
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <Pressable  className="flex flex-row justify-between" onPress={() => navigation.navigate('changePassword')}>
-                            <Text className="text-[16px] text-[#24527A]">Change Password</Text>
+                            <Text className="text-[16px] text-[#1F375D]">Change Password</Text>
                             <Image source={require('../../../assets/arrow-right.png')} style={{ width: 16, height: 16}}/>
                         </Pressable>
                     </View>
                 </View>
                 <View className="mb-6">
                     <View className="flex flex-row justify-between items-center mb-2">
-                        <Text className="text-[#24527A] text-[16px] font-semibold">Additional settings</Text>
+                        <Text className="text-[#1F375D] text-[16px] font-semibold">Additional settings</Text>
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <Pressable  className="flex flex-row justify-between" onPress={() => navigation.navigate('changeFeedCalculation')}>
-                            <Text className="text-[16px] text-[#24527A]">Change feed calculation</Text>
+                            <Text className="text-[16px] text-[#1F375D]">Change feed calculation</Text>
                             <Image source={require('../../../assets/arrow-right.png')} style={{ width: 16, height: 16}}/>
                         </Pressable>
                     </View>
                 </View>
                 {/* <View className="mb-6">
                     <View className="flex flex-row justify-between items-center mb-2">
-                        <Text className="text-[#24527A] text-[16px] font-semibold">Counting algorithms</Text>
-                        <Pressable className="flex flex-row border-[#24527A] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
+                        <Text className="text-[#1F375D] text-[16px] font-semibold">Counting algorithms</Text>
+                        <Pressable className="flex flex-row border-[#1F375D] rounded-md border-[.3px] pr-2 pl-2 pb-[6px] pt-[5px]"
                             onPress={() => navigation.navigate('changeAlgorithm')}>
                             <Image className="" source={require('../../../assets/edit.png')} style={{ width: 16, height: 16}} />
-                            <Text className="font-semibold text-[16px] text-[#24527A] pl-1">Change algorithm</Text>
+                            <Text className="font-semibold text-[16px] text-[#1F375D] pl-1">Change algorithm</Text>
                         </Pressable>
                     </View>
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <View className="flex flex-row justify-between mb-3">
-                            <Text className="text-[16px] text-[#24527A]">Contour-based</Text>
+                            <Text className="text-[16px] text-[#1F375D]">Contour-based</Text>
                         </View>
                         <View className="flex flex-row  mb-3 ">
-                            <Text className="text-[16px] text-[#24527A]">Canny-edge detection</Text>
+                            <Text className="text-[16px] text-[#1F375D]">Canny-edge detection</Text>
                         </View>
                         <View className="flex flex-row d mb-3 ">
-                            <Text className="text-[16px] text-[#24527A]">Blob-detection</Text>
+                            <Text className="text-[16px] text-[#1F375D]">Blob-detection</Text>
                         </View>
                     </View>
                 </View> */}

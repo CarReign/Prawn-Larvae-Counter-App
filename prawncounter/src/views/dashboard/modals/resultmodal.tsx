@@ -79,8 +79,8 @@ export default function ResultModal({ children, navigation }: { children: React.
                 <View className="flex flex-col justify-center relative p-4 w-full  content-center">
 
                     <View className="bg-[#F9FCFF] flex flex-col justify-between p-4 mt-6 h-[640px] shadow-md rounded-md opacity-100">
-                        <View className="flex flex-row mb-4 justify-between w-full border-b-[.3px] border-[#24527A] pb-2 mt-0">
-                            <Text className="text-[20px] text-[#24527A]">Count result</Text>
+                        <View className="flex flex-row mb-4 justify-between w-full border-b-[.3px] border-[#1F375D] pb-2 mt-0">
+                            <Text className="text-[20px] text-[#1F375D]">Count result</Text>
                             <Pressable onPress={() => setResult(null)}
                                 className="mt-1">
                                 <Image source={require('../../../../assets/close.png')} />
@@ -88,12 +88,12 @@ export default function ResultModal({ children, navigation }: { children: React.
                         </View>
                         <ImageComponent path={(!!result && !!result.path && result.path) || ""} />
                         <View className="flex flex-row justify-center items-end mb-4 mt-4">
-                            <Text className="text-center text-[16px] pr-2 text-[#24527A]">There's</Text>
-                            <Text className="text-center text-[24px] pr-2 text-[#24527A]">{!!result && !!result.count && result.count}</Text>
-                            <Text className="text-center text-[16px] text-[#24527A]">prawns</Text>
+                            <Text className="text-center text-[16px] pr-2 text-[#1F375D]">There's</Text>
+                            <Text className="text-center text-[24px] pr-2 text-[#1F375D]">{!!result && !!result.count && result.count}</Text>
+                            <Text className="text-center text-[16px] text-[#1F375D]">prawns</Text>
                         </View>
                         <Pressable
-                            className="bg-[#24527A] rounded-md py-3 px-3 mb-2 justify-center flex flex-row items-center"
+                            className="bg-[#1F375D] rounded-md py-3 px-3 mb-2 justify-center flex flex-row items-center"
                             onPress={handleTakePictureAgain}
 
                         >
@@ -105,7 +105,7 @@ export default function ResultModal({ children, navigation }: { children: React.
                             onPress={() => { setIsPaused(true); navigateCallback && navigateCallback() }}
                         >
                             <Image source={require('../../../../assets/add.png')} style={{ width: 12, height: 12 }} />
-                            <Text className="text-[#24527A] pl-1 text-center">Add to pond</Text>
+                            <Text className="text-[#1F375D] pl-1 text-center">Add to pond</Text>
                         </Pressable>
                     </View>
                 </View>

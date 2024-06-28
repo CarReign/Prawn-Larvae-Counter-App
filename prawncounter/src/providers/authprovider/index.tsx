@@ -45,6 +45,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }, []);
 
     const reset = () => {
+        setSession(null);
     }
 
     return (
