@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "prawncounter",
+    "name": "Prawn Larvae Counter",
     "slug": "prawncounter",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/title.png",
+    "icon": "./assets/prawn.png",
     "userInterfaceStyle": "light",
     "plugins": [
       [
@@ -29,7 +29,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/prawn.png",
         "backgroundColor": "#BAD8F2"
-      }
+      },
+      "package": "com.companyname.appname"
     },
     "web": {
       "favicon": "./assets/prawn.png"

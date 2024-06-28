@@ -19,8 +19,6 @@ export default function Settings({ route, navigation }: IDashboardProps) {
     const [ newUsername, setNewUsername] = useState<any>(username);
     const [ newFarmName, setNewFarmName ] = useState<any>(farm?.farm_name);
     
-    
-
     const toggleLogoutModal = () => {
         console.log("logout")
         setLogoutModalVisibility(!logoutModalVisibility);
@@ -65,6 +63,17 @@ export default function Settings({ route, navigation }: IDashboardProps) {
                     <View className="bg-[#F2F9FF] rounded-md p-3">
                         <Pressable  className="flex flex-row justify-between" onPress={() => navigation.navigate('changePassword')}>
                             <Text className="text-[16px] text-[#24527A]">Change Password</Text>
+                            <Image source={require('../../../assets/arrow-right.png')} style={{ width: 16, height: 16}}/>
+                        </Pressable>
+                    </View>
+                </View>
+                <View className="mb-6">
+                    <View className="flex flex-row justify-between items-center mb-2">
+                        <Text className="text-[#24527A] text-[16px] font-semibold">Additional settings</Text>
+                    </View>
+                    <View className="bg-[#F2F9FF] rounded-md p-3">
+                        <Pressable  className="flex flex-row justify-between" onPress={() => navigation.navigate('changeFeedCalculation')}>
+                            <Text className="text-[16px] text-[#24527A]">Change feed calculation</Text>
                             <Image source={require('../../../assets/arrow-right.png')} style={{ width: 16, height: 16}}/>
                         </Pressable>
                     </View>

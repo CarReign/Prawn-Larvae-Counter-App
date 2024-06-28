@@ -11,6 +11,7 @@ import CountProvider from "./src/providers/countprovider";
 import Settings from "./src/views/settings";
 import EditAccount from "./src/views/editAccount";
 import ChangePassword from "./src/views/changepassword";
+import ChangeFeedCalculation from "./src/views/changefeedcalculation";
 import ChangeAlgorithm from "./src/views/changealgorithm";
 import SelectPond from "./src/views/selectpond/selectpond";
 import SignUpPage from "./src/views/signuppage";
@@ -18,6 +19,7 @@ import ResultModal from "./src/views/dashboard/modals/resultmodal";
 import { useContext, useEffect, useRef } from "react";
 import SelectFarm from "./src/views/selectfarm";
 import NoInternet from "./src/views/nointernet";
+import { FeedProvider } from "./src/providers/feedprovider";
 
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -39,25 +41,28 @@ export default function App() {
       <FarmProvider>
         <PondProvider>
           <CountProvider>
-            <ResultModal navigation={navigatorRef}>
-              <NavigationContainer ref={navigatorRef}>
-                <RootStack.Navigator initialRouteName="dashboard" screenOptions={{
-                  headerTintColor: '#24527A',
-                  headerStyle: { backgroundColor: '#ECF4FB' },
-                }}>
-                  <RootStack.Screen name="dashboard" options={{ header: () => null, }} component={Dashboard} />
-                  <RootStack.Screen name="signup" options={{ header: () => null, }} component={SignUpPage} />
-                  <RootStack.Screen name="signin" options={{ header: () => null, }} component={SignInPage} />
-                  <RootStack.Screen name="settings" options={{ title: "Settings" }} component={Settings} />
-                  <RootStack.Screen name="editAccount" options={{ title: "Edit Account" }} component={EditAccount} />
-                  <RootStack.Screen name="changePassword" options={{ title: "Change Password" }} component={ChangePassword} />
-                  <RootStack.Screen name="changeAlgorithm" options={{ title: "Change Algorithm" }} component={ChangeAlgorithm} />
-                  <RootStack.Screen name="selectPond" options={{ title: "Select Pond" }} component={SelectPond} />
-                  <RootStack.Screen name="selectFarm" options={{ header: () => null, }} component={SelectFarm} />
-                  <RootStack.Screen name="noInternet" options={{ header: () => null, }} component={NoInternet} />
-                </RootStack.Navigator>
-              </NavigationContainer>
-            </ResultModal>
+            <FeedProvider>
+              <ResultModal navigation={navigatorRef}>
+                <NavigationContainer ref={navigatorRef}>
+                  <RootStack.Navigator initialRouteName="dashboard" screenOptions={{
+                    headerTintColor: '#24527A',
+                    headerStyle: { backgroundColor: '#ECF4FB' },
+                  }}>
+                    <RootStack.Screen name="dashboard" options={{ header: () => null, }} component={Dashboard} />
+                    <RootStack.Screen name="signup" options={{ header: () => null, }} component={SignUpPage} />
+                    <RootStack.Screen name="signin" options={{ header: () => null, }} component={SignInPage} />
+                    <RootStack.Screen name="settings" options={{ title: "Settings" }} component={Settings} />
+                    <RootStack.Screen name="editAccount" options={{ title: "Edit account" }} component={EditAccount} />
+                    <RootStack.Screen name="changePassword" options={{ title: "Change password" }} component={ChangePassword} />
+                    <RootStack.Screen name="changeFeedCalculation" options={{ title: "Change feed calculation" }} component={ChangeFeedCalculation} />
+                    <RootStack.Screen name="changeAlgorithm" options={{ title: "Change algorithm" }} component={ChangeAlgorithm} />
+                    <RootStack.Screen name="selectPond" options={{ title: "Select Pond" }} component={SelectPond} />
+                    <RootStack.Screen name="selectFarm" options={{ header: () => null, }} component={SelectFarm} />
+                    <RootStack.Screen name="noInternet" options={{ header: () => null, }} component={NoInternet} />
+                  </RootStack.Navigator>
+                </NavigationContainer>
+              </ResultModal>
+            </FeedProvider>
           </CountProvider>
         </PondProvider>
       </FarmProvider>
