@@ -64,7 +64,9 @@ export default function FloatingCamera() {
                 .finally(() => {
                     setCurrentImageUri("");
                 });
-        };
+        } else {
+            setLoading(false);
+        }
     }, [currentImageUri]);
 
     useEffect(() => {

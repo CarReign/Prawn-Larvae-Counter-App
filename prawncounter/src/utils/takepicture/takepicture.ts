@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 
-export const handleTakePicture = async (resultCallback: (result: string) => void, isCamera: boolean = true) => {
+export const handleTakePicture = async (resultCallback: (result: string ) => void, isCamera: boolean = true) => {
     // setResult({ count: 666, path: "public/test.jpg" });
     let permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permission.granted) {

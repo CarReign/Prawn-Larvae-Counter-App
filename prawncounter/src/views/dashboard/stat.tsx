@@ -6,5 +6,4 @@ export default function Stat({ stat, figure }: { stat: string, figure: string })
         <Text className="text-[#1F375D] text-center text-[22px] font-semibold">{figure}</Text>
         <Text className="text-[#1F375D] text-center font-light">{stat}</Text>
     </View>
-
 }
