@@ -8,6 +8,14 @@
     "userInterfaceStyle": "light",
     "plugins": [
       [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow the application to access your camera",
+          "microphonePermission": "Allow the application to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ],
+      [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos and sends them online for image processing purposes."

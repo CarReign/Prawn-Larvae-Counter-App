@@ -1,40 +1,31 @@
 import { Pressable, Text, View } from "react-native";
-import { Camera, CameraType, PermissionResponse } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useEffect, useState } from "react";
 
 
 export default function CustomCamera() {
-    const [permission, requestPermission] = Camera.useCameraPermissions();
-    const [transition, setTransition] = useState(false);
+    const [permission, requestPermission] = useCameraPermissions();
 
     if (!permission?.granted) {
         requestPermission();
     }
 
-    useEffect(() => {
-        setTimeout(() => {
-            setTransition(true);
-        }, 1000);
-        return () => {
-            setTransition(false);
-        }
-    }, [permission]);
-
     return (
-        <View className="flex-1">
-            { transition ?
-            <Camera type={CameraType.back} ratio="16:9" className="flex-1 aspect-auto bg-black">
-                <View className="flex-1">
-                    <View className="w-full absolute bottom-[30px] flex flex-col items-center justify-center">
-                        <Pressable className=" min-h-[55px] min-w-[55px] rounded-full border flex flex-col items-center justify-center border-white ">
-                            <View className=" min-h-[50px] min-w-[50px] bg-white rounded-full"></View>
-                        </Pressable>
-                    </View>
+        <View className="flex-1 d-flex justify-center bg-[#F2F9FF]">
+            <CameraView facing="back" mode="picture" enableTorch={false} zoom={0} className=" min-w-full min-h-[512px] max-h-[80%] mt-[30px] aspect-auto bg-black">
+                <View className="absolute top-1/2 translate-y-1/2 self-center">
+                    <Text className="color-white">Please focus your camera on larvae prawn container</Text>
                 </View>
-            </Camera>
-            :
-            <View className="bg-black flex-1"></View>
-            }
+            </CameraView>
+            <View className="w-full py-8 flex flex-row items-center justify-evenly">
+                <Pressable className=" min-h-[55px] min-w-[55px] rounded-full border flex flex-col items-center justify-center border-[#1F375D] ">
+                    <Text className="text-[#1F375D] text-[16px] mb-0 leading-none ">❌</Text>
+                </Pressable>
+                <Pressable className=" min-h-[55px] min-w-[55px] rounded-full border flex flex-col items-center justify-center border-[#1F375D] ">
+                    <View className=" min-h-[50px] min-w-[50px] bg-[#1F375D] rounded-full"></View>
+                </Pressable>
+                <View className="min-w-[55px]"/>
+            </View> 
         </View>
     );
 }
