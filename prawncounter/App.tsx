@@ -51,7 +51,7 @@ export default function App() {
                   }}>
                     <RootStack.Screen name="dashboard" options={{ header: () => null, }} component={Dashboard} />
                     <RootStack.Screen name="signup" options={{ header: () => null, }} component={SignUpPage} />
-                    <RootStack.Screen name="signin" options={{ header: () => null, }} component={CustomCamera} />
+                    <RootStack.Screen name="signin" options={{ header: () => null, }} component={SignInPage} />
                     <RootStack.Screen name="settings" options={{ title: "Settings" }} component={Settings} />
                     <RootStack.Screen name="editAccount" options={{ title: "Edit account" }} component={EditAccount} />
                     <RootStack.Screen name="changePassword" options={{ title: "Change password" }} component={ChangePassword} />
